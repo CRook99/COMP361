@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum CameraMode
 {
@@ -34,6 +32,10 @@ namespace System.Camera
         private bool _isRotating;
         private float _currentZoom;
         
+        // INPUT
+        private PlayerInput _playerInput;
+        private InputAction _moveInput;
+        
         private void Awake()
         {
             _standardVCamTransposer = standardVCam.GetCinemachineComponent<CinemachineTransposer>();
@@ -43,24 +45,38 @@ namespace System.Camera
 
             _currentZoom = startingZoom;
             Switch(CameraMode.Standard);
+
+            _playerInput = new PlayerInput();
+        }
+
+        private void OnEnable()
+        {
+            _moveInput = _playerInput.Combat.MoveCamera;
+            _playerInput.Combat.RotateCamera.performed += RotateCamera;
+            _playerInput.Combat.SwitchMode.performed += SwitchMode;
+            _playerInput.Combat.ZoomCamera.performed += ZoomCamera;
+            
+            _playerInput.Combat.Enable();
         }
         
+        private void OnDisable()
+        {
+            _playerInput.Disable();
+            _playerInput.Combat.RotateCamera.performed -= RotateCamera;
+            _playerInput.Combat.SwitchMode.performed -= SwitchMode;
+            _playerInput.Combat.ZoomCamera.performed -= ZoomCamera;
+        }
+
         private void Update()
         {
-            if (_isRotating || brain.IsBlending) return;
-
-            HandleSwitch();
-
             if (brain.IsBlending) return;
             
             HandleMovement();
-            HandleRotation();
-            HandleZoom();
         }
 
-        private void HandleSwitch()
+        private void SwitchMode(InputAction.CallbackContext context)
         {
-            if (!Input.GetKeyDown(KeyCode.Space)) return;
+            if (_isRotating || brain.IsBlending) return;
             
             Switch(_mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard);
         }
@@ -91,46 +107,25 @@ namespace System.Camera
 
         private void HandleMovement()
         {
+            // Get relative forward and right vectors of current camera orientation
             var forward = _activeTransposer.transform.forward;
             forward.y = 0f;
             forward.Normalize();
             var right = _activeTransposer.transform.right;
             right.y = 0f;
             right.Normalize();
-
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                transform.position += forward * (_activeConfig.MovementSpeed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                transform.position -= forward * (_activeConfig.MovementSpeed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                transform.position -= right * (_activeConfig.MovementSpeed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                transform.position += right * (_activeConfig.MovementSpeed * Time.deltaTime);
-            }
+            
+            Vector2 input = _moveInput.ReadValue<Vector2>();
+            transform.position += (input.y * forward + input.x * right) * (_activeConfig.MovementSpeed * Time.deltaTime);
         }
-
-        private void HandleRotation()
+        
+        private void RotateCamera(InputAction.CallbackContext context)
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Rotate(-90f);
-            }
-            else if (Input.GetKeyDown(KeyCode.Q))
-            {
-                Rotate(90f);
-            }
-        }
-
-        private void Rotate(float amount)
-        {
+            if (_isRotating || brain.IsBlending) return;
+            
+            float inputValue = context.ReadValue<float>();
+            float amount = inputValue * -90f; // Q is -1, E is 1. 90f is Q rotation, -90f is E rotation
+            
             _isRotating = true;
             
             transform.DORotate(new Vector3(0f, amount, 0f), _activeConfig.RotationTime, RotateMode.LocalAxisAdd)
@@ -139,15 +134,11 @@ namespace System.Camera
                     _isRotating = false;
                 });
         }
-
-        private void HandleZoom()
+        
+        private void ZoomCamera(InputAction.CallbackContext context)
         {
-            float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-
-            if (scrollInput == 0) return;
-            
-            // Change magnitude of vector from camera to target
-            _currentZoom -= scrollInput * _activeConfig.ZoomSpeed;
+            float value = context.ReadValue<Vector2>().y;
+            _currentZoom -= Mathf.Sign(value) * _activeConfig.ZoomSpeed;
             _currentZoom = Mathf.Clamp(_currentZoom, _activeConfig.MinZoomDistance, _activeConfig.MaxZoomDistance);
             
             _activeTransposer.m_FollowOffset = _activeConfig.Offset.normalized * _currentZoom;
