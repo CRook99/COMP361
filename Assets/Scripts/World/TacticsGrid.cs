@@ -12,15 +12,19 @@ namespace World
         private Dictionary<Vector2Int, Cell> _obstacles;
 
         private MapParser _mapParser;
+        private Pathfinder _pathfinder;
 
         private void Awake()
         {
             _cellMap = new Dictionary<Vector2Int, Cell>();
             _obstacles = new Dictionary<Vector2Int, Cell>();
             _mapParser = GetComponent<MapParser>();
+            _pathfinder = new Pathfinder();
             
             _mapParser.ReadMap(out _cellMap, out _obstacles);
             PrecomputeNeighbours();
+
+            var path = _pathfinder.FindPath(GetCell(11, 10), GetCell(20, 21));
         }
 
         public Cell GetCell(int x, int y)
@@ -51,6 +55,17 @@ namespace World
                     if (neighbour != null)
                         cell.Neighbours[i] = neighbour;
                 }
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (_cellMap == null) return;
+            
+            foreach (Cell cell in _cellMap.Values)
+            {
+                var pos = new Vector3(cell.Position.x, 1f, cell.Position.y);
+                Handles.Label(pos, cell.Position.ToString());
             }
         }
     }
