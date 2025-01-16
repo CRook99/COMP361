@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -6,55 +7,28 @@ namespace World
 {
     public class TacticsGrid : MonoBehaviour
     {
-        [SerializeField] private List<Layer> layers;
-        
-        [ContextMenu("Generate map")]
-        public void GenerateMap()
+        private Dictionary<Vector2Int, Cell> _cellMap;
+        private Dictionary<Vector2Int, Cell> _obstacles;
+
+        private MapParser _mapParser;
+
+        private void Awake()
         {
-            ClearMap();
+            _cellMap = new Dictionary<Vector2Int, Cell>();
+            _obstacles = new Dictionary<Vector2Int, Cell>();
+            _mapParser = GetComponent<MapParser>();
             
-            var parser = new MapParser();
-
-            for (int i = 0; i < layers.Count; i++)
-            {
-                GameObject layer = new GameObject("Layer_" + i);
-                layer.transform.parent = transform;
-                
-                foreach (Vector2Int cell in parser.GetMapCells(layers[i].Image))
-                {
-                    GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(layers[i].Object, layer.transform);
-                    obj.transform.position = new Vector3(cell.x, layers[i].Elevation, cell.y);
-                }
-            }
+            _mapParser.ReadMap(out _cellMap, out _obstacles);
         }
 
-        [ContextMenu("Clear map")]
-        public void ClearMap()
+        public Cell GetCell(int x, int y)
         {
-            List<GameObject> cells = new List<GameObject>();
-            GatherChildren(transform, cells);
-
-            for (int i = cells.Count - 1; i >= 0; i--)
-            {
-                DestroyImmediate(cells[i]);
-            }
-
-            void GatherChildren(Transform parent, List<GameObject> children)
-            {
-                foreach (Transform child in parent)
-                {
-                    children.Add(child.gameObject);
-                    GatherChildren(child, children);
-                }
-            }
+            return _cellMap[new Vector2Int(x, y)];
         }
-    }
 
-    [System.Serializable]
-    public class Layer
-    {
-        public GameObject Object;
-        public Texture2D Image;
-        public int Elevation;
+        public Cell GetCell(Vector2Int xy)
+        {
+            return _cellMap[xy];
+        }
     }
 }

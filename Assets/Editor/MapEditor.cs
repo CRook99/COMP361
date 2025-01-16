@@ -2,20 +2,20 @@ using UnityEditor;
 using UnityEngine;
 using World;
 
-[CustomEditor(typeof(TacticsGrid))]
-public class GridEditor : Editor
+[CustomEditor(typeof(MapParser))]
+public class MapEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        TacticsGrid grid = (TacticsGrid)target;
+        var parser = (MapParser)target;
 
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate map"))
-            grid.GenerateMap();
+            parser.GenerateMap();
         if (GUILayout.Button("Clear map"))
-            grid.ClearMap();
+            parser.ClearMap();
         EditorGUILayout.EndHorizontal();
     }
 }
