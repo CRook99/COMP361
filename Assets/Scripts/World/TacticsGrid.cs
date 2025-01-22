@@ -8,23 +8,30 @@ namespace World
 {
     public class TacticsGrid : MonoBehaviour
     {
+        public static TacticsGrid Instance { get; private set; }
+        
         private Dictionary<Vector2Int, Cell> _cellMap;
         private Dictionary<Vector2Int, Cell> _obstacles;
 
         private MapParser _mapParser;
-        private Pathfinder _pathfinder;
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+            }
+            else
+            {
+                Instance = this;
+            }
+            
             _cellMap = new Dictionary<Vector2Int, Cell>();
             _obstacles = new Dictionary<Vector2Int, Cell>();
             _mapParser = GetComponent<MapParser>();
-            _pathfinder = new Pathfinder();
             
             _mapParser.ReadMap(out _cellMap, out _obstacles);
             PrecomputeNeighbours();
-
-            var path = _pathfinder.FindPath(GetCell(11, 10), GetCell(20, 21));
         }
 
         public Cell GetCell(int x, int y)

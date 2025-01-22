@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace World
 {
-    public class Pathfinder
+    public static class Pathfinder
     {
         private const float Sqrt2 = 1.4142f;
 
-        public List<Cell> FindPath(Cell start, Cell end)
+        public static List<Cell> FindPath(Cell start, Cell end)
         {
             if (start == null)
             {
@@ -48,7 +48,10 @@ namespace World
                     if (neighbour == null || !neighbour.Walkable || closedSet.Contains(neighbour))
                         continue;
 
-                    float movementCost = (i % 2 == 0) ? 1 : Sqrt2;
+                    if (IsDiagonalMove(i) && !IsDiagonalMoveValid(current, i))
+                        continue;
+
+                    float movementCost = IsDiagonalMove(i) ? Sqrt2 : 1;
                     float tentativeGScore = gScore[current] + movementCost;
                     
                     if (!openSet.Contains(neighbour))
@@ -65,7 +68,7 @@ namespace World
             return new List<Cell>();
         }
 
-        private List<Cell> ReconstructPath(Dictionary<Cell, Cell> parentMap, Cell current)
+        private static List<Cell> ReconstructPath(Dictionary<Cell, Cell> parentMap, Cell current)
         {
             List<Cell> path = new List<Cell> { current };
 
@@ -79,11 +82,24 @@ namespace World
             return path;
         }
 
-        private float Heuristic(Cell a, Cell b)
+        private static float Heuristic(Cell a, Cell b)
         {
             float dx = Mathf.Abs(a.Position.x - b.Position.x);
             float dy = Mathf.Abs(a.Position.y - b.Position.y); 
             return Mathf.Sqrt(Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2));
+        }
+
+        private static bool IsDiagonalMove(int i)
+        {
+            return i % 2 == 1;
+        }
+
+        private static bool IsDiagonalMoveValid(Cell cell, int goalIndex)
+        {
+            Cell leftNeighbour = cell.Neighbours[goalIndex - 1];
+            Cell rightNeighbour = cell.Neighbours[(goalIndex + 1) % 8];
+
+            return leftNeighbour is { Walkable: true } && rightNeighbour is { Walkable: true };
         }
     }
 }
