@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 using Utility;
 using World;
@@ -10,12 +11,15 @@ namespace Entities
 {
     public abstract class Entity : MonoBehaviour
     {
+        /** Speed that I move along my movement path. For movement range, Data.MovementRange */
         private const float MovementSpeed = 4f;
         
-        protected Cell CurrentCell;
-
         [SerializeField] protected EntityScriptableObject Data;
+        
+        protected Cell CurrentCell;
         protected int CurrentHealth;
+
+        public UnitModifiers Modifiers;
 
         protected void Awake()
         {
@@ -31,6 +35,14 @@ namespace Entities
         private void Update()
         {
             
+        }
+
+        protected void Initialize(EntityScriptableObject inData)
+        {
+            if (inData == null)
+                Debug.LogWarning($"Unit provided with null data.");
+
+            Data = inData;
         }
 
         protected void MoveToCell(Cell destination)

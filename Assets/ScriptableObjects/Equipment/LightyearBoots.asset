@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd734735021bd594e9ac7de5e4d744f5, type: 3}
+  m_Name: LightyearBoots
+  m_EditorClassIdentifier: 
+  title: Lightyear Boots
+  description: Bonus 2 spaces movement range
+  image: {fileID: 0}
+  modifiers:
+    PercentDamageReduction: 0
+    PercentDamageReturnChance: 0
+    PercentDamageReturnAmount: 0
+    EvasionBonusPercent: 0
+    BonusMovementRange: 2
+    AbilityCooldownTurnReduction: 0
