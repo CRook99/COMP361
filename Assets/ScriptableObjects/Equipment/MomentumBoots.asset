@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Momentum Boots
   description: Ability cools down 1 turn faster
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: d72fcfed68469e4478310e3e1552d179, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 0

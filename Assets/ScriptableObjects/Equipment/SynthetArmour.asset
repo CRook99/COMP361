@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Synthet Armour
   description: 20% chance to evade shots taken while uncovered or in half cover
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 1a6bdb70e41f6034388b50cd22940063, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 0

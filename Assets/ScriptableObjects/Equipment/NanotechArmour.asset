@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Nanotech Armour
   description: 20% chance to return half of incoming damage to an attacker
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 7ba4c6b172227ee4fadce4ff5e4fddac, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 20

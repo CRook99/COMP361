@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Heavy Armour
   description: Reduce incoming damage by 25%
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 20c084a2e0948d741bb07aea05a2c896, type: 3}
   modifiers:
     PercentDamageReduction: 25
     PercentDamageReturnChance: 0
