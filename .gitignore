@@ -73,3 +73,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
 Assets/Resources/DOTweenSettings.asset
+# MacOS files
+.DS_Store
