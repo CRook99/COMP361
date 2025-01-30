@@ -1,5 +1,7 @@
+using System.Collections;
 using Cinemachine;
 using DG.Tweening;
+using Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,8 +31,11 @@ namespace System.Camera
         
         [SerializeField] private Ease easeType;
         [SerializeField] private float startingZoom;
+        [SerializeField] private float cycleTime;
         private bool _isRotating;
         private float _currentZoom;
+
+        public bool Locked => _isRotating || _isSwitching || brain.IsBlending;
         
         // INPUT
         private PlayerInput _playerInput;
@@ -45,12 +50,12 @@ namespace System.Camera
 
             _currentZoom = startingZoom;
             Switch(CameraMode.Standard);
-
-            _playerInput = new PlayerInput();
         }
 
         private void OnEnable()
         {
+            _playerInput = InputManager.Instance.PlayerInput;
+            
             _moveInput = _playerInput.Combat.MoveCamera;
             _playerInput.Combat.RotateCamera.performed += RotateCamera;
             _playerInput.Combat.SwitchMode.performed += SwitchMode;
@@ -142,6 +147,20 @@ namespace System.Camera
             _currentZoom = Mathf.Clamp(_currentZoom, _activeConfig.MinZoomDistance, _activeConfig.MaxZoomDistance);
             
             _activeTransposer.m_FollowOffset = _activeConfig.Offset.normalized * _currentZoom;
+        }
+
+        public void MoveToPosition(Vector3 position)
+        {
+            if (Locked) return;
+            Debug.Log("go");
+            
+            Vector3 start = transform.position;
+            Vector3 end = position;
+            
+            transform.DOMove(position, cycleTime)
+                .SetEase(Ease.OutQuad)
+                .OnStart(() => _isSwitching = true)
+                .OnComplete(() => _isSwitching = false);
         }
     }
 }
