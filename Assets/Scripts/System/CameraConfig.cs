@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace System.Camera
+namespace System
 {
     [Serializable]
     public class CameraConfig

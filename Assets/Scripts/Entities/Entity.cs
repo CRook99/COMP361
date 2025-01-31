@@ -2,7 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
-using Unity.VisualScripting;
+using Controller;
+using Managers;
 using UnityEngine;
 using Utility;
 using World;
@@ -16,10 +17,11 @@ namespace Entities
         
         [SerializeField] protected EntityScriptableObject Data;
         
-        protected Cell CurrentCell;
+        public UnitModifiers Modifiers;
+
+        protected Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
         protected int CurrentHealth;
 
-        public UnitModifiers Modifiers;
 
         protected void Awake()
         {
@@ -28,8 +30,7 @@ namespace Entities
 
         protected void Start()
         {
-            CurrentCell = TacticsGrid.Instance.GetCell(11, 11);
-            transform.position = CurrentCell.Position.ToVector3XZ();
+            
         }
 
         private void Update()
@@ -45,7 +46,7 @@ namespace Entities
             Data = inData;
         }
 
-        protected void MoveToCell(Cell destination)
+        public void MoveToCell(Cell destination)
         {
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
             if (path.Count <= 1) return;
@@ -53,16 +54,16 @@ namespace Entities
             StartCoroutine(FollowPath(path));
         }
 
-        private IEnumerator FollowPath(List<Cell> path)
+        protected virtual IEnumerator FollowPath(List<Cell> path)
         {
+            EventManager.TriggerEvent(EventTypes.OnPlayerBeginMove, this);
+            
             int pathIndex = 0;
 
             while (true)
             {
                 Vector3 start = path[pathIndex].Position.ToVector3XZ();
                 Vector3 end = path[pathIndex + 1].Position.ToVector3XZ();
-                Debug.Log(start);
-                Debug.Log(end);
                 float travelTime = Vector3.Distance(start, end) / MovementSpeed;
                 float elapsed = 0f;
 
@@ -78,6 +79,8 @@ namespace Entities
 
                 if (pathIndex >= path.Count - 1) break;
             }
+            
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
         }
 
         protected void TakeDamage(int amount)
