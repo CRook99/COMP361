@@ -37,6 +37,7 @@ namespace Controller
         [SerializeField] private bool attachOnMove;
         [SerializeField] private float attachedFollowSmoothing; // Higher == closer following
         
+        [Header("Space")]
         [SerializeField] private Ease easeType;
         [SerializeField] private float startingZoom;
         [SerializeField] private float cycleTime;
