@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Input
+namespace Controller
 {
     public class InputManager : MonoBehaviour
     {

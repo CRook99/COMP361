@@ -71,6 +71,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""0866c9e6-eead-4850-837b-d0b2ca9c622a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -304,6 +313,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Cycle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4531ae8f-7df3-4473-b49a-bdb21ec65700"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -317,6 +337,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Combat_SwitchMode = m_Combat.FindAction("SwitchMode", throwIfNotFound: true);
         m_Combat_ZoomCamera = m_Combat.FindAction("ZoomCamera", throwIfNotFound: true);
         m_Combat_Cycle = m_Combat.FindAction("Cycle", throwIfNotFound: true);
+        m_Combat_Select = m_Combat.FindAction("Select", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -388,6 +409,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat_SwitchMode;
     private readonly InputAction m_Combat_ZoomCamera;
     private readonly InputAction m_Combat_Cycle;
+    private readonly InputAction m_Combat_Select;
     public struct CombatActions
     {
         private @PlayerInput m_Wrapper;
@@ -397,6 +419,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @SwitchMode => m_Wrapper.m_Combat_SwitchMode;
         public InputAction @ZoomCamera => m_Wrapper.m_Combat_ZoomCamera;
         public InputAction @Cycle => m_Wrapper.m_Combat_Cycle;
+        public InputAction @Select => m_Wrapper.m_Combat_Select;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -421,6 +444,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Cycle.started += instance.OnCycle;
             @Cycle.performed += instance.OnCycle;
             @Cycle.canceled += instance.OnCycle;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
         }
 
         private void UnregisterCallbacks(ICombatActions instance)
@@ -440,6 +466,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Cycle.started -= instance.OnCycle;
             @Cycle.performed -= instance.OnCycle;
             @Cycle.canceled -= instance.OnCycle;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
         }
 
         public void RemoveCallbacks(ICombatActions instance)
@@ -464,5 +493,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnSwitchMode(InputAction.CallbackContext context);
         void OnZoomCamera(InputAction.CallbackContext context);
         void OnCycle(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
     }
 }

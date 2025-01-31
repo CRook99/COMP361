@@ -1,7 +1,9 @@
 using System.Collections;
 using Cinemachine;
 using DG.Tweening;
-using Input;
+using Controller;
+using System;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,11 +13,12 @@ public enum CameraMode
     AirSupport
 }
 
-namespace System.Camera
+namespace Controller
 {
-    public class CameraSystem : MonoBehaviour
+    public class CameraController : PlayerComponent
     {
         [Header("Cameras")] 
+        [SerializeField] private Transform cameraSystem;
         [SerializeField] private CinemachineBrain brain;
         [SerializeField] private CinemachineVirtualCamera standardVCam;
         [SerializeField] private CinemachineVirtualCamera airSupportVCam;
@@ -26,8 +29,13 @@ namespace System.Camera
         private CinemachineTransposer _activeTransposer;
         private CameraConfig _activeConfig;
 
+        [Header("Config")]
         [SerializeField] private CameraConfig standardConfig;
         [SerializeField] private CameraConfig airSupportConfig;
+        
+        [Header("Attachment")]
+        [SerializeField] private bool attachOnMove;
+        [SerializeField] private float attachedFollowSmoothing; // Higher == closer following
         
         [SerializeField] private Ease easeType;
         [SerializeField] private float startingZoom;
@@ -40,6 +48,9 @@ namespace System.Camera
         // INPUT
         private PlayerInput _playerInput;
         private InputAction _moveInput;
+
+        private Transform _attachedTransform;
+        private bool _attached;
         
         private void Awake()
         {
@@ -52,7 +63,7 @@ namespace System.Camera
             Switch(CameraMode.Standard);
         }
 
-        private void OnEnable()
+        private void Start()
         {
             _playerInput = InputManager.Instance.PlayerInput;
             
@@ -62,21 +73,42 @@ namespace System.Camera
             _playerInput.Combat.ZoomCamera.performed += ZoomCamera;
             
             _playerInput.Combat.Enable();
+            
         }
-        
+
+        private void OnEnable()
+        {
+            EventManager.Subscribe(EventTypes.OnPlayerBeginMove, AttachToTransform);
+            EventManager.Subscribe(EventTypes.OnPlayerEndMove, DetachFromTransform);
+            EventManager.Subscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
+        }
+
         private void OnDisable()
         {
             _playerInput.Disable();
             _playerInput.Combat.RotateCamera.performed -= RotateCamera;
             _playerInput.Combat.SwitchMode.performed -= SwitchMode;
             _playerInput.Combat.ZoomCamera.performed -= ZoomCamera;
+            
+            EventManager.Unsubscribe(EventTypes.OnPlayerBeginMove, AttachToTransform);
+            EventManager.Unsubscribe(EventTypes.OnPlayerEndMove, DetachFromTransform);
+            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
+
         }
 
         private void Update()
         {
             if (brain.IsBlending) return;
-            
-            HandleMovement();
+
+            if (_attached)
+            {
+                cameraSystem.transform.position =
+                    Vector3.Lerp(cameraSystem.transform.position, _attachedTransform.position, attachedFollowSmoothing * Time.deltaTime);
+            }
+            else
+            {
+                HandleMovement();
+            }
         }
 
         private void SwitchMode(InputAction.CallbackContext context)
@@ -121,7 +153,7 @@ namespace System.Camera
             right.Normalize();
             
             Vector2 input = _moveInput.ReadValue<Vector2>();
-            transform.position += (input.y * forward + input.x * right) * (_activeConfig.MovementSpeed * Time.deltaTime);
+            cameraSystem.transform.position += (input.y * forward + input.x * right) * (_activeConfig.MovementSpeed * Time.deltaTime);
         }
         
         private void RotateCamera(InputAction.CallbackContext context)
@@ -133,7 +165,7 @@ namespace System.Camera
             
             _isRotating = true;
             
-            transform.DORotate(new Vector3(0f, amount, 0f), _activeConfig.RotationTime, RotateMode.LocalAxisAdd)
+            cameraSystem.transform.DORotate(new Vector3(0f, amount, 0f), _activeConfig.RotationTime, RotateMode.LocalAxisAdd)
                 .SetEase(easeType)
                 .OnComplete(() => {
                     _isRotating = false;
@@ -149,18 +181,65 @@ namespace System.Camera
             _activeTransposer.m_FollowOffset = _activeConfig.Offset.normalized * _currentZoom;
         }
 
-        public void MoveToPosition(Vector3 position)
+        /** Smoothly moves the camera to look at a given position, locking camera controls along the way */
+        public void MoveToPosition(object data)
         {
             if (Locked) return;
-            Debug.Log("go");
+
+            Vector3 position;
+
+            // Adapter
+            if (data is Vector3 vec)
+                position = vec;
+            else if (data is Transform tr)
+                position = tr.position;
+            else if (data is GameObject go)
+                position = go.transform.position;
+            else if (data is MonoBehaviour mono)
+                position = mono.transform.position;
+            else
+                return;
             
-            Vector3 start = transform.position;
-            Vector3 end = position;
-            
-            transform.DOMove(position, cycleTime)
+            cameraSystem.transform.DOMove(position, cycleTime)
                 .SetEase(Ease.OutQuad)
-                .OnStart(() => _isSwitching = true)
-                .OnComplete(() => _isSwitching = false);
+                .OnStart(() =>
+                {
+                    _isSwitching = true;
+                })
+                .OnComplete(() =>
+                {
+                    _isSwitching = false;
+                });
+        }
+        
+        public void AttachToTransform(object data)
+        {
+            if (!attachOnMove) return;
+            
+            if (data == null)
+            {
+                Debug.LogError("Passed null attachTransform to CameraController::AttachToTransform");
+                return;
+            }
+
+            Transform attachTransform;
+            if (data is Transform tr)
+                attachTransform = tr;
+            else if (data is MonoBehaviour mono)
+                attachTransform = mono.transform;
+            else
+                return;
+            
+            _attachedTransform = attachTransform;
+            _attached = true; // We use an extra bool since null comparison is expensive
+        }
+
+        public void DetachFromTransform()
+        {
+            if (!attachOnMove) return;
+            
+            _attachedTransform = null;
+            _attached = false;
         }
     }
 }

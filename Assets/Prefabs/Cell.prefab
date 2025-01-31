@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3988390607841450367}
   - component: {fileID: 6606828922256902480}
   - component: {fileID: 118609477459082458}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Geometry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4206245746946307640}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
