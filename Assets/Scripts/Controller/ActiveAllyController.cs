@@ -22,5 +22,10 @@ namespace Controller
                 }
             }
         }
+
+        private void Awake()
+        {
+            ActiveAlly = AllySwitcher.Allies[0];
+        }
     }
 }
