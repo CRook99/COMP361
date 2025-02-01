@@ -10,6 +10,13 @@ using World;
 
 namespace Entities
 {
+    public enum ActionType
+    {
+        Move,
+        Weapon,
+        Ability
+    }
+    
     public abstract class Entity : MonoBehaviour
     {
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
