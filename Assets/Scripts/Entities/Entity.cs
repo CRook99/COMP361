@@ -102,5 +102,17 @@ namespace Entities
         {
             Debug.Log($"{gameObject.name} died!");
         }
+
+        public virtual void TakeTurn(System.Action onTurnComplete)
+        {
+            Debug.Log($"{gameObject.name} is taking their turn.");
+            StartCoroutine(EndTurnAfterDelay(onTurnComplete));
+        }
+
+        private IEnumerator EndTurnAfterDelay(System.Action onTurnComplete)
+        {
+            yield return new WaitForSeconds(1f); 
+            onTurnComplete?.Invoke(); 
+        }
     }
 }

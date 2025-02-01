@@ -6,9 +6,11 @@ namespace Managers
 {
     public enum EventTypes
     {
+        OnActiveAllyChanged,
         OnPlayerBeginMove,
         OnPlayerEndMove,
-        OnActiveAllyChanged,
+        OnStartAllyTurn,
+        OnStartEnemyTurn
     }
     public class EventManager : MonoBehaviour
     {
