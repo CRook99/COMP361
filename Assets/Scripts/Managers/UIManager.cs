@@ -1,0 +1,41 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Entities;
+using Managers;
+using UnityEngine;
+
+namespace Managers
+{
+    public class UIManager : MonoBehaviour
+    {
+        [SerializeField] private AllyStatusWidget statusWidgetPrefab;
+        [SerializeField] private Transform widgetContainer;
+
+        private Dictionary<Ally, AllyStatusWidget> _widgetMap;
+
+        private void Awake()
+        {
+            _widgetMap = new();
+        }
+
+        private void OnEnable()
+        {
+            EventManager.Subscribe(EventTypes.OnSpawnAlly, RegisterAlly);
+        }
+    
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe(EventTypes.OnSpawnAlly, RegisterAlly);
+        }
+
+        public void RegisterAlly(object data)
+        {
+            if (data is not Ally ally) return;
+        
+            AllyStatusWidget widget = Instantiate(statusWidgetPrefab, widgetContainer);
+            widget.Initialize(ally);
+            _widgetMap[ally] = widget;
+        }
+    }
+}

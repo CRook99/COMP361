@@ -10,8 +10,6 @@ namespace Controller
 {
     public class AllySwitcher : PlayerComponent
     {
-        public List<Ally> Allies;
-        
         private PlayerInput _playerInput;
         public int _currentIndex;
 
@@ -48,8 +46,8 @@ namespace Controller
             }
             
             float inputValue = context.ReadValue<float>();
-            _currentIndex = MathUtils.Mod(_currentIndex + (int)inputValue, Allies.Count);
-            ActiveAllyController.ActiveAlly = Allies[_currentIndex];
+            _currentIndex = MathUtils.Mod(_currentIndex + (int)inputValue, GameManager.Allies.Count);
+            ActiveAllyController.ActiveAlly = GameManager.Allies[_currentIndex];
         }
 
         private void Lock()

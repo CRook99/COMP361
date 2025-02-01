@@ -23,9 +23,9 @@ namespace Controller
             }
         }
 
-        private void Awake()
+        private void Start()
         {
-            ActiveAlly = AllySwitcher.Allies[0];
+            ActiveAlly = GameManager.Allies[0];
         }
     }
 }

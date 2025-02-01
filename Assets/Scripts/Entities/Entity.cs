@@ -15,15 +15,18 @@ namespace Entities
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
         private const float MovementSpeed = 4f;
         
-        [SerializeField] protected EntityScriptableObject Data;
+        public EntityScriptableObject Data;
         
         public UnitModifiers Modifiers;
+
+        public event Action<int> OnHealthChanged;
+        public event Action<int> OnTakeDamage;
 
         protected Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
         protected int CurrentHealth;
 
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             CurrentHealth = Data.MaxHealth;
         }
@@ -86,9 +89,11 @@ namespace Entities
         protected void TakeDamage(int amount)
         {
             CurrentHealth -= amount;
+            OnTakeDamage?.Invoke(amount);
+            OnHealthChanged?.Invoke(CurrentHealth);
             if (CurrentHealth <= 0)
             {
-                // Die
+                Die();
             }
         }
 

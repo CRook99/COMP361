@@ -10,7 +10,9 @@ namespace Managers
         OnPlayerBeginMove,
         OnPlayerEndMove,
         OnStartAllyTurn,
-        OnStartEnemyTurn
+        OnStartEnemyTurn,
+        OnSpawnAlly,
+        OnSpawnEnemy,
     }
     public class EventManager : MonoBehaviour
     {
