@@ -6,12 +6,14 @@ using UnityEngine;
 
 namespace World
 {
+    // represents the game map
+    //
     public class TacticsGrid : MonoBehaviour
     {
         public static TacticsGrid Instance { get; private set; }
         
-        private Dictionary<Vector2Int, Cell> _cellMap;
-        private Dictionary<Vector2Int, Cell> _obstacles;
+        private Dictionary<Vector2Int, Cell> _cellMap; // cells of game map
+        private Dictionary<Vector2Int, Cell> _obstacles; // dict of obstacles on the map 
 
         private MapParser _mapParser;
 
