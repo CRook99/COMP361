@@ -121,7 +121,7 @@ namespace Entities
 
             HashSet<Cell> obstacles = TacticsGrid.Instance.GetObstacleCells();
 
-            HashSet<Cell> player_cells_in_sight = new HashSet<Cell>;
+            HashSet<Cell> player_cells_in_sight = new HashSet<Cell>();
 
             foreach(Cell player_pos in playerPositions) {
                 if(!HasObstacleBetween(cell, player_pos, obstacles)) {
