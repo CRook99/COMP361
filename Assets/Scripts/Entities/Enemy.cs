@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using UnityEngine;
 using World;
 
@@ -34,7 +35,9 @@ namespace Entities
         // Gets available Cells based on current position, does not include obstacle cells or cells with enemies 
         private List<Cell> GetAvailableCells(List<Cell> obstacleCells, List<Cell> playerPositions) 
         {
-            // Data.MovementRange
+            Assert.NotNull(obstacleCells);
+            Assert.NotNull(playerPositions);
+
             int currentX = CurrentCell.Position.x;
             int currentY = CurrentCell.Position.y;
 
@@ -62,6 +65,9 @@ namespace Entities
         // Generates score for each cell depending on sime heuristics 
         private float EvalCell(Cell cell, List<Cell> playerPositions)
         {
+            Assert.NotNull(cell);
+            Assert.NotNull(playerPositions);
+
             float score = 0;
 
             // Prefer cover
@@ -79,6 +85,7 @@ namespace Entities
         // checks if any adjacent cell is an obstacle (cover)
         private bool IsCover(Cell cell)
         {
+            Assert.NotNull(cell);
             HashSet<Cell> obstacles = TacticsGrid.Instance.GetObstacleCells();   
             return 
             obstacles.Contains(cell.N) ||
@@ -90,6 +97,9 @@ namespace Entities
         // Gets number of allies that would flank the enemy at cell
         private int IsFlanked(Cell cell, List<Cell> playerPositions)
         {
+            Assert.NotNull(cell);
+            Assert.NotNull(playerPositions);
+
             int flanked_by = 0;
             HashSet<Cell> obstacles = TacticsGrid.Instance.GetObstacleCells();
 
@@ -102,10 +112,39 @@ namespace Entities
             return flanked_by;
         }
 
+        // Gets number of players that are in enemy line of sight
+        // if cell is a cover, then its allows to move to the side to shoot
         private int HasLineOfSight(Cell cell, List<Cell> playerPositions)
         {
-            // Placeholder logic getting numbers of allies in line of sight
-            return 0;
+            Assert.NotNull(cell);
+            Assert.NotNull(playerPositions);
+
+            HashSet<Cell> obstacles = TacticsGrid.Instance.GetObstacleCells();
+
+            HashSet<Cell> player_cells_in_sight = new HashSet<Cell>;
+
+            foreach(Cell player_pos in playerPositions) {
+                if(!HasObstacleBetween(cell, player_pos, obstacles)) {
+                    obstacles.Add(player_pos );
+                }
+                // if cell contains cover, then you can move out of cover to shoot
+                if(IsCover(cell)) {
+                    if(cell.N != null && cell.N.Walkable && !HasObstacleBetween(cell.N, player_pos, obstacles))
+                        obstacles.Add(player_pos);
+
+                    if(cell.S != null && cell.S.Walkable && !HasObstacleBetween(cell.S, player_pos, obstacles))
+                        obstacles.Add(player_pos);
+
+                    if(cell.E != null && cell.E.Walkable && !HasObstacleBetween(cell.E, player_pos, obstacles))
+                        obstacles.Add(player_pos);
+
+                    if(cell.W != null && cell.W.Walkable && !HasObstacleBetween(cell.W, player_pos, obstacles))
+                        obstacles.Add(player_pos);
+                    
+                }
+            }
+
+            return player_cells_in_sight.Count;
         }
 
         // given start and end cells, checks if an obstacle exists somewhere between them
