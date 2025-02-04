@@ -52,6 +52,18 @@ namespace World
             return cell;
         }
 
+        // Gets current obstacles in the game world
+        public HashSet<Cell> GetObstacleCells() {
+            return _obstacles.Values.ToHashSet();
+        }
+
+
+        // Gets all cells in the game world
+        public HashSet<Cell> GetAllCells()
+        {
+            return _cellMap.Values.ToHashSet();
+        }
+
         private void PrecomputeNeighbours()
         {
             int[] xMap = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -77,5 +89,6 @@ namespace World
                 Handles.Label(pos, cell.Position.ToString());
             }
         }
+
     }
 }
