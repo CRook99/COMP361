@@ -38,12 +38,12 @@ namespace Entities
             CurrentHealth = Data.MaxHealth;
         }
 
-        protected void Start()
+        protected virtual void Start()
         {
             
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             
         }

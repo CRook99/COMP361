@@ -14,6 +14,11 @@ namespace Entities
         protected override void Awake()
         {
             base.Awake();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
             
             EventManager.TriggerEvent(EventTypes.OnSpawnAlly, this);
         }

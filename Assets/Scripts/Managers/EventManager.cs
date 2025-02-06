@@ -13,6 +13,8 @@ namespace Managers
         OnStartEnemyTurn,
         OnSpawnAlly,
         OnSpawnEnemy,
+        OnPause,
+        OnUnpause,
     }
     public class EventManager : MonoBehaviour
     {
