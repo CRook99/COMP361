@@ -10,13 +10,6 @@ using World;
 
 namespace Entities
 {
-    public enum ActionType
-    {
-        Move,
-        Weapon,
-        Ability
-    }
-    
     public abstract class Entity : MonoBehaviour
     {
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
@@ -25,6 +18,7 @@ namespace Entities
         public EntityScriptableObject Data;
         
         public UnitModifiers Modifiers;
+        public EntityActions Actions;
 
         public event Action<int> OnHealthChanged;
         public event Action<int> OnTakeDamage;
@@ -36,6 +30,7 @@ namespace Entities
         protected virtual void Awake()
         {
             CurrentHealth = Data.MaxHealth;
+            Actions = new EntityActions();
         }
 
         protected virtual void Start()
@@ -56,11 +51,14 @@ namespace Entities
             Data = inData;
         }
 
-        public void MoveToCell(Cell destination)
+        public virtual void MoveToCell(Cell destination)
         {
+            if (!Actions.CanUseAction(ActionType.Move)) return;
+            
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
             if (path.Count <= 1) return;
             
+            Actions.UseAction(ActionType.Move);
             StartCoroutine(FollowPath(path));
         }
 

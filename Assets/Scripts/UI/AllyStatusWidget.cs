@@ -23,7 +23,8 @@ namespace UI
         [SerializeField] private Image healthFill;
         [SerializeField] private TextMeshProUGUI healthText;
 
-        [Header("Actions")] [SerializeField] private Transform actionsParent;
+        [Header("Actions")] 
+        [SerializeField] private Transform actionsParent;
         
         [Header("Misc")]
         [SerializeField] private Image fade;
@@ -48,15 +49,15 @@ namespace UI
         {
             _ally = ally;
             _ally.OnHealthChanged += UpdateHealth;
-            _ally.OnUseAction += UseAction;
-            _ally.OnRefreshAction += RefreshAction;
+            _ally.Actions.OnUseAction += UseAction;
+            _ally.Actions.OnRefreshAction += RefreshAction;
         }
 
         private void OnDisable()
         {
             _ally.OnHealthChanged -= UpdateHealth;
-            _ally.OnUseAction -= UseAction;
-            _ally.OnRefreshAction -= RefreshAction;
+            _ally.Actions.OnUseAction -= UseAction;
+            _ally.Actions.OnRefreshAction -= RefreshAction;
 
         }
 
