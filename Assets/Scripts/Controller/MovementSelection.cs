@@ -77,7 +77,7 @@ namespace Controller
         {
             if (_currentCell != null)
             {
-                ActiveAllyController.ActiveAlly.MoveToCell(_currentCell);
+                ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
             }
             else
             {

@@ -9,6 +9,7 @@ namespace Managers
         OnActiveAllyChanged,
         OnPlayerBeginMove,
         OnPlayerEndMove,
+        OnPlayerUseAction,
         OnStartAllyTurn,
         OnStartEnemyTurn,
         OnSpawnAlly,

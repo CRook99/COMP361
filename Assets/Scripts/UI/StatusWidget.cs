@@ -8,10 +8,11 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class UIManager : MonoBehaviour
+    public class StatusWidget : MonoBehaviour
     {
         [SerializeField] private AllyStatusWidget statusWidgetPrefab;
         [SerializeField] private Transform widgetContainer;
+        [SerializeField] private List<ActionScriptableObject> actions;
 
         private Dictionary<Ally, AllyStatusWidget> _widgetMap;
 
@@ -35,7 +36,7 @@ namespace Managers
             if (data is not Ally ally) return;
         
             AllyStatusWidget widget = Instantiate(statusWidgetPrefab, widgetContainer);
-            widget.Initialize(ally);
+            widget.Initialize(ally, actions);
             _widgetMap[ally] = widget;
         }
     }

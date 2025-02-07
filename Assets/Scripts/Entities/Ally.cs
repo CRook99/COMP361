@@ -19,5 +19,17 @@ namespace Entities
             
             EventManager.TriggerEvent(EventTypes.OnSpawnAlly, this);
         }
+
+        public override void TryMoveToCell(Cell destination)
+        {
+            if (!Actions.CanUseAction(ActionType.Move))
+            {
+                // Handle unable
+                return;
+            }
+            
+            EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Move);
+            MoveToCell(destination);
+        }
     }
 }

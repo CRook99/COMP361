@@ -51,12 +51,12 @@ namespace Entities
             Data = inData;
         }
 
-        public virtual void MoveToCell(Cell destination)
+        public abstract void TryMoveToCell(Cell destination);
+
+        protected void MoveToCell(Cell destination)
         {
-            if (!Actions.CanUseAction(ActionType.Move)) return;
-            
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
-            if (path.Count <= 1) return;
+            if (path.Count == 0) return;
             
             Actions.UseAction(ActionType.Move);
             StartCoroutine(FollowPath(path));
