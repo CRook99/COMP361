@@ -67,6 +67,64 @@ namespace World
 
             return new List<Cell>();
         }
+        
+        public static HashSet<Cell> FindReachableCells(Cell start, int range)
+        {
+            if (start == null)
+            {
+                Debug.LogWarning("Tried to find reachable area with null start cell");
+                return new HashSet<Cell>();
+            }
+
+            if (range <= 0)
+            {
+                Debug.Log("Tried to find reachable area with non-positive range");
+                return new HashSet<Cell>();
+            }
+
+            var reachable = new Dictionary<Cell, float>();
+            var queue = new Queue<(Cell cell, float distance)>();
+            
+            queue.Enqueue((start, 0f));
+            reachable[start] = 0f;
+
+            float rangeFloat = range;
+
+            while (queue.Count > 0)
+            {
+                var (current, currentDistance) = queue.Dequeue();
+
+                if (currentDistance > rangeFloat || currentDistance > reachable[current])
+                    continue;
+
+                for (int i = 0; i < 8; i++)
+                {
+                    Cell neighbour = current.Neighbours[i];
+                    
+                    if (neighbour is not { Walkable: true })
+                        continue;
+                    
+                    if (IsDiagonalMove(i) && !IsDiagonalMoveValid(current, i))
+                        continue;
+
+                    float newDistance = currentDistance + (IsDiagonalMove(i) ? Sqrt2 : 1f);
+
+                    if (newDistance > rangeFloat)
+                        continue;
+
+                    if (reachable.TryGetValue(neighbour, out float existingDistance))
+                    {
+                        if (newDistance >= existingDistance)
+                            continue;
+                    }
+                    
+                    queue.Enqueue((neighbour, newDistance));
+                    reachable[neighbour] = newDistance;
+                }
+            }
+
+            return new HashSet<Cell>(reachable.Keys);
+        }
 
         private static List<Cell> ReconstructPath(Dictionary<Cell, Cell> parentMap, Cell current)
         {

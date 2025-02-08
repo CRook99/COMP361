@@ -75,14 +75,12 @@ namespace Controller
 
         private void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (_currentCell != null)
-            {
-                ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
-            }
-            else
-            {
+            if (_currentCell == null)
                 Debug.Log("No cell hovered");
-            }
+            else if (!_currentCell.Walkable)
+                Debug.Log("Unwalkable cell selected");
+            else
+                ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
         }
 
         private void LockCursor()
