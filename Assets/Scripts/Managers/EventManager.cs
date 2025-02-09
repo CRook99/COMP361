@@ -6,6 +6,7 @@ namespace Managers
 {
     public enum EventTypes
     {
+        OnCameraModeChanged,
         OnActiveAllyChanged,
         OnPlayerBeginMove,
         OnPlayerEndMove,

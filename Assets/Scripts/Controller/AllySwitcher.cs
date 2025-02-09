@@ -50,8 +50,9 @@ namespace Controller
             ActiveAllyController.ActiveAlly = GameManager.Allies[_currentIndex];
         }
 
-        private void Lock()
+        private void Lock(object _)
         {
+            Debug.Log("lock");
             _locked = true;
         }
 

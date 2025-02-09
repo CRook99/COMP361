@@ -74,8 +74,6 @@ namespace Entities
 
         protected virtual IEnumerator FollowPath(List<Cell> path)
         {
-            EventManager.TriggerEvent(EventTypes.OnPlayerBeginMove, this);
-            
             int pathIndex = 0;
 
             while (true)
@@ -97,8 +95,6 @@ namespace Entities
 
                 if (pathIndex >= path.Count - 1) break;
             }
-            
-            EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
         }
 
         protected void TakeDamage(int amount)

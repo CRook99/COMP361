@@ -45,6 +45,13 @@ namespace Entities
             MoveToCell(destination);
         }
 
+        protected override IEnumerator FollowPath(List<Cell> path)
+        {
+            EventManager.TriggerEvent(EventTypes.OnPlayerBeginMove, this);
+            yield return base.FollowPath(path);
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
+        }
+
         private void OnActiveAllyChanged(object data)
         {
             if (data is not Ally ally) return;
