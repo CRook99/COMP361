@@ -52,7 +52,6 @@ namespace Controller
 
         private void Lock(object _)
         {
-            Debug.Log("lock");
             _locked = true;
         }
 
