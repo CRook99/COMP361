@@ -6,6 +6,7 @@ using System;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using World;
 
 public enum CameraMode
 {
@@ -32,6 +33,7 @@ namespace Controller
         [Header("Config")]
         [SerializeField] private CameraConfig standardConfig;
         [SerializeField] private CameraConfig airSupportConfig;
+        [SerializeField] private float snapTime;
         
         [Header("Attachment")]
         [SerializeField] private bool attachOnMove;
@@ -52,6 +54,8 @@ namespace Controller
 
         private Transform _attachedTransform;
         private bool _attached;
+
+        private Tween _snappingTween;
         
         private void Awake()
         {
@@ -61,7 +65,8 @@ namespace Controller
             _airSupportVCamTransposer.m_FollowOffset = airSupportConfig.Offset;
 
             _currentZoom = startingZoom;
-            Switch(CameraMode.Standard);
+            _mode = CameraMode.Standard;
+            Switch();
         }
 
         private void Start()
@@ -109,21 +114,22 @@ namespace Controller
             else
             {
                 HandleMovement();
+                if (_mode == CameraMode.AirSupport) HandleSnapping();
             }
         }
 
         private void SwitchMode(InputAction.CallbackContext context)
         {
             if (_isRotating || brain.IsBlending) return;
-            
-            Switch(_mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard);
+
+            _mode = _mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard;
+            Switch();
+            EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, _mode);
         }
 
-        private void Switch(CameraMode mode)
+        private void Switch()
         {
-            _mode = mode;
-            
-            if (mode == CameraMode.Standard)
+            if (_mode == CameraMode.Standard)
             {
                 _activeConfig = standardConfig;
                 _activeTransposer = _standardVCamTransposer;
@@ -145,6 +151,8 @@ namespace Controller
 
         private void HandleMovement()
         {
+            _snappingTween?.Kill();
+            
             // Get relative forward and right vectors of current camera orientation
             var forward = _activeTransposer.transform.forward;
             forward.y = 0f;
@@ -155,6 +163,24 @@ namespace Controller
             
             Vector2 input = _moveInput.ReadValue<Vector2>();
             cameraSystem.transform.position += (input.y * forward + input.x * right) * (_activeConfig.MovementSpeed * Time.deltaTime);
+        }
+
+        private void HandleSnapping()
+        {
+            Vector2 input = _moveInput.ReadValue<Vector2>();
+            if (input.magnitude > 0f) return;
+
+            int roundX = Mathf.RoundToInt(cameraSystem.transform.position.x);
+            int roundZ = Mathf.RoundToInt(cameraSystem.transform.position.z);
+
+            if (TacticsGrid.Instance.GetCell(roundX, roundZ) == null) return;
+
+            Vector3 snapPosition = new Vector3(roundX, cameraSystem.transform.position.y, roundZ);
+
+            _snappingTween?.Kill();
+            _snappingTween = cameraSystem.transform.DOMove(snapPosition, snapTime)
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() => _snappingTween = null);
         }
         
         private void RotateCamera(InputAction.CallbackContext context)

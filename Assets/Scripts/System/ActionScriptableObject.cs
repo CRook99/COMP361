@@ -8,5 +8,6 @@ namespace System
     {
         public Sprite Icon;
         public ActionType Type;
+        public string DisplayName;
     }
 }

@@ -9,30 +9,24 @@ namespace UI
 {
     public class AllyStatusActionWidget : MonoBehaviour
     {
-        private const float SwitchTime = 0.5f;
-        
         [SerializeField] private Image icon;
-        [SerializeField] private RectTransform restingPosition;
-        [SerializeField] private RectTransform activatedPosition;
-        [SerializeField] private Image bar;
+        [SerializeField] private Color inactiveColor;
         
         public ActionScriptableObject Data;
 
-        private void Awake()
+        private void Start()
         {
             icon.sprite = Data.Icon;
         }
 
         public void Activate()
         {
-            bar.DOFade(1f, SwitchTime).SetEase(Ease.Linear);
-            icon.rectTransform.DOMoveY(activatedPosition.position.y, SwitchTime).SetEase(Ease.Linear);
+            icon.color = Color.white;
         }
         
         public void Deactivate()
         {
-            bar.DOFade(0f, SwitchTime).SetEase(Ease.Linear);
-            icon.rectTransform.DOMoveY(restingPosition.position.y, SwitchTime).SetEase(Ease.Linear);
+            icon.color = inactiveColor;
         }
     }
 }

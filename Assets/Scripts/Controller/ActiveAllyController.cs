@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Entities;
 using Managers;
 using UnityEngine;
@@ -23,8 +24,13 @@ namespace Controller
             }
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
+            while (GameManager.Allies.Count == 0)
+            {
+                yield return null;
+            }
+            
             ActiveAlly = GameManager.Allies[0];
         }
     }

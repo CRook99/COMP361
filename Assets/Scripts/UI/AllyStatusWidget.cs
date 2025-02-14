@@ -23,7 +23,10 @@ namespace UI
         [SerializeField] private Image healthFill;
         [SerializeField] private TextMeshProUGUI healthText;
 
-        [Header("Actions")] [SerializeField] private Transform actionsParent;
+        [Header("Actions")] 
+        [SerializeField] private AllyStatusActionWidget actionWidgetPrefab;
+        [SerializeField] private Transform actionsParent;
+        [SerializeField] private CanvasGroup actionsGroup;
         
         [Header("Misc")]
         [SerializeField] private Image fade;
@@ -32,31 +35,30 @@ namespace UI
         private void Awake()
         {
             EventManager.Subscribe(EventTypes.OnActiveAllyChanged, ChangeState);
-
-            _actionMap = new();
-
-            foreach (Transform child in actionsParent)
-            {
-                if (child == actionsParent) continue;
-
-                AllyStatusActionWidget widget = child.GetComponent<AllyStatusActionWidget>();
-                _actionMap.Add(widget.Data.Type, widget);
-            }
         }
 
-        public void Initialize(Ally ally)
+        public void Initialize(Ally ally, List<ActionScriptableObject> actions)
         {
             _ally = ally;
             _ally.OnHealthChanged += UpdateHealth;
-            _ally.OnUseAction += UseAction;
-            _ally.OnRefreshAction += RefreshAction;
+            _ally.Actions.OnUseAction += UseAction;
+            _ally.Actions.OnRefreshAction += RefreshAction;
+
+            _actionMap = new();
+            
+            foreach (ActionScriptableObject action in actions)
+            {
+                AllyStatusActionWidget widget = Instantiate(actionWidgetPrefab, actionsParent);
+                widget.Data = action;
+                _actionMap.Add(action.Type, widget);
+            }
         }
 
         private void OnDisable()
         {
             _ally.OnHealthChanged -= UpdateHealth;
-            _ally.OnUseAction -= UseAction;
-            _ally.OnRefreshAction -= RefreshAction;
+            _ally.Actions.OnUseAction -= UseAction;
+            _ally.Actions.OnRefreshAction -= RefreshAction;
 
         }
 
@@ -69,6 +71,7 @@ namespace UI
                 _active = true;
                 scaleParent.DOScale(ExpandScale, SwitchTime);
                 fade.DOFade(1f, SwitchTime);
+                actionsGroup.DOFade(0f, SwitchTime);
             }
             else // Changed to another ally
             {
@@ -77,6 +80,7 @@ namespace UI
                 _active = false;
                 scaleParent.DOScale(1f, SwitchTime);
                 fade.DOFade(0f, SwitchTime);
+                actionsGroup.DOFade(1f, SwitchTime);
             }
         }
 

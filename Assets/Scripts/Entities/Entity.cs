@@ -10,13 +10,6 @@ using World;
 
 namespace Entities
 {
-    public enum ActionType
-    {
-        Move,
-        Weapon,
-        Ability
-    }
-    
     public abstract class Entity : MonoBehaviour
     {
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
@@ -25,6 +18,7 @@ namespace Entities
         public EntityScriptableObject Data;
         
         public UnitModifiers Modifiers;
+        public EntityActions Actions;
 
         public event Action<int> OnHealthChanged;
         public event Action<int> OnTakeDamage;
@@ -36,16 +30,27 @@ namespace Entities
         protected virtual void Awake()
         {
             CurrentHealth = Data.MaxHealth;
+            Actions = new EntityActions();
         }
 
-        protected void Start()
+        protected virtual void Start()
         {
             
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             
+        }
+
+        [ContextMenu("Test Range")]
+        private void TestRange()
+        {
+            HashSet<Cell> cells = Pathfinder.FindReachableCells(CurrentCell, 5);
+            foreach (Cell cell in cells)
+            {
+                Debug.Log(cell.Position);
+            }
         }
 
         protected void Initialize(EntityScriptableObject inData)
@@ -56,18 +61,19 @@ namespace Entities
             Data = inData;
         }
 
-        public void MoveToCell(Cell destination)
+        public abstract void TryMoveToCell(Cell destination);
+
+        protected void MoveToCell(Cell destination)
         {
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
-            if (path.Count <= 1) return;
+            if (path.Count == 0) return;
             
+            Actions.UseAction(ActionType.Move);
             StartCoroutine(FollowPath(path));
         }
 
         protected virtual IEnumerator FollowPath(List<Cell> path)
         {
-            EventManager.TriggerEvent(EventTypes.OnPlayerBeginMove, this);
-            
             int pathIndex = 0;
 
             while (true)
@@ -89,8 +95,6 @@ namespace Entities
 
                 if (pathIndex >= path.Count - 1) break;
             }
-            
-            EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
         }
 
         protected void TakeDamage(int amount)

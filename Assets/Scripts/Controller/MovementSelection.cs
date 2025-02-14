@@ -1,4 +1,6 @@
+using System;
 using Controller;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utility;
@@ -15,22 +17,36 @@ namespace Controller
         private Cell _currentCell;
         private PlayerInput _playerInput;
         private LayerMask _rayMask;
+        private bool _cursorLocked;
 
         private void Awake()
         {
             _rayMask = LayerMask.GetMask("Cell");
             _cam = Camera.main;
         }
+        
+        private void OnEnable()
+        {
+            EventManager.Subscribe(EventTypes.OnPause, LockCursor);
+            EventManager.Subscribe(EventTypes.OnUnpause, UnlockCursor);
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe(EventTypes.OnPause, LockCursor);
+            EventManager.Unsubscribe(EventTypes.OnUnpause, UnlockCursor);
+        }
 
         private void Start()
         {
             _playerInput = InputManager.Instance.PlayerInput;
-
             _playerInput.Combat.Select.performed += OnSelectTile;
         }
 
         private void Update()
         {
+            if (_cursorLocked) return;
+            
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             _ray = _cam.ScreenPointToRay(mousePosition);
 
@@ -59,14 +75,22 @@ namespace Controller
 
         private void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (_currentCell != null)
-            {
-                ActiveAllyController.ActiveAlly.MoveToCell(_currentCell);
-            }
-            else
-            {
+            if (_currentCell == null)
                 Debug.Log("No cell hovered");
-            }
+            else if (!_currentCell.Walkable)
+                Debug.Log("Unwalkable cell selected");
+            else
+                ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
+        }
+
+        private void LockCursor()
+        {
+            _cursorLocked = true;
+        }
+
+        private void UnlockCursor()
+        {
+            _cursorLocked = false;
         }
     }
 }

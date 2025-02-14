@@ -80,6 +80,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""81b52f84-0fe6-431a-9d9a-39366a4778c8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -324,6 +333,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d477058a-9062-4ee8-b18f-65aea7b18ceb"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -338,6 +358,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Combat_ZoomCamera = m_Combat.FindAction("ZoomCamera", throwIfNotFound: true);
         m_Combat_Cycle = m_Combat.FindAction("Cycle", throwIfNotFound: true);
         m_Combat_Select = m_Combat.FindAction("Select", throwIfNotFound: true);
+        m_Combat_Pause = m_Combat.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -410,6 +431,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat_ZoomCamera;
     private readonly InputAction m_Combat_Cycle;
     private readonly InputAction m_Combat_Select;
+    private readonly InputAction m_Combat_Pause;
     public struct CombatActions
     {
         private @PlayerInput m_Wrapper;
@@ -420,6 +442,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @ZoomCamera => m_Wrapper.m_Combat_ZoomCamera;
         public InputAction @Cycle => m_Wrapper.m_Combat_Cycle;
         public InputAction @Select => m_Wrapper.m_Combat_Select;
+        public InputAction @Pause => m_Wrapper.m_Combat_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -447,6 +470,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Select.started += instance.OnSelect;
             @Select.performed += instance.OnSelect;
             @Select.canceled += instance.OnSelect;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(ICombatActions instance)
@@ -469,6 +495,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Select.started -= instance.OnSelect;
             @Select.performed -= instance.OnSelect;
             @Select.canceled -= instance.OnSelect;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(ICombatActions instance)
@@ -494,5 +523,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnZoomCamera(InputAction.CallbackContext context);
         void OnCycle(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

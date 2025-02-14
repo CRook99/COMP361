@@ -181,5 +181,10 @@ namespace Entities
                 MoveToCell(best);
             }
         }
+        
+        public override void TryMoveToCell(Cell destination)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
