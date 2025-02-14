@@ -11,6 +11,7 @@ namespace Managers
         OnPlayerBeginMove,
         OnPlayerEndMove,
         OnPlayerUseAction,
+        OnPlayerChangeMode,
         OnStartAllyTurn,
         OnStartEnemyTurn,
         OnSpawnAlly,
