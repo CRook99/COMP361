@@ -10,8 +10,14 @@ namespace Entities
 {
     public class Enemy : Entity
     { 
-        // Get best cell the enemy should move based on current position
 
+        // Set of fields that determine how much Cover, Line of Sight enemies (given your in cover), and flanked by other allies
+        // matters in the enemies decision making 
+        private readonly int CoverWeight = 10;
+        private readonly int LineOfSightInCoverWeight = 8;
+        private readonly int isFlankedWeight = -10;
+
+        // Get best cell the enemy should move based on current position
         public Cell GetBestMove()
         {   
             List<Cell> obstacleCells = TacticsGrid.Instance.GetObstacleCells().ToList();
@@ -20,6 +26,8 @@ namespace Entities
 
             Cell bestMove = null;
             float bestScore = float.MinValue;
+
+            // print(obstacleCells.Count());
 
             foreach (Cell cell in possibleMoves)
             {
@@ -50,6 +58,7 @@ namespace Entities
                 if(obstacleCells.Contains(cell) || playerPositions.Contains(cell) || !cell.Walkable) {
                     continue;
                 }
+
                 // Calculate distance
                 int cellX = cell.Position.x;
                 int cellY = cell.Position.y;
@@ -74,14 +83,16 @@ namespace Entities
             float score = 0;
 
             // Prefer cover
-            if (IsCover(cell)) score += 10f;
+            if (IsCover(cell))  {
+                score += CoverWeight;
 
-            // Avoid flanking
-            score -= 10f * IsFlanked(cell, playerPositions);
-
-            // Ensure attack chance
-            score += 5f * HasLineOfSight(cell, playerPositions);
-            print(playerPositions);
+                // Ensure attack chance
+                score += LineOfSightInCoverWeight * HasLineOfSight(cell, playerPositions);
+                score += isFlankedWeight * IsFlanked(cell, playerPositions);
+            } else {
+                // Avoid flanking
+                score += isFlankedWeight * IsFlanked(cell, playerPositions);
+            }
 
             return score;
         }
@@ -123,28 +134,26 @@ namespace Entities
             Assert.NotNull(playerPositions);
 
             HashSet<Cell> obstacles = TacticsGrid.Instance.GetObstacleCells();
-
             HashSet<Cell> player_cells_in_sight = new HashSet<Cell>();
 
             foreach(Cell player_pos in playerPositions) {
                 if(!HasObstacleBetween(cell, player_pos, obstacles)) {
-                    obstacles.Add(player_pos );
+                    player_cells_in_sight.Add(player_pos);
                 }
 
                 // if cell contains cover, then you can move out of cover to shoot
                 if(IsCover(cell)) {
                     if(cell.N != null && cell.N.Walkable && !HasObstacleBetween(cell.N, player_pos, obstacles))
-                        obstacles.Add(player_pos);
+                        player_cells_in_sight.Add(player_pos);
 
                     if(cell.S != null && cell.S.Walkable && !HasObstacleBetween(cell.S, player_pos, obstacles))
-                        obstacles.Add(player_pos);
+                        player_cells_in_sight.Add(player_pos);
 
                     if(cell.E != null && cell.E.Walkable && !HasObstacleBetween(cell.E, player_pos, obstacles))
-                        obstacles.Add(player_pos);
+                        player_cells_in_sight.Add(player_pos);
 
                     if(cell.W != null && cell.W.Walkable && !HasObstacleBetween(cell.W, player_pos, obstacles))
-                        obstacles.Add(player_pos);
-                    
+                        player_cells_in_sight.Add(player_pos);
                 }
             }
 
@@ -152,36 +161,60 @@ namespace Entities
         }
 
         // given start and end cells, checks if an obstacle exists somewhere between them
+        // i.e a line drawn from end to start intersects with a obstacle tile
+        // uses Bresenham's algorithm
         private bool HasObstacleBetween(Cell start, Cell end, HashSet<Cell> obstacles)
         {
-            int dx = (int)Mathf.Sign(end.Position.x - start.Position.x);
-            int dy = (int)Mathf.Sign(end.Position.y - start.Position.y);
+            int x0 = start.Position.x;
+            int y0 = start.Position.y;
+            int dx = Math.Abs(end.Position.x - x0);
+            int dy = Math.Abs(end.Position.y - y0);
+            int sx = (x0 < end.Position.x) ? 1 : -1;
+            int sy = (y0 < end.Position.y) ? 1 : -1;
+            int err = dx - dy;
 
-            int x = start.Position.x + dx;
-            int y = start.Position.y + dy;
-
-            while (x != end.Position.x || y != end.Position.y)
+            while (true)
             {
-                Cell checkCell = TacticsGrid.Instance.GetCell(x, y);
+                Cell checkCell = TacticsGrid.Instance.GetCell(x0, y0);
                 if (obstacles.Contains(checkCell)) 
                     return true;
 
-                x += dx;
-                y += dy;
+                if (x0 == end.Position.x && y0 == end.Position.y)
+                    break;
+
+                int e2 = 2 * err;
+                if (e2 > -dy) 
+                {
+                    err -= dy;
+                    x0 += sx;
+                }
+                if (e2 < dx) 
+                {
+                    err += dx;
+                    y0 += sy;
+                }
             }
 
             return false;
         }
 
         // for testing
-        private void Update() {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                Cell best = GetBestMove();
-                MoveToCell(best);
-            }
+        // protected override void Update() {
+        //     if (Input.GetKeyDown(KeyCode.M))
+        //     {
+        //         Cell best = GetBestMove();
+        //         MoveToCell(best);
+        //     }
+        // }
+
+        // for testing
+        [ContextMenu("testMove")]
+        private void testMove() {
+            Cell best = GetBestMove();
+            MoveToCell(best);
         }
-        
+
+
         public override void TryMoveToCell(Cell destination)
         {
             throw new System.NotImplementedException();
