@@ -12,6 +12,9 @@ namespace UI
     public class ActiveAllyIndicator : MonoBehaviour
     {
         private const float FadeTime = 0.1f;
+
+        [SerializeField] private Sprite onScreenSprite;
+        [SerializeField] private Sprite offScreenSprite;
         
         [SerializeField] private Vector3 standardOffset;
         [SerializeField] private Vector3 airSupportOffset;
@@ -25,6 +28,8 @@ namespace UI
         private Image _image;
         private Vector3 _offset;
         private float _margin;
+
+        private bool _wasOffScreen;
 
         private void Awake()
         {
@@ -60,9 +65,17 @@ namespace UI
                 0f
             );
 
-            float bob = Mathf.Approximately(pos.x, clampedPos.x) && Mathf.Approximately(pos.y, clampedPos.y)
-                ? Mathf.Sin(bobSpeed * Time.time) * bobMagnitude
-                : 0f;
+            bool isOffScreen = !Mathf.Approximately(pos.x, clampedPos.x) || !Mathf.Approximately(pos.y, clampedPos.y);
+
+            if (isOffScreen != _wasOffScreen)
+            {
+                _image.sprite = isOffScreen ? offScreenSprite : onScreenSprite;
+                _wasOffScreen = isOffScreen;
+            }
+
+            float bob = isOffScreen
+                ? 0f
+                : Mathf.Sin(bobSpeed * Time.time) * bobMagnitude;
 
             transform.position = clampedPos + Vector3.up * bob;
         }
