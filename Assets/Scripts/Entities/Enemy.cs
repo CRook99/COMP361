@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 using World;
 
@@ -44,6 +46,7 @@ namespace Entities
             List<Cell> available = new List<Cell>();
 
             foreach (Cell cell in TacticsGrid.Instance.GetAllCells()) {
+
                 if(obstacleCells.Contains(cell) || playerPositions.Contains(cell) || !cell.Walkable) {
                     continue;
                 }
@@ -78,6 +81,7 @@ namespace Entities
 
             // Ensure attack chance
             score += 5f * HasLineOfSight(cell, playerPositions);
+            print(playerPositions);
 
             return score;
         }
@@ -104,11 +108,10 @@ namespace Entities
             HashSet<Cell> obstacles = TacticsGrid.Instance.GetObstacleCells();
 
             foreach(Cell player_pos in playerPositions) {
-                if(!HasObstacleBetween(cell, player_pos, obstacles)) {
+                if(!HasObstacleBetween(player_pos, cell, obstacles)) {
                     flanked_by += 1;
                 }
             }
-
             return flanked_by;
         }
 
@@ -127,6 +130,7 @@ namespace Entities
                 if(!HasObstacleBetween(cell, player_pos, obstacles)) {
                     obstacles.Add(player_pos );
                 }
+
                 // if cell contains cover, then you can move out of cover to shoot
                 if(IsCover(cell)) {
                     if(cell.N != null && cell.N.Walkable && !HasObstacleBetween(cell.N, player_pos, obstacles))
@@ -167,6 +171,15 @@ namespace Entities
             }
 
             return false;
+        }
+
+        // for testing
+        private void Update() {
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                Cell best = GetBestMove();
+                MoveToCell(best);
+            }
         }
     }
 }
