@@ -18,6 +18,8 @@ namespace Managers
         OnSpawnEnemy,
         OnPause,
         OnUnpause,
+        OnPlayerBeginAiming,
+        OnPlayerConfirmShot
     }
     public class EventManager : MonoBehaviour
     {
