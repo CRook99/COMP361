@@ -49,7 +49,7 @@ namespace Controller
             EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
         }
 
-        private void StartAiming()
+        private void StartAiming() // I don't know if I even need to do this
         {
             // Prevent aiming when impossible
             if (_isAiming || TurnManager.Instance.HasUnitActed(ActiveAlly)) return;
