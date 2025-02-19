@@ -77,7 +77,8 @@ public class GameManager : MonoBehaviour
         GameState state = new GameState
         {
             Allies = new List<AllyData>(),
-            Enemies = new List<EnemyData>()
+            Enemies = new List<EnemyData>(),
+            isAllyTurn = TurnManager.Instance != null ? TurnManager.Instance.IsAllyTurn : true // Default to ally turn if no instance
         };
 
         foreach (Ally ally in Allies)

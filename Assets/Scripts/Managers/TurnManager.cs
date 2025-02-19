@@ -11,6 +11,7 @@ public class TurnManager : MonoBehaviour
     public static TurnManager Instance {get; private set;}
     
     private bool _isAllyTurn = true;
+    public bool IsAllyTurn => _isAllyTurn; // Getter for the gameManager -> Serialize
 
     private void Awake() 
     {

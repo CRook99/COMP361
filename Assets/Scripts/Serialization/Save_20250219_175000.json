@@ -1,15 +1,15 @@
 {
     "Allies": [
         {
-            "posX": 9.0,
-            "posY": 0.0,
-            "posZ": 11.0,
-            "entityDataName": "Ally"
-        },
-        {
             "posX": 10.0,
             "posY": 0.0,
             "posZ": 5.0,
+            "entityDataName": "Ally"
+        },
+        {
+            "posX": 9.0,
+            "posY": 0.0,
+            "posZ": 11.0,
             "entityDataName": "Ally"
         },
         {
@@ -19,5 +19,6 @@
             "entityDataName": "Ally"
         }
     ],
-    "Enemies": []
+    "Enemies": [],
+    "isAllyTurn": true
 }
