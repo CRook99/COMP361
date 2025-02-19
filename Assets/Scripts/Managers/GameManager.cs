@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
                 posX = ally.transform.position.x,
                 posY = ally.transform.position.y,
                 posZ = ally.transform.position.z,
-                //currentHealth = ally.Health,
+                currentHealth = ally.Health,
                 entityDataName = ally.Data != null ? ally.Data.name : "Unknown"
             };
 
@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
                 posX = enemy.transform.position.x,
                 posY = enemy.transform.position.y,
                 posZ = enemy.transform.position.z,
-                //currentHealth = enemy.Health,
+                currentHealth = enemy.Health,
                 entityDataName = enemy.Data != null ? enemy.Data.name : "Unknown"
             };
 

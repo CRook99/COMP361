@@ -8,7 +8,7 @@ public class EntityData
     public float posY;
     public float posZ;
 
-    //public int currentHealth;
+    public int currentHealth;
 
     public string entityDataName; //identifier
 }

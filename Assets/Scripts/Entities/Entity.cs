@@ -25,6 +25,8 @@ namespace Entities
 
         protected Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
         protected int CurrentHealth;
+        public int Health => CurrentHealth; // For serialization
+
 
 
         protected virtual void Awake()
