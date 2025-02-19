@@ -70,6 +70,15 @@ public class GameManager : MonoBehaviour
     {
         SaveGameState();
     }
+        if (Input.GetKeyDown(KeyCode.T))
+    {
+        Debug.Log("Turn ++");
+        if (TurnManager.Instance.IsAllyTurn == true){
+            TurnManager.Instance.StartEnemyTurn();
+        }else{
+            TurnManager.Instance.StartAllyTurn();
+        }
+    }
     }
 
     public void SaveGameState()
@@ -78,7 +87,8 @@ public class GameManager : MonoBehaviour
         {
             Allies = new List<AllyData>(),
             Enemies = new List<EnemyData>(),
-            isAllyTurn = TurnManager.Instance != null ? TurnManager.Instance.IsAllyTurn : true // Default to ally turn if no instance
+            isAllyTurn = TurnManager.Instance != null ? TurnManager.Instance.IsAllyTurn : true, // Default to ally turn if no instance
+            turnNumber = TurnManager.Instance != null ? TurnManager.Instance.TurnNumber : 0 
         };
 
         foreach (Ally ally in Allies)

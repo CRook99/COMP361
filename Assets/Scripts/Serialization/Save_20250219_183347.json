@@ -23,5 +23,6 @@
         }
     ],
     "Enemies": [],
-    "isAllyTurn": true
+    "isAllyTurn": true,
+    "turnNumber": 1
 }

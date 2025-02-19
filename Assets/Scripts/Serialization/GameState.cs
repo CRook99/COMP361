@@ -10,6 +10,8 @@ public class GameState : GameSerializableBase
     public List<EnemyData> Enemies;
 
     public bool isAllyTurn;
+    public int turnNumber;
+
 
     public override bool Validate()
     {

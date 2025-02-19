@@ -11,7 +11,10 @@ public class TurnManager : MonoBehaviour
     public static TurnManager Instance {get; private set;}
     
     private bool _isAllyTurn = true;
-    public bool IsAllyTurn => _isAllyTurn; // Getter for the gameManager -> Serialize
+    private int _turnNumber = 0;
+    // Getters for the gameManager -> Serialize
+    public bool IsAllyTurn => _isAllyTurn; 
+    public int TurnNumber => _turnNumber;
 
     private void Awake() 
     {
@@ -36,6 +39,7 @@ public class TurnManager : MonoBehaviour
         // Make UI element indicating whose turn it is subscribe to this
 
         _isAllyTurn = true;
+        _turnNumber++;
         Debug.Log("Ally's Turn");
     }
 
@@ -47,5 +51,10 @@ public class TurnManager : MonoBehaviour
         _isAllyTurn = false;
         Debug.Log("Enemy's Turn");
 
+    }
+
+     public void SetTurnNumber(int turn)
+    {
+        _turnNumber = turn;
     }
 }
