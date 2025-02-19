@@ -363,7 +363,7 @@ Transform:
   m_GameObject: {fileID: 5281981}
   serializedVersion: 2
   m_LocalRotation: {x: 0.6710053, y: 0, z: 0, w: 0.7414526}
-  m_LocalPosition: {x: 0, y: 19.90074, z: -1.990075}
+  m_LocalPosition: {x: 0, y: 10, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18010,7 +18010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 3
-  m_FollowOffset: {x: 0, y: 19.90074, z: -1.990075}
+  m_FollowOffset: {x: 0, y: 10, z: -1}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0
@@ -25766,6 +25766,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09571ad9fc2e114eab5a34ce8e9cd6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onScreenSprite: {fileID: 21300000, guid: 22cd37262fb600048a589b5a724c96e6, type: 3}
+  offScreenSprite: {fileID: 21300000, guid: d999667f07e695042adf36cc2ec8972d, type: 3}
   standardOffset: {x: 0, y: 80, z: 0}
   airSupportOffset: {x: 0, y: 60, z: 0}
   allyOffset: {x: 0, y: 1, z: 0}
