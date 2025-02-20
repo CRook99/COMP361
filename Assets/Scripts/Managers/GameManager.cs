@@ -88,7 +88,15 @@ public class GameManager : MonoBehaviour
             Allies = new List<AllyData>(),
             Enemies = new List<EnemyData>(),
             isAllyTurn = TurnManager.Instance != null ? TurnManager.Instance.IsAllyTurn : true, // Default to ally turn if no instance
-            turnNumber = TurnManager.Instance != null ? TurnManager.Instance.TurnNumber : 0 
+            turnNumber = TurnManager.Instance != null ? TurnManager.Instance.TurnNumber : 0,
+            enemiesVanquished = StatisticsManager.Instance.GetEnemiesVanquished(),
+            damageDealt = StatisticsManager.Instance.GetDamageDealt(),
+            shotsLanded = StatisticsManager.Instance.GetShotsLanded(),
+            spacesMoved = StatisticsManager.Instance.GetSpacesMoved(),
+            fallenSoldiers = StatisticsManager.Instance.GetFallenSoldiers(),
+            damageReceived = StatisticsManager.Instance.GetDamageReceived(),
+            shotsTaken = StatisticsManager.Instance.GetShotsTaken(),
+            chanceShotsDodged = StatisticsManager.Instance.GetChanceShotsDodged()
         };
 
         foreach (Ally ally in Allies)
