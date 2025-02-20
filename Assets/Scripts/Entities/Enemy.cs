@@ -27,7 +27,6 @@ namespace Entities
             Cell bestMove = null;
             float bestScore = float.MinValue;
 
-            // print(obstacleCells.Count());
 
             foreach (Cell cell in possibleMoves)
             {
@@ -198,14 +197,6 @@ namespace Entities
             return false;
         }
 
-        // for testing
-        // protected override void Update() {
-        //     if (Input.GetKeyDown(KeyCode.M))
-        //     {
-        //         Cell best = GetBestMove();
-        //         MoveToCell(best);
-        //     }
-        // }
 
         // for testing
         [ContextMenu("testMove")]
