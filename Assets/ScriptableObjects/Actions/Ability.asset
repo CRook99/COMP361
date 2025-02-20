@@ -15,3 +15,4 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 970b2b081a1e2de4eba18c88550c71eb, type: 3}
   Type: 2
   DisplayName: Ability
+  WidgetType: 2

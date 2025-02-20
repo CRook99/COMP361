@@ -15,3 +15,4 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 99987f0639decc44d9ff5b7b1396731c, type: 3}
   Type: 1
   DisplayName: Weapon
+  WidgetType: 1
