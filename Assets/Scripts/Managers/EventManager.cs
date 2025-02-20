@@ -18,6 +18,14 @@ namespace Managers
         OnSpawnEnemy,
         OnPause,
         OnUnpause,
+         OnEnemyKilled,
+        OnDamageDealt,
+        OnShotLanded,
+        OnSpaceMoved,
+        OnAllyFallen,
+        OnDamageTaken,
+        OnShotTaken,
+        OnChanceShotDodged
     }
     public class EventManager : MonoBehaviour
     {

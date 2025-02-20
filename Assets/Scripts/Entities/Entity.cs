@@ -69,6 +69,8 @@ namespace Entities
         {
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
             if (path.Count == 0) return;
+
+            EventManager.TriggerEvent(EventTypes.OnSpaceMoved, path.Count); // stats manager
             
             Actions.UseAction(ActionType.Move);
             StartCoroutine(FollowPath(path));
@@ -104,6 +106,9 @@ namespace Entities
             CurrentHealth -= amount;
             OnTakeDamage?.Invoke(amount);
             OnHealthChanged?.Invoke(CurrentHealth);
+
+            EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
+
             if (CurrentHealth <= 0)
             {
                 Die();
@@ -119,6 +124,8 @@ namespace Entities
         protected virtual void Die()
         {
             Debug.Log($"{gameObject.name} died!");
+
+             EventManager.TriggerEvent(EventTypes.OnAllyFallen); // stats manager
         }
 
         public virtual void TakeTurn(System.Action onTurnComplete)
