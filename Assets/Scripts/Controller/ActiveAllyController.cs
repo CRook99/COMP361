@@ -5,14 +5,17 @@ using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Controller
 {
     public class ActiveAllyController : PlayerComponent
     {
         private Ally _activeAlly;
-        private bool _isAiming;
+        private ModeSwitcher _modeSwitcher; // Ask Connor about this!!!! - see #$* - SerializeField??
+        //private bool _isAiming;
         private List<Enemy> _validTargets = new List<Enemy>();
+        private int _currentTargetIndex = 0;
 
         public Ally ActiveAlly
         {
@@ -29,6 +32,8 @@ namespace Controller
 
         private IEnumerator Start()
         {
+            _modeSwitcher = FindObjectOfType<ModeSwitcher>(); // #%*
+
             while (GameManager.Allies.Count == 0)
             {
                 yield return null;
@@ -39,17 +44,64 @@ namespace Controller
 
         private void OnEnable()
         {
-            EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, StartAiming);
+            //EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, StartAiming);
             EventManager.Subscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
+            InputManager.Instance.PlayerInput.Combat.Cycle.performed += CycleTarget; // chatgpt
         }
 
         private void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, StartAiming);
+            //EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, StartAiming);
             EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
         }
 
-        private void StartAiming() // I don't know if I even need to do this
+        private void EnterWeaponMode()
+        {
+            if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(_activeAlly)) return;
+
+            _modeSwitcher.SwitchMode(ActionType.Weapon);
+            _validTargets = FindValidTargets();
+
+            if (_validTargets.Count > 0)
+            {
+                HighlightTarget(_validTargets[_currentTargetIndex]);
+            }
+            else
+            {
+                TargetingUIManager.Instance.HideReticle();
+            }
+
+            EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming, _activeAlly); // Begin aiming or change mode?
+        }
+
+        private void ExitWeaponMode()
+        {
+            if (!_modeSwitcher) return;
+
+            _modeSwitcher.SwitchMode(ActionType.Move); // Ask Connor
+            TargetingUIManager.Instance.HideReticle();
+        }
+
+        private void CycleTarget(InputAction.CallbackContext context)
+        {
+            if (!_modeSwitcher || _validTargets.Count == 0) return;
+
+            float inputValue = context.ReadValue<float>();
+            int direction = (inputValue > 0) ? -1 : 1; // I don't really understand what's going on here, copied CycleAlly & chatGPT...
+
+            _currentTargetIndex = (_currentTargetIndex + direction + _validTargets.Count) % _validTargets.Count;
+
+            HighlightTarget(_validTargets[_currentTargetIndex]);
+        }
+
+        private void HighlightTarget(Enemy target)
+        {
+            TargetingUIManager.Instance.ShowTarget(target);
+        }
+
+        private void 
+
+        /*private void StartAiming() 
         {
             // Prevent aiming when impossible
             if (_isAiming || TurnManager.Instance.HasUnitActed(ActiveAlly)) return;
@@ -61,11 +113,11 @@ namespace Controller
 
             // Lock unit switching while aiming
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming); 
-        }
+        }*/
 
-        private void HandleShot()
+        private void HandleShot() // Not yet
         {
-
+            return;
         }
 
         private List<Enemy> FindValidTargets()
@@ -83,7 +135,7 @@ namespace Controller
             return targets;
         }
 
-        private bool IsTargetValid(Enemy enemy)
+        private bool IsTargetValid(Enemy enemy) // TODO
         {
             return false;
         }
