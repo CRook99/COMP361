@@ -1,0 +1,57 @@
+using UnityEngine;
+using Managers;
+using TMPro;
+using System.Collections;
+
+namespace UI
+{
+    public class TurnIndicator : MonoBehaviour
+    {
+        
+        private TMP_Text turnText;
+
+        private void Awake()
+        {
+            turnText = GetComponent<TMP_Text>();
+            turnText.text = "";
+            turnText.gameObject.SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            EventManager.Subscribe(EventTypes.OnStartAllyTurn, ShowAllyTurn);
+            EventManager.Subscribe(EventTypes.OnStartEnemyTurn, ShowEnemyTurn); 
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe(EventTypes.OnStartAllyTurn, ShowAllyTurn);
+            EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, ShowEnemyTurn);
+        }
+
+        private void ShowAllyTurn()
+        {
+            turnText.text = "Ally Turn";
+            turnText.color = Color.blue;
+            turnText.gameObject.SetActive(true);
+            StartCoroutine(HideAfterDelay());
+        }
+
+        private void ShowEnemyTurn()
+        {
+            turnText.text = "Ally Turn";
+            turnText.color = Color.red;
+            turnText.gameObject.SetActive(true);
+            StartCoroutine(HideAfterDelay());
+        }
+
+        private IEnumerator HideAfterDelay()
+        {
+            yield return new WaitForSeconds(2);
+            turnText.gameObject.SetActive(false);
+            // Introduce a fade maybe
+        }
+    }
+}
+
+
