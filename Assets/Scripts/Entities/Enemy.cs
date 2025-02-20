@@ -118,7 +118,7 @@ namespace Entities
             HashSet<Cell> obstacles = TacticsGrid.Instance.GetObstacleCells();
 
             foreach(Cell player_pos in playerPositions) {
-                if(!HasObstacleBetween(player_pos, cell, obstacles)) {
+                if(!ObstacleBetweenCells(player_pos, cell, obstacles)) {
                     flanked_by += 1;
                 }
             }
@@ -136,22 +136,22 @@ namespace Entities
             HashSet<Cell> player_cells_in_sight = new HashSet<Cell>();
 
             foreach(Cell player_pos in playerPositions) {
-                if(!HasObstacleBetween(cell, player_pos, obstacles)) {
+                if(!ObstacleBetweenCells(cell, player_pos, obstacles)) {
                     player_cells_in_sight.Add(player_pos);
                 }
 
                 // if cell contains cover, then you can move out of cover to shoot
                 if(IsCover(cell)) {
-                    if(cell.N != null && cell.N.Walkable && !HasObstacleBetween(cell.N, player_pos, obstacles))
+                    if(cell.N != null && cell.N.Walkable && !ObstacleBetweenCells(cell.N, player_pos, obstacles))
                         player_cells_in_sight.Add(player_pos);
 
-                    if(cell.S != null && cell.S.Walkable && !HasObstacleBetween(cell.S, player_pos, obstacles))
+                    if(cell.S != null && cell.S.Walkable && !ObstacleBetweenCells(cell.S, player_pos, obstacles))
                         player_cells_in_sight.Add(player_pos);
 
-                    if(cell.E != null && cell.E.Walkable && !HasObstacleBetween(cell.E, player_pos, obstacles))
+                    if(cell.E != null && cell.E.Walkable && !ObstacleBetweenCells(cell.E, player_pos, obstacles))
                         player_cells_in_sight.Add(player_pos);
 
-                    if(cell.W != null && cell.W.Walkable && !HasObstacleBetween(cell.W, player_pos, obstacles))
+                    if(cell.W != null && cell.W.Walkable && !ObstacleBetweenCells(cell.W, player_pos, obstacles))
                         player_cells_in_sight.Add(player_pos);
                 }
             }
@@ -162,7 +162,7 @@ namespace Entities
         // given start and end cells, checks if an obstacle exists somewhere between them
         // i.e a line drawn from end to start intersects with a obstacle tile
         // uses Bresenham's algorithm
-        private bool HasObstacleBetween(Cell start, Cell end, HashSet<Cell> obstacles)
+        private bool ObstacleBetweenCells(Cell start, Cell end, HashSet<Cell> obstacles)
         {
             int x0 = start.Position.x;
             int y0 = start.Position.y;
@@ -195,6 +195,12 @@ namespace Entities
             }
 
             return false;
+        }
+
+        // A public that function that checks if an obstacle exists between the current cell
+        // of the enemy and the input cell
+        public bool HasObstacleBetween(Cell end) {
+            return ObstacleBetweenCells(CurrentCell, end, TacticsGrid.Instance.GetObstacleCells());
         }
 
 
