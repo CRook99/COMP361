@@ -18,7 +18,8 @@ namespace Managers
         OnSpawnEnemy,
         OnPause,
         OnUnpause,
-         OnEnemyKilled,
+        // Begin stats
+        OnEnemyKilled,
         OnDamageDealt,
         OnShotLanded,
         OnSpaceMoved,
@@ -26,6 +27,7 @@ namespace Managers
         OnDamageTaken,
         OnShotTaken,
         OnChanceShotDodged
+        // End stats
     }
     public class EventManager : MonoBehaviour
     {

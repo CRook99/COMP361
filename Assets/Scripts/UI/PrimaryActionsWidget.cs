@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Entities;
 using Managers;
+using UI.BottomWidgets;
 using UnityEngine;
 
 namespace UI
