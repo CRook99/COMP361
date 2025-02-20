@@ -130,5 +130,12 @@ namespace Entities
             yield return new WaitForSeconds(1f); 
             onTurnComplete?.Invoke(); 
         }
+
+
+        // A public that function that checks if an obstacle exists between the current cell
+        // of the enemy and the input cell
+        public bool HasObstacleBetween(Cell end) {
+            return TacticsGrid.Instance.ObstacleBetweenCells(CurrentCell, end);
+        }
     }
 }
