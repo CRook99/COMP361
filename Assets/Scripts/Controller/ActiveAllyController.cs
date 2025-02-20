@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 
 namespace Controller
 {
-    public class ActiveAllyController : PlayerComponent
+    public class ActiveAllyController : PlayerComponent // Locking? Event Subscription
     {
         private Ally _activeAlly;
         private ModeSwitcher _modeSwitcher; // Ask Connor about this!!!! - see #$* - SerializeField??
