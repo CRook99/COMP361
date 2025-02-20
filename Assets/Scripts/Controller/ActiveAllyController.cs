@@ -13,9 +13,8 @@ namespace Controller
     {
         private Ally _activeAlly;
         private ModeSwitcher _modeSwitcher; // Ask Connor about this!!!! - see #$* - SerializeField??
-        //private bool _isAiming;
         private List<Enemy> _validTargets = new List<Enemy>();
-        private int _currentTargetIndex = 0;
+        private int _currentTargetIndex = 0; // Good practice to initialise here??
 
         public Ally ActiveAlly
         {
@@ -44,32 +43,26 @@ namespace Controller
 
         private void OnEnable()
         {
-            //EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, StartAiming);
+            EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, EnterWeaponMode);
             EventManager.Subscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
-            InputManager.Instance.PlayerInput.Combat.Cycle.performed += CycleTarget; // chatgpt
+            InputManager.Instance.PlayerInput.Combat.Cycle.performed += CycleTarget; 
         }
 
         private void OnDisable()
         {
-            //EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, StartAiming);
+            EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, ExitWeaponMode);
             EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
+            InputManager.Instance.PlayerInput.Combat.Cycle.performed -= CycleTarget;
         }
 
         private void EnterWeaponMode()
         {
-            if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(_activeAlly)) return;
+            if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(_activeAlly) || _modeSwitcher == null) return;
 
             _modeSwitcher.SwitchMode(ActionType.Weapon);
             _validTargets = FindValidTargets();
 
-            if (_validTargets.Count > 0)
-            {
-                HighlightTarget(_validTargets[_currentTargetIndex]);
-            }
-            else
-            {
-                TargetingUIManager.Instance.HideReticle();
-            }
+            SetCurrentTarget();
 
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming, _activeAlly); // Begin aiming or change mode?
         }
@@ -82,38 +75,22 @@ namespace Controller
             TargetingUIManager.Instance.HideReticle();
         }
 
-        private void CycleTarget(InputAction.CallbackContext context)
+        private void CycleTarget(InputAction.CallbackContext context) // SFX needed??
         {
             if (!_modeSwitcher || _validTargets.Count == 0) return;
 
             float inputValue = context.ReadValue<float>();
-            int direction = (inputValue > 0) ? -1 : 1; // I don't really understand what's going on here, copied CycleAlly & chatGPT...
+            int direction = (inputValue > 0) ? -1 : 1; // I don't really understand what's going on here, copied CycleAlly 
 
             _currentTargetIndex = (_currentTargetIndex + direction + _validTargets.Count) % _validTargets.Count;
 
-            HighlightTarget(_validTargets[_currentTargetIndex]);
+            SetCurrentTarget();
         }
 
         private void HighlightTarget(Enemy target)
         {
             TargetingUIManager.Instance.ShowTarget(target);
-        }
-
-        private void 
-
-        /*private void StartAiming() 
-        {
-            // Prevent aiming when impossible
-            if (_isAiming || TurnManager.Instance.HasUnitActed(ActiveAlly)) return;
-            if (!TurnManager.Instance.IsAllyTurn()) return;
-
-            _isAiming = true;
-            _validTargets = FindValidTargets();
-            
-
-            // Lock unit switching while aiming
-            EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming); 
-        }*/
+        } 
 
         private void HandleShot() // Not yet
         {
@@ -140,5 +117,16 @@ namespace Controller
             return false;
         }
 
+        private void SetCurrentTarget()
+        {
+            if (_validTargets.Count > 0)
+            {
+                HighlightTarget(_validTargets[_currentTargetIndex]);
+            }
+            else
+            {
+                TargetingUIManager.Instance.HideReticle();
+            }
+        }
     }
 }
