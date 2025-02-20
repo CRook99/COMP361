@@ -12,11 +12,10 @@ public class GameState : GameSerializableBase
     public bool isAllyTurn;
     public int turnNumber;
 
-
     public override bool Validate()
     {
         // Add further checks here in future
-        return Allies != null && Enemies != null;
+        return Allies != null && Enemies != null && turnNumber > 0;
     }
 }
 

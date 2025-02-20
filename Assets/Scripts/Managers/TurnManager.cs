@@ -37,7 +37,6 @@ public class TurnManager : MonoBehaviour
     {
         EventManager.TriggerEvent(EventTypes.OnStartAllyTurn);
         // Make UI element indicating whose turn it is subscribe to this
-
         _isAllyTurn = true;
         _turnNumber++;
         Debug.Log("Ally's Turn");
@@ -50,11 +49,15 @@ public class TurnManager : MonoBehaviour
 
         _isAllyTurn = false;
         Debug.Log("Enemy's Turn");
-
     }
 
      public void SetTurnNumber(int turn)
     {
         _turnNumber = turn;
     }
+
+    public void Autosave(){
+
+    }
+
 }

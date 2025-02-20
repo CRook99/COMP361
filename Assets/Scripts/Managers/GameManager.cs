@@ -66,22 +66,22 @@ public class GameManager : MonoBehaviour
     // Temporary method to demonstrate json serialization
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-    {
-        SaveGameState();
-    }
-        if (Input.GetKeyDown(KeyCode.T))
-    {
-        Debug.Log("Turn ++");
-        if (TurnManager.Instance.IsAllyTurn == true){
-            TurnManager.Instance.StartEnemyTurn();
-        }else{
-            TurnManager.Instance.StartAllyTurn();
+        if (Input.GetKeyDown(KeyCode.L)){
+            //Debug.Log("L");
+            SaveGameState();
+        }
+
+        if (Input.GetKeyDown(KeyCode.T)){
+            Debug.Log("Turn++");
+            if (TurnManager.Instance.IsAllyTurn == true){
+                TurnManager.Instance.StartEnemyTurn();
+            }else{
+                TurnManager.Instance.StartAllyTurn();
+            }
         }
     }
-    }
 
-    public void SaveGameState()
+    public void SaveGameState(bool overwriteSave = true)
     {
         GameState state = new GameState
         {
@@ -121,18 +121,23 @@ public class GameManager : MonoBehaviour
 
         string json = state.Serialize();
 
-        string folderPath = @"C:\Users\adminprx\Documents\Courses\SoftProject\project\COMP361\Assets\Scripts\Serialization";
+        string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
         if (!Directory.Exists(folderPath))
         {
             Directory.CreateDirectory(folderPath);
         }
+ 
+        string filePathTimeStamp = Path.Combine(folderPath, $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json");
+        string filePathOverwrite = Path.Combine(folderPath, "Save_File.json");
 
-        string fileName = $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json";
-        string filePath = Path.Combine(folderPath, fileName);
-        
-        File.WriteAllText(filePath, json);
+        if (overwriteSave){
+            File.WriteAllText(filePathOverwrite, json);
+            Debug.Log("Game saved successfully to " + filePathOverwrite);
+        }else{
+            File.WriteAllText(filePathTimeStamp, json);
+            Debug.Log("Game saved successfully to " + filePathTimeStamp);
+        }
 
-        Debug.Log("Game saved successfully to " + filePath);
     }
 
 }

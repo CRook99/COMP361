@@ -1,13 +1,6 @@
 {
     "Allies": [
         {
-            "posX": 9.0,
-            "posY": 0.0,
-            "posZ": 11.0,
-            "currentHealth": 150,
-            "entityDataName": "Ally"
-        },
-        {
             "posX": 10.0,
             "posY": 0.0,
             "posZ": 5.0,
@@ -20,9 +13,16 @@
             "posZ": 8.0,
             "currentHealth": 150,
             "entityDataName": "Ally"
+        },
+        {
+            "posX": 9.0,
+            "posY": 0.0,
+            "posZ": 11.0,
+            "currentHealth": 150,
+            "entityDataName": "Ally"
         }
     ],
     "Enemies": [],
     "isAllyTurn": false,
-    "turnNumber": 1
+    "turnNumber": 5
 }
