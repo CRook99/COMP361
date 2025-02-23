@@ -19,7 +19,17 @@ namespace Managers
         OnPause,
         OnUnpause,
         OnPlayerBeginAiming,
-        OnPlayerConfirmShot
+        OnPlayerConfirmShot,
+        // Begin stats
+        OnEnemyKilled,
+        OnDamageDealt,
+        OnShotLanded,
+        OnSpaceMoved,
+        OnAllyFallen,
+        OnDamageTaken,
+        OnShotTaken,
+        OnChanceShotDodged
+        // End stats
     }
     public class EventManager : MonoBehaviour
     {

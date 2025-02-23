@@ -1,4 +1,5 @@
 using Entities;
+using UI.BottomWidgets;
 using UnityEngine;
 
 namespace System
@@ -9,5 +10,6 @@ namespace System
         public Sprite Icon;
         public ActionType Type;
         public string DisplayName;
+        public EBottomWidget WidgetType;
     }
 }
