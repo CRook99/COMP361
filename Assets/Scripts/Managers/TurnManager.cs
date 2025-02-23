@@ -4,7 +4,6 @@ using System;
 using Entities;
 using Managers;
 using Unity.VisualScripting;
-using UnityEngine.InputSystem.Controls;
 
 public class TurnManager : MonoBehaviour 
 {
@@ -38,13 +37,15 @@ public class TurnManager : MonoBehaviour
         Debug.Log("Ally's Turn");
     }
 
+
+    [ContextMenu("Enemy Turn")]
     public void StartEnemyTurn() 
     {
+        
         EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);
         // Make UI element indicating whose turn it is subscribe to this
 
         _isAllyTurn = false;
         Debug.Log("Enemy's Turn");
-
     }
 }

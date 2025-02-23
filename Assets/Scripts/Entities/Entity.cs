@@ -68,6 +68,8 @@ namespace Entities
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
             if (path.Count == 0) return;
             
+            Debug.Log($"Moving to {destination.Position}");
+
             Actions.UseAction(ActionType.Move);
             StartCoroutine(FollowPath(path));
         }
@@ -130,7 +132,6 @@ namespace Entities
             yield return new WaitForSeconds(1f); 
             onTurnComplete?.Invoke(); 
         }
-
 
         // A public that function that checks if an obstacle exists between the current cell
         // of the enemy and the input cell

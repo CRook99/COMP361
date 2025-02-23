@@ -5,11 +5,15 @@ using NUnit.Framework; // for Assert
 using Unity.VisualScripting;
 using UnityEngine;
 using World;
+using Managers;
+using System.Collections;
+
 
 namespace Entities
 {
     public class Enemy : Entity
     {
+        
 
         // Set of fields that determine how much Cover, Line of Sight enemies (given your in cover), and flanked by other allies
         // matters in the enemies decision making 
@@ -27,7 +31,6 @@ namespace Entities
             Cell bestMove = null;
             float bestScore = float.MinValue;
 
-
             foreach (Cell cell in possibleMoves)
             {
                 float score = EvalCell(cell, playerPositions);
@@ -39,6 +42,12 @@ namespace Entities
             }
 
             return bestMove;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            EventManager.TriggerEvent(EventTypes.OnSpawnEnemy, this);
         }
 
         // Gets available Cells based on current position, does not include obstacle cells or cells with enemies 
@@ -157,19 +166,24 @@ namespace Entities
             return player_cells_in_sight.Count;
         }
 
+        protected override IEnumerator FollowPath(List<Cell> path)
+        {
+            // EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
+            yield return base.FollowPath(path);
+            // EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
+        }
 
         // for testing
-        [ContextMenu("testMove")]
-        private void testMove()
+        [ContextMenu("Test Move")]
+        private void TestMove()
         {
             Cell best = GetBestMove();
             MoveToCell(best);
         }
 
-
-        public override void TryMoveToCell(Cell destination)
-        {
-            throw new System.NotImplementedException();
+        public override void TryMoveToCell(Cell destination) 
+        { 
+            MoveToCell(destination);
         }
     }
 }
