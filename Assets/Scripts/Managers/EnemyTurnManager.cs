@@ -25,11 +25,19 @@ namespace Managers
         [ContextMenu("Enemy Turn")]
         public void HandleEnemyTurn()
         {
+            // make sure camera is in standard mode before running enemy turn
+            EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, CameraMode.Standard);
+
             foreach (Enemy enemy in GameManager.Enemies)
             {
-                Debug.Log("Running enemy turn");
                 Cell bestMove = enemy.GetBestMove();
                 enemy.TryMoveToCell(bestMove);
+
+                Ally ally = enemy.FindClosestVisibleAllyToShoot();
+                if (ally != null)
+                {
+                    // TODO: Implement shooting
+                }
             }
         }
     }

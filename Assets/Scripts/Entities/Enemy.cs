@@ -166,11 +166,36 @@ namespace Entities
             return player_cells_in_sight.Count;
         }
 
+        // Finds the closest visible potential ally to shoot
+        public Ally FindClosestVisibleAllyToShoot()
+        {
+            List<Ally> allies = GameManager.Allies;
+            Ally closestAlly = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (Ally ally in allies)
+            {
+                if (TacticsGrid.Instance.ObstacleBetweenCells(CurrentCell, ally.CurrentCell))
+                {
+                    continue;
+                }
+
+                float distance = Vector3.Distance(transform.position, ally.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestAlly = ally;
+                }
+            }
+
+            return closestAlly;
+        }
+
         protected override IEnumerator FollowPath(List<Cell> path)
         {
-            // EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
+            EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
             yield return base.FollowPath(path);
-            // EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
+            EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
         }
 
         // for testing
