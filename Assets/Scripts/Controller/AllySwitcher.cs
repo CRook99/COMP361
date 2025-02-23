@@ -26,12 +26,16 @@ namespace Controller
         {
             EventManager.Subscribe(EventTypes.OnPlayerBeginMove, Lock);
             EventManager.Subscribe(EventTypes.OnPlayerEndMove, Unlock);
+            EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, Lock);
+            EventManager.Subscribe(EventTypes.OnPlayerEndAiming, Unlock);
         }
         
         private void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnPlayerBeginMove, Lock);
             EventManager.Unsubscribe(EventTypes.OnPlayerEndMove, Unlock);
+            EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, Lock);
+            EventManager.Unsubscribe(EventTypes.OnPlayerEndAiming, Unlock);
         }
 
         /** Activated by TAB/LSHIFT, switches the active/focused ally */

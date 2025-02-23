@@ -20,6 +20,7 @@ namespace Managers
         OnUnpause,
         OnPlayerBeginAiming,
         OnPlayerConfirmShot,
+        OnPlayerEndAiming,
         // Begin stats
         OnEnemyKilled,
         OnDamageDealt,

@@ -9,57 +9,68 @@ namespace Controller
 {
     public class TargetingSystem : PlayerComponent
     {
-        private ModeSwitcher _modeSwitcher; // Ask Connor about this!!!! - see #$* - SerializeField??
+        private ModeSwitcher _modeSwitcher; // Ask Connor about this!!!! - see #$*
         private List<Enemy> _validTargets = new List<Enemy>();
         private int _currentTargetIndex = 0; // Good practice to initialise here??
-        private Ally _activeAlly;
         private PlayerInput _playerInput;
+        [SerializeField] private Reticle reticle;
 
-        // Start is called before the first frame update
+        private void Update()
+        {
+            if (_validTargets.Count > 0)
+            {
+                reticle.SetPosition(_validTargets[_currentTargetIndex].transform.position);
+            }
+
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
+            }
+        }
+
         void Start()
         {
             _playerInput = InputManager.Instance.PlayerInput;
-
             _playerInput.Combat.Cycle.performed += CycleTarget;
         }
 
         private void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, EnterWeaponMode);
-            EventManager.Subscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
-            InputManager.Instance.PlayerInput.Combat.Cycle.performed += CycleTarget;
+            //EventManager.Subscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
+            EventManager.Subscribe(EventTypes.OnPlayerEndAiming, ExitWeaponMode);
         }
 
         private void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, ExitWeaponMode);
-            EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
-            InputManager.Instance.PlayerInput.Combat.Cycle.performed -= CycleTarget;
+            EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, EnterWeaponMode);
+            //EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
+            EventManager.Unsubscribe(EventTypes.OnPlayerEndAiming, ExitWeaponMode);
         }
 
         private void EnterWeaponMode()
         {
-            if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(_activeAlly) || _modeSwitcher == null) return;
+            Debug.Log("Helo");
+            if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(ActiveAllyController.ActiveAlly)) return; //_modeSwitcher == null
+            Debug.Log("Helobai");
 
-            _modeSwitcher.SwitchMode(ActionType.Weapon);
+            //_modeSwitcher.SwitchMode(ActionType.Weapon);
             _validTargets = FindValidTargets();
 
             SetCurrentTarget();
-
-            EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming, _activeAlly); 
         }
 
         private void ExitWeaponMode()
         {
-            if (!_modeSwitcher) return;
+            //if (!_modeSwitcher) return;
 
-            _modeSwitcher.SwitchMode(ActionType.Move); 
-            TargetingUIManager.Instance.HideReticle();
+            //_modeSwitcher.SwitchMode(ActionType.Move); 
+            reticle.Hide();
         }
 
         private void CycleTarget(InputAction.CallbackContext context) // SFX needed??
         {
-            if (!_modeSwitcher || _validTargets.Count == 0) return;
+            if (_validTargets.Count == 0) return; //!_modeSwitcher
 
             float inputValue = context.ReadValue<float>();
             int direction = (inputValue > 0) ? -1 : 1;  
@@ -71,7 +82,7 @@ namespace Controller
 
         private void HighlightTarget(Enemy target)
         {
-            TargetingUIManager.Instance.ShowTarget(target);
+            reticle.SetPosition(target.transform.position);
         }
 
         private void HandleShot() // Not yet
@@ -96,7 +107,7 @@ namespace Controller
 
         private bool IsTargetValid(Enemy enemy) // TODO
         {
-            return false;
+            return true;
         }
 
         private void SetCurrentTarget()
@@ -107,11 +118,9 @@ namespace Controller
             }
             else
             {
-                TargetingUIManager.Instance.HideReticle();
+                reticle.Hide();
             }
         }
     }
-
-    // TODO: Get rid of ui manager and add reticle field
 
 }
