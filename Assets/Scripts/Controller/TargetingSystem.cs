@@ -11,24 +11,31 @@ namespace Controller
     {
         private ModeSwitcher _modeSwitcher; // Ask Connor about this!!!! - see #$*
         private List<Enemy> _validTargets = new List<Enemy>();
-        private int _currentTargetIndex = 0; // Good practice to initialise here??
+        private bool _aiming = false;
+        private int _currentTargetIndex; 
         private PlayerInput _playerInput;
         [SerializeField] private Reticle reticle;
 
         private void Update()
         {
-            if (_validTargets.Count > 0)
+            if (_aiming)
             {
-                reticle.SetPosition(_validTargets[_currentTargetIndex].transform.position);
+                HighlightTarget(_validTargets[_currentTargetIndex]);
             }
 
-            if (Input.GetKeyDown(KeyCode.J))
+            if (Input.GetKeyDown(KeyCode.H))
             {
                 EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
+                _aiming = true;
+            }
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming);
+                _aiming = false;
             }
         }
 
-        void Start()
+        private void Start()
         {
             _playerInput = InputManager.Instance.PlayerInput;
             _playerInput.Combat.Cycle.performed += CycleTarget;
@@ -50,9 +57,7 @@ namespace Controller
 
         private void EnterWeaponMode()
         {
-            Debug.Log("Helo");
             if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(ActiveAllyController.ActiveAlly)) return; //_modeSwitcher == null
-            Debug.Log("Helobai");
 
             //_modeSwitcher.SwitchMode(ActionType.Weapon);
             _validTargets = FindValidTargets();
@@ -70,7 +75,7 @@ namespace Controller
 
         private void CycleTarget(InputAction.CallbackContext context) // SFX needed??
         {
-            if (_validTargets.Count == 0) return; //!_modeSwitcher
+            if (_validTargets.Count == 0 || !_aiming) return; //!_modeSwitcher
 
             float inputValue = context.ReadValue<float>();
             int direction = (inputValue > 0) ? -1 : 1;  
@@ -82,7 +87,10 @@ namespace Controller
 
         private void HighlightTarget(Enemy target)
         {
-            reticle.SetPosition(target.transform.position);
+            Transform centerOfMass = target.transform.Find("CenterOfMass");
+            Vector3 targetPosition = centerOfMass != null ? centerOfMass.position : target.transform.position;
+
+            reticle.SetPosition(Camera.main.WorldToScreenPoint(targetPosition));
         }
 
         private void HandleShot() // Not yet

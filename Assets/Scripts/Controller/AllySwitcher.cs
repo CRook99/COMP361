@@ -54,12 +54,12 @@ namespace Controller
             ActiveAllyController.ActiveAlly = GameManager.Allies[_currentIndex];
         }
 
-        private void Lock(object _)
+        public void Lock()
         {
             _locked = true;
         }
 
-        private void Unlock()
+        public void Unlock()
         {
             _locked = false;
         }
