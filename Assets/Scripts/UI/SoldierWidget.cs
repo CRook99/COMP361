@@ -12,6 +12,7 @@ public class SoldierWidget : MonoBehaviour
     [SerializeField] private Image SoldierImage;
     [SerializeField] private EquipmentWidget ArmorWidget;
     [SerializeField] private EquipmentWidget BootsWidget;
+    // [SerializeField] private AbilityWidget AbilityWidget
 
     private Dictionary<EquipmentType, EquipmentScriptableObject> _selectedEquipment = new();
 

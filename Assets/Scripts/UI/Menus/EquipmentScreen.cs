@@ -38,8 +38,8 @@ namespace UI
             Debug.Log("Omega Armor: " + EquipmentCarrier.Instance.GetSoldierEquipment("OMEGA", EquipmentType.Armor).title);
             Debug.Log("Omega Boots: " + EquipmentCarrier.Instance.GetSoldierEquipment("OMEGA", EquipmentType.Boots).title);
 
-            Debug.Log("Gamma Armor: " + EquipmentCarrier.Instance.GetSoldierEquipment("GAMMA", EquipmentType.Boots).title);
-            Debug.Log("Gamma Boots: " + EquipmentCarrier.Instance.GetSoldierEquipment("GAMMA", EquipmentType.Armor).title);
+            Debug.Log("Gamma Armor: " + EquipmentCarrier.Instance.GetSoldierEquipment("GAMMA", EquipmentType.Armor).title);
+            Debug.Log("Gamma Boots: " + EquipmentCarrier.Instance.GetSoldierEquipment("GAMMA", EquipmentType.Boots).title);
         }
     }
 }
