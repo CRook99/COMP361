@@ -14,6 +14,9 @@ namespace Managers
         OnPlayerChangeMode,
         OnStartAllyTurn,
         OnStartEnemyTurn,
+        OnEndEnemyTurn,
+        OnEnemyBeginMove,
+        OnEnemyEndMove,
         OnSpawnAlly,
         OnSpawnEnemy,
         OnPause,
@@ -103,6 +106,7 @@ namespace Managers
             else
             {
                 Instance._dataEvents[eventType] = listener;
+                Debug.Log($"Subscribing to {eventType}");
             }
         }
 

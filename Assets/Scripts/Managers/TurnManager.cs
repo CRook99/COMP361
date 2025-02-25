@@ -6,6 +6,7 @@ using Managers;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem.Controls;
 
+
 public class TurnManager : MonoBehaviour 
 {
     public static TurnManager Instance {get; private set;}
@@ -42,6 +43,7 @@ public class TurnManager : MonoBehaviour
         Debug.Log("Ally's Turn");
     }
 
+    [ContextMenu("Enemy Turn")]
     public void StartEnemyTurn() 
     {
         EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);

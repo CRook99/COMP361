@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using Entities;
 using Managers;
 using UnityEngine;
+using World;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,14 +39,12 @@ public class GameManager : MonoBehaviour
     {
         EventManager.Subscribe(EventTypes.OnSpawnAlly, AddAlly);
         EventManager.Subscribe(EventTypes.OnSpawnEnemy, AddEnemy);
-
     }
     
     private void OnDisable()
     {
         EventManager.Unsubscribe(EventTypes.OnSpawnAlly, AddAlly);
         EventManager.Unsubscribe(EventTypes.OnSpawnEnemy, AddEnemy);
-
     }
 
     public void AddAlly(object data)
