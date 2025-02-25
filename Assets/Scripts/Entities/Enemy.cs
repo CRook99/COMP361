@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework; // for Assert
 using Unity.VisualScripting;
 using UnityEngine;
 using World;
@@ -13,7 +12,7 @@ namespace Entities
 {
     public class Enemy : Entity
     {
-        
+
 
         // Set of fields that determine how much Cover, Line of Sight enemies (given your in cover), and flanked by other allies
         // matters in the enemies decision making 
@@ -53,8 +52,10 @@ namespace Entities
         // Gets available Cells based on current position, does not include obstacle cells or cells with enemies 
         private List<Cell> GetAvailableCells(List<Cell> obstacleCells, List<Cell> playerPositions)
         {
-            Assert.NotNull(obstacleCells);
-            Assert.NotNull(playerPositions);
+            if(obstacleCells == null) 
+                throw new ArgumentNullException("GetAvailableCells called with null obstacleCells");
+            if(playerPositions == null) 
+                throw new ArgumentNullException("GetAvailableCells called with null playerPositions");
 
             int currentX = CurrentCell.Position.x;
             int currentY = CurrentCell.Position.y;
@@ -87,13 +88,15 @@ namespace Entities
         // Generates score for each cell depending on sime heuristics 
         private float EvalCell(Cell cell, List<Cell> playerPositions)
         {
-            Assert.NotNull(cell);
-            Assert.NotNull(playerPositions);
+            if(cell == null) 
+                throw new ArgumentNullException("EvalCell called with null cell");
+            if(playerPositions == null) 
+                throw new ArgumentNullException("EvalCell called with null playerPositions");
 
             float score = 0;
 
             // Prefer cover
-            if (TacticsGrid.Instance.isCover(cell))
+            if (TacticsGrid.Instance.IsCover(cell))
             {
                 score += CoverWeight;
 
@@ -113,8 +116,11 @@ namespace Entities
         // Gets number of allies that would flank the enemy at cell
         private int GetFlankedCount(Cell cell, List<Cell> playerPositions)
         {
-            Assert.NotNull(cell);
-            Assert.NotNull(playerPositions);
+            if(cell == null) 
+                throw new ArgumentNullException("GetFlankedCount called with null cell");
+            if(playerPositions == null)
+                throw new ArgumentNullException("GetFlankedCount called with null playerPositions");
+
             int flanked_by = 0;
             foreach (Cell player_pos in playerPositions)
             {
@@ -130,8 +136,10 @@ namespace Entities
         // if cell is a cover, then its allows to move to the side to shoot
         private int HasLineOfSight(Cell cell, List<Cell> playerPositions)
         {
-            Assert.NotNull(cell);
-            Assert.NotNull(playerPositions);
+            if(cell == null) 
+                throw new ArgumentNullException("HasLineOfSight called with null cell");
+            if(playerPositions == null) 
+                throw new ArgumentNullException("HasLineOfSight called with null playerPositions");
 
             HashSet<Cell> player_cells_in_sight = new HashSet<Cell>();
 
@@ -143,7 +151,7 @@ namespace Entities
                 }
 
                 // if cell contains cover, then you can move out of cover to shoot
-                if (TacticsGrid.Instance.isCover(cell))
+                if (TacticsGrid.Instance.IsCover(cell))
                 {
                     if (cell.N != null && cell.N.Walkable &&
                     !TacticsGrid.Instance.ObstacleBetweenCells(cell.N, player_pos))
@@ -206,8 +214,8 @@ namespace Entities
             MoveToCell(best);
         }
 
-        public override void TryMoveToCell(Cell destination) 
-        { 
+        public override void TryMoveToCell(Cell destination)
+        {
             MoveToCell(destination);
         }
     }

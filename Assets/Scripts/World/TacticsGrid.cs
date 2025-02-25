@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+// using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using NUnit.Framework;
 
 namespace World
 {
@@ -121,9 +121,10 @@ namespace World
         }
 
         // Checks if cell is as cover next to it
-        public bool isCover(Cell cell)
+        public bool IsCover(Cell cell)
         {
-            Assert.NotNull(cell);
+            if (cell == null) throw new NullReferenceException("Cell is null");
+
             HashSet<Cell> obstacles = Instance.GetObstacleCells();
             return
             obstacles.Contains(cell.N) ||
