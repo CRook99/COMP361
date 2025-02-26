@@ -23,7 +23,7 @@ namespace Entities
         public event Action<int> OnHealthChanged;
         public event Action<int> OnTakeDamage;
 
-        protected Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
+        public Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
         protected int CurrentHealth;
 
 
@@ -70,6 +70,8 @@ namespace Entities
 
             EventManager.TriggerEvent(EventTypes.OnSpaceMoved, path.Count); // stats manager
             
+            Debug.Log($"Moving to {destination.Position}");
+
             Actions.UseAction(ActionType.Move);
             StartCoroutine(FollowPath(path));
         }
@@ -136,6 +138,12 @@ namespace Entities
         {
             yield return new WaitForSeconds(1f); 
             onTurnComplete?.Invoke(); 
+        }
+
+        // A public that function that checks if an obstacle exists between the current cell
+        // of the enemy and the input cell
+        public bool HasObstacleBetween(Cell end) {
+            return TacticsGrid.Instance.ObstacleBetweenCells(CurrentCell, end);
         }
     }
 }

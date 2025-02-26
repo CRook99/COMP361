@@ -8,11 +8,13 @@ namespace Controller
         [SerializeField] private AllySwitcher allySwitcher;
         [SerializeField] private CameraController cameraController;
         [SerializeField] private MovementSelection movementSelection;
+        [SerializeField] private TargetingSystem targetingSystem;
 
         public ActiveAllyController ActiveAllyController => activeAllyController;
         public AllySwitcher AllySwitcher => allySwitcher;
         public CameraController CameraController => cameraController;
         public MovementSelection MovementSelection => movementSelection;
+        public TargetingSystem TargetingSystem => targetingSystem;
 
         public void BuildReferences()
         {
@@ -20,6 +22,7 @@ namespace Controller
             allySwitcher = GetComponent<AllySwitcher>();
             cameraController = GetComponent<CameraController>();
             movementSelection = GetComponent<MovementSelection>();
+            targetingSystem= GetComponent<TargetingSystem>();
         }
     }
 
@@ -45,5 +48,6 @@ namespace Controller
         public AllySwitcher AllySwitcher => References.AllySwitcher;
         public CameraController CameraController => References.CameraController;
         public MovementSelection MovementSelection => References.MovementSelection;
+        public TargetingSystem TargetingSystem => References.TargetingSystem;
     }
 }
