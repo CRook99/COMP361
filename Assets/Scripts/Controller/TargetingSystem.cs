@@ -4,12 +4,13 @@ using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using World;
 
 namespace Controller
 {
     public class TargetingSystem : PlayerComponent
     {
-        private ModeSwitcher _modeSwitcher; // Ask Connor about this!!!! - see #$*
+        private ModeSwitcher _modeSwitcher; // see comments below
         private List<Enemy> _validTargets = new List<Enemy>();
         private bool _aiming = false;
         private int _currentTargetIndex; 
@@ -30,7 +31,7 @@ namespace Controller
             }
             if (Input.GetKeyDown(KeyCode.J))
             {
-                EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming);
+                EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming); // TODO: Handle last valid enemy killed
                 _aiming = false;
             }
         }
@@ -62,7 +63,7 @@ namespace Controller
             //_modeSwitcher.SwitchMode(ActionType.Weapon);
             _validTargets = FindValidTargets();
 
-            SetCurrentTarget();
+            HighlightTarget(_validTargets[_currentTargetIndex]);
         }
 
         private void ExitWeaponMode()
@@ -73,7 +74,7 @@ namespace Controller
             reticle.Hide();
         }
 
-        private void CycleTarget(InputAction.CallbackContext context) // SFX needed??
+        private void CycleTarget(InputAction.CallbackContext context) // TODO: SFX
         {
             if (_validTargets.Count == 0 || !_aiming) return; //!_modeSwitcher
 
@@ -82,11 +83,17 @@ namespace Controller
 
             _currentTargetIndex = (_currentTargetIndex + direction + _validTargets.Count) % _validTargets.Count;
 
-            SetCurrentTarget();
+            HighlightTarget(_validTargets[_currentTargetIndex]);
         }
 
         private void HighlightTarget(Enemy target)
         {
+            if (_validTargets.Count == 0)
+            {
+                reticle.Hide();
+                return;
+            }
+
             Transform centerOfMass = target.transform.Find("CenterOfMass");
             Vector3 targetPosition = centerOfMass != null ? centerOfMass.position : target.transform.position;
 
@@ -98,8 +105,8 @@ namespace Controller
             return;
         }
 
-        private List<Enemy> FindValidTargets()
-        {
+        private List<Enemy> FindValidTargets() // We want to copy GameManager.Enemies so we can remove invalid enemies from the list
+        { 
             List<Enemy> targets = new List<Enemy>();
 
             foreach (Enemy enemy in GameManager.Enemies)
@@ -113,21 +120,15 @@ namespace Controller
             return targets;
         }
 
-        private bool IsTargetValid(Enemy enemy) // TODO
+        private bool IsTargetValid(Enemy enemy) // Works - more rules need to be defined
         {
-            return true;
-        }
+            if (enemy == null) return false;
 
-        private void SetCurrentTarget()
-        {
-            if (_validTargets.Count > 0)
-            {
-                HighlightTarget(_validTargets[_currentTargetIndex]);
-            }
-            else
-            {
-                reticle.Hide();
-            }
+            // TODO: Weapon range
+
+            if (TacticsGrid.Instance.ObstacleBetweenCells(ActiveAllyController.ActiveAlly.CurrentCell, enemy.CurrentCell)) return false;
+
+            return true;
         }
     }
 
