@@ -25,7 +25,8 @@ namespace Entities
         {
             List<Cell> obstacleCells = TacticsGrid.Instance.GetObstacleCells().ToList();
             List<Cell> playerPositions = GameManager.Allies.Select(a => a.CurrentCell).ToList();
-            List<Cell> possibleMoves = GetAvailableCells(obstacleCells, playerPositions);
+            List<Cell> EnemyPositions = GameManager.Enemies.Select(a => a.CurrentCell).ToList();
+            List<Cell> possibleMoves = GetAvailableCells(obstacleCells, playerPositions, EnemyPositions);
 
             Cell bestMove = null;
             float bestScore = float.MinValue;
@@ -50,7 +51,7 @@ namespace Entities
         }
 
         // Gets available Cells based on current position, does not include obstacle cells or cells with enemies 
-        private List<Cell> GetAvailableCells(List<Cell> obstacleCells, List<Cell> playerPositions)
+        private List<Cell> GetAvailableCells(List<Cell> obstacleCells, List<Cell> playerPositions, List<Cell> EnemyPositions)
         {
             if(obstacleCells == null) 
                 throw new ArgumentNullException("GetAvailableCells called with null obstacleCells");
@@ -65,7 +66,8 @@ namespace Entities
             foreach (Cell cell in TacticsGrid.Instance.GetAllCells())
             {
 
-                if (obstacleCells.Contains(cell) || playerPositions.Contains(cell) || !cell.Walkable)
+                if (obstacleCells.Contains(cell) || playerPositions.Contains(cell) || 
+                EnemyPositions.Contains(cell)|| !cell.Walkable)
                 {
                     continue;
                 }
@@ -201,9 +203,9 @@ namespace Entities
 
         protected override IEnumerator FollowPath(List<Cell> path)
         {
-            EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
+            // EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
             yield return base.FollowPath(path);
-            EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
+            EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);
         }
 
         // for testing

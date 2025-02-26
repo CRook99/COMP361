@@ -14,7 +14,7 @@ namespace Managers
         OnStartAllyTurn,
         OnStartEnemyTurn,
         OnEndEnemyTurn,
-        OnEnemyBeginMove,
+        OnEnemyBeginMove, 
         OnEnemyEndMove,
         OnSpawnAlly,
         OnSpawnEnemy,

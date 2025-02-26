@@ -4,6 +4,7 @@ using UnityEngine;
 using Entities;
 using Managers;
 using World;
+using UnityEngine.SearchService;
 
 
 namespace Managers
@@ -11,33 +12,54 @@ namespace Managers
 
     public class EnemyTurnManager : MonoBehaviour
     {
+        private List<Enemy> _enemies = null;
+
         private void OnEnable()
         {
-            EventManager.Subscribe(EventTypes.OnStartEnemyTurn, HandleEnemyTurn);
+            EventManager.Subscribe(EventTypes.OnStartEnemyTurn, ChainEnemyMoves);
+            EventManager.Subscribe(EventTypes.OnEnemyBeginMove, HandleEnemyTurn);
         }
 
         private void OnDisable()
         {
-            // For some reason, event is getting un
-            EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, HandleEnemyTurn);
+            EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, ChainEnemyMoves);
+            EventManager.Unsubscribe(EventTypes.OnEnemyBeginMove, HandleEnemyTurn);
         }
 
+        public void ChainEnemyMoves() {
+            _enemies ??= new List<Enemy>(GameManager.Enemies);
+
+            // there is still enemies to move 
+            if(_enemies.Count > 0) {
+                Enemy enemy = _enemies[0];
+                _enemies.RemoveAt(0);
+                EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, enemy);
+            } else {
+                _enemies = null;
+                EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
+            }
+        }   
+
+
         [ContextMenu("Enemy Turn")]
-        public void HandleEnemyTurn()
+        public void HandleEnemyTurn(object obj)
         {
+            if(obj is not Enemy enemy)
+                throw new ArgumentException("HandleEnemyTurn called with non-Enemy object");
+
             // make sure camera is in standard mode before running enemy turn
             EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, CameraMode.Standard);
 
-            foreach (Enemy enemy in GameManager.Enemies)
+            // foreach (Enemy enemy in GameManager.Enemies)
             {
                 Cell bestMove = enemy.GetBestMove();
                 enemy.TryMoveToCell(bestMove);
-
-                Ally ally = enemy.FindClosestVisibleAllyToShoot();
-                if (ally != null)
-                {
-                    // TODO: Implement shooting
-                }
+                
+                // Ally ally = enemy.FindClosestVisibleAllyToShoot();
+                // if (ally != null)
+                // {
+                //     // TODO: Implement shooting
+                // }
             }
         }
     }
