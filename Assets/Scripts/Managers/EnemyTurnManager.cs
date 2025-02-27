@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Entities;
-using Managers;
-using World;
-using UnityEngine.SearchService;
-
 
 namespace Managers
 {
@@ -17,19 +13,21 @@ namespace Managers
         private void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnStartEnemyTurn, ChainEnemyMoves);
-            EventManager.Subscribe(EventTypes.OnEnemyBeginMove, HandleEnemyTurn);
+            EventManager.Subscribe(EventTypes.OnEnemyBeginMove, HandleEnemyMoveSequence);
+            EventManager.Subscribe(EventTypes.OnEnemyBeginShoot, HandleEnemyShooting);
         }
 
         private void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, ChainEnemyMoves);
-            EventManager.Unsubscribe(EventTypes.OnEnemyBeginMove, HandleEnemyTurn);
+            EventManager.Unsubscribe(EventTypes.OnEnemyBeginMove, HandleEnemyMoveSequence);
+            EventManager.Unsubscribe(EventTypes.OnEnemyBeginShoot, HandleEnemyShooting);
         }
 
-        public void ChainEnemyMoves() {
+        private void ChainEnemyMoves() {
             _enemies ??= new List<Enemy>(GameManager.Enemies);
 
-            // there is still enemies to move 
+            // There is still enemies to move 
             if(_enemies.Count > 0) {
                 Enemy enemy = _enemies[0];
                 _enemies.RemoveAt(0);
@@ -40,27 +38,34 @@ namespace Managers
             }
         }   
 
-
         [ContextMenu("Enemy Turn")]
-        public void HandleEnemyTurn(object obj)
+        private void HandleEnemyMoveSequence(object obj)
         {
             if(obj is not Enemy enemy)
                 throw new ArgumentException("HandleEnemyTurn called with non-Enemy object");
 
-            // make sure camera is in standard mode before running enemy turn
+            // Make sure camera is in standard mode before running enemy turn
             EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, CameraMode.Standard);
+            Cell bestMove = enemy.GetBestMove();
 
-            // foreach (Enemy enemy in GameManager.Enemies)
+            // This will trigger event HandleEnemyShooting with event OnEnemyBeginShoot
+            enemy.TryMoveToCell(bestMove);
+        }
+
+        private void HandleEnemyShooting(object obj)
+        {
+            if(obj is not Enemy enemy)
+                throw new ArgumentException("HandleEnemyTurn called with non-Enemy object");
+
+            Ally ally = enemy.FindClosestVisibleAllyToShoot();
+            if (ally != null)
             {
-                Cell bestMove = enemy.GetBestMove();
-                enemy.TryMoveToCell(bestMove);
-                
-                // Ally ally = enemy.FindClosestVisibleAllyToShoot();
-                // if (ally != null)
-                // {
-                //     // TODO: Implement shooting
-                // }
+                // TODO: Implement shooting logic
+                Debug.Log($"{enemy.name} is shooting at {ally.name}");
             }
+
+            // Goes to the next enemy move
+            EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);
         }
     }
 }

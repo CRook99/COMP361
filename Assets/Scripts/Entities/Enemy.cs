@@ -201,11 +201,12 @@ namespace Entities
             return closestAlly;
         }
 
+        // Moves the enemy to the cell during its enemy turn
         protected override IEnumerator FollowPath(List<Cell> path)
         {
-            // EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
             yield return base.FollowPath(path);
-            EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);
+            // Start Shooting Sequence after movement
+            EventManager.TriggerEvent(EventTypes.OnEnemyBeginShoot, this);
         }
 
         // for testing
@@ -216,6 +217,7 @@ namespace Entities
             MoveToCell(best);
         }
 
+        //
         public override void TryMoveToCell(Cell destination)
         {
             MoveToCell(destination);
