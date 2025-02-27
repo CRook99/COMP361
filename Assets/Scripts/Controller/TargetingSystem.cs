@@ -40,6 +40,8 @@ namespace Controller
         {
             _playerInput = InputManager.Instance.PlayerInput;
             _playerInput.Combat.Cycle.performed += CycleTarget;
+
+            reticle.Hide();
         }
 
         private void OnEnable()
@@ -93,9 +95,8 @@ namespace Controller
                 reticle.Hide();
                 return;
             }
-
-            Transform centerOfMass = target.transform.Find("CenterOfMass");
-            Vector3 targetPosition = centerOfMass != null ? centerOfMass.position : target.transform.position;
+            
+            Vector3 targetPosition = target.CenterOfMass != null ? target.CenterOfMass.position : target.transform.position;
 
             reticle.SetPosition(Camera.main.WorldToScreenPoint(targetPosition));
         }

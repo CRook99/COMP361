@@ -12,13 +12,13 @@ namespace Entities
 {
     public class Enemy : Entity
     {
-
-
         // Set of fields that determine how much Cover, Line of Sight enemies (given your in cover), and flanked by other allies
         // matters in the enemies decision making 
         private readonly int CoverWeight = 10;
         private readonly int LineOfSightInCoverWeight = 8;
         private readonly int isFlankedWeight = -10;
+
+        public Transform CenterOfMass;
 
         // Get best cell the enemy should move based on current position
         public Cell GetBestMove()
