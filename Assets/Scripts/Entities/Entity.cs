@@ -99,6 +99,7 @@ namespace Entities
 
                 if (pathIndex >= path.Count - 1) break;
             }
+            
         }
 
         protected void TakeDamage(int amount)

@@ -13,10 +13,12 @@ namespace Managers
         OnPlayerUseAction,
         OnPlayerChangeMode,
         OnStartAllyTurn,
-        OnStartEnemyTurn,
+        OnStartEnemyTurn, // on start enemy turn sequence
         OnEndEnemyTurn,
-        OnEnemyBeginMove,
+        OnEnemyBeginMove, // on start of enemy move sequence 
         OnEnemyEndMove,
+        OnEnemyBeginShoot, // on start of enemy shooting sequence
+        OnEnemyEndShoot, // on end of enemy shooting sequence
         OnSpawnAlly,
         OnSpawnEnemy,
         OnPause,
