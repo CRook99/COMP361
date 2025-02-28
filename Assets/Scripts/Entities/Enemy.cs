@@ -174,29 +174,41 @@ namespace Entities
             return player_cells_in_sight.Count;
         }
 
-        // Finds the closest visible potential ally to shoot
-        public Ally FindClosestVisibleAllyToShoot()
+        // Finds the closest visible potential ally to shoot, and the cell to shoot from
+        public (Cell, Ally) FindClosestVisibleAllyToShoot()
         {
-            List<Ally> allies = GameManager.Allies;
             Ally closestAlly = null;
             float closestDistance = float.MaxValue;
+            Cell shootingCell = null; // Cell to shoot from
 
-            foreach (Ally ally in allies)
+            List<Cell> neighbourCells = new List<Cell>
             {
-                if (TacticsGrid.Instance.ObstacleBetweenCells(CurrentCell, ally.CurrentCell))
-                {
-                    continue;
-                }
+                CurrentCell.N, CurrentCell.S, CurrentCell.E, CurrentCell.W
+            };
 
-                float distance = Vector3.Distance(transform.position, ally.transform.position);
-                if (distance < closestDistance)
+            foreach (Ally ally in GameManager.Allies)
+            {
+                // goes over all neighbor cells that the enemy can move to 
+                foreach (Cell cell in neighbourCells)
                 {
-                    closestDistance = distance;
-                    closestAlly = ally;
+                    if (cell == null || !cell.Walkable) continue;
+
+                    if (TacticsGrid.Instance.ObstacleBetweenCells(cell, ally.CurrentCell))
+                        continue;
+
+                    Vector3 cellPosition3D = new Vector3(cell.Position.x, 0, cell.Position.y);
+                    float distance = Vector3.Distance(cellPosition3D, ally.transform.position);
+
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestAlly = ally;
+                        shootingCell = cell;
+                    }
                 }
             }
 
-            return closestAlly;
+            return (shootingCell, closestAlly);
         }
 
         // Moves the enemy to the cell during its enemy turn

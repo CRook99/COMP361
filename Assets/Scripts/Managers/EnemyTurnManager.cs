@@ -25,6 +25,7 @@ namespace Managers
             // TODO Can't trigger event here as the cam controller is solely responsible for calling this.
             // TODO Introduce new event OnForceCameraMode and subscribe to this in CameraController?
             // EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, CameraMode.Standard);
+            
             _enemies ??= new List<Enemy>(GameManager.Enemies);
             
             if (_enemies.Count > 0)
@@ -34,6 +35,7 @@ namespace Managers
                 {
                     yield return RunEnemyAction(enemy);
                 }
+                EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
             }
             else
             {
@@ -49,7 +51,7 @@ namespace Managers
             yield return enemy.MoveToCell(bestMove);
             
             // Shooting
-            Ally ally = enemy.FindClosestVisibleAllyToShoot();
+            (Cell cell, Ally ally) = enemy.FindClosestVisibleAllyToShoot();
             if (ally != null)
             {
                 // TODO: Implement shooting logic
