@@ -63,17 +63,17 @@ namespace Entities
 
         public abstract void TryMoveToCell(Cell destination);
 
-        protected void MoveToCell(Cell destination)
+        public IEnumerator MoveToCell(Cell destination)
         {
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
-            if (path.Count == 0) return;
+            if (path.Count == 0) yield break;
 
             EventManager.TriggerEvent(EventTypes.OnSpaceMoved, path.Count); // stats manager
             
             Debug.Log($"Moving to {destination.Position}");
 
             Actions.UseAction(ActionType.Move);
-            StartCoroutine(FollowPath(path));
+            yield return FollowPath(path);
         }
 
         protected virtual IEnumerator FollowPath(List<Cell> path)
