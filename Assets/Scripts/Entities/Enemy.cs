@@ -214,7 +214,7 @@ namespace Entities
         // Moves the enemy to the cell during its enemy turn
         public override void TryMoveToCell(Cell destination)
         {
-            MoveToCell(destination);
+            StartCoroutine(MoveToCell(destination));
         }
 
         protected override IEnumerator FollowPath(List<Cell> path)

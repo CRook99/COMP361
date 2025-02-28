@@ -86,11 +86,9 @@ namespace Controller
         {
             EventManager.Subscribe(EventTypes.OnPlayerBeginMove, AttachToTransform);
             EventManager.Subscribe(EventTypes.OnPlayerEndMove, DetachFromTransform);
-            EventManager.Subscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
-
-            // EventManager.Subscribe(EventTypes.OnStartEnemyTurn, AttachToTransform);
             EventManager.Subscribe(EventTypes.OnEnemyBeginMove, AttachToTransform);
             EventManager.Subscribe(EventTypes.OnEnemyEndMove, DetachFromTransform);
+            EventManager.Subscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
         }
 
         private void OnDisable()
@@ -102,11 +100,9 @@ namespace Controller
 
             EventManager.Unsubscribe(EventTypes.OnPlayerBeginMove, AttachToTransform);
             EventManager.Unsubscribe(EventTypes.OnPlayerEndMove, DetachFromTransform);
-            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
-
-            // EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, DetachFromTransform);
             EventManager.Unsubscribe(EventTypes.OnEnemyBeginMove, AttachToTransform);
             EventManager.Unsubscribe(EventTypes.OnEnemyEndMove, DetachFromTransform);
+            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
         }
 
         private void Update()

@@ -45,7 +45,7 @@ namespace Entities
             
             EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Move);
             _moveArea.Hide();
-            MoveToCell(destination);
+            StartCoroutine(MoveToCell(destination));
         }
 
         protected override IEnumerator FollowPath(List<Cell> path)
@@ -82,7 +82,7 @@ namespace Entities
             EquipmentScriptableObject armor = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Armor);
             EquipmentScriptableObject boots = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Boots);
 
-            if (armor == null || boots == null) 
+            if (armor == null || boots == null) 
             {
                 Debug.LogWarning("ERROR - Equipment is NULL");
                 Modifiers = new UnitModifiers(); 

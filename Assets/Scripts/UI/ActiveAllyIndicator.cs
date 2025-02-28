@@ -44,6 +44,8 @@ namespace UI
             EventManager.Subscribe(EventTypes.OnCameraModeChanged, OnCameraModeChanged);
             EventManager.Subscribe(EventTypes.OnPlayerBeginMove, Disable);
             EventManager.Subscribe(EventTypes.OnPlayerEndMove, Enable);
+            EventManager.Subscribe(EventTypes.OnStartEnemyTurn, Disable);
+            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, Enable);
         }
 
         private void OnDisable()
@@ -52,6 +54,8 @@ namespace UI
             EventManager.Unsubscribe(EventTypes.OnCameraModeChanged, OnCameraModeChanged);
             EventManager.Unsubscribe(EventTypes.OnPlayerBeginMove, Disable);
             EventManager.Unsubscribe(EventTypes.OnPlayerEndMove, Enable);
+            EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, Disable);
+            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, Enable);
         }
 
         private void Update()
@@ -107,7 +111,7 @@ namespace UI
             _image.DOFade(1f, FadeTime);
         }
 
-        private void Disable(object _)
+        private void Disable()
         {
             _image.DOFade(0f, FadeTime);
         }

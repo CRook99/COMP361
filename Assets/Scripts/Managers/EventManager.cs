@@ -37,6 +37,8 @@ namespace Managers
         OnChanceShotDodged
         // End stats
     }
+
+    public delegate void EventCallback(object data);
     public class EventManager : MonoBehaviour
     {
         private static EventManager _instance;
@@ -56,8 +58,7 @@ namespace Managers
             }
         }
 
-        private Dictionary<EventTypes, Action> _events = new();
-        private Dictionary<EventTypes, Action<object>> _dataEvents = new();
+        private Dictionary<EventTypes, EventCallback> _events = new();
         
         private void Awake()
         {
@@ -69,10 +70,20 @@ namespace Managers
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        
+
         public static void Subscribe(EventTypes eventType, Action listener)
         {
-            if (Instance._events.TryGetValue(eventType, out Action thisEvent))
+            SubscribeCallback(eventType, _ => listener());
+        }
+        
+        public static void Subscribe(EventTypes eventType, Action<object> listener)
+        {
+            SubscribeCallback(eventType, listener.Invoke);
+        }
+
+        private static void SubscribeCallback(EventTypes eventType, EventCallback listener)
+        {
+            if (Instance._events.TryGetValue(eventType, out EventCallback thisEvent))
             {
                 Instance._events[eventType] = thisEvent + listener;
             }
@@ -81,48 +92,32 @@ namespace Managers
                 Instance._events[eventType] = listener;
             }
         }
-
+        
         public static void Unsubscribe(EventTypes eventType, Action listener)
         {
-            if (Instance._events.TryGetValue(eventType, out Action thisEvent))
-            {
-                Instance._events[eventType] = thisEvent - listener;
-            }
-        }
-
-        public static void TriggerEvent(EventTypes eventType)
-        {
-            if (Instance._events.TryGetValue(eventType, out Action thisEvent))
-            {
-                thisEvent?.Invoke();
-            }
-        }
-
-        // Methods for events with data
-        public static void Subscribe(EventTypes eventType, Action<object> listener)
-        {
-            if (Instance._dataEvents.TryGetValue(eventType, out Action<object> thisEvent))
-            {
-                Instance._dataEvents[eventType] = thisEvent + listener;
-            }
-            else
-            {
-                Instance._dataEvents[eventType] = listener;
-                Debug.Log($"Subscribing to {eventType}");
-            }
+            UnsubscribeCallback(eventType, _ => listener());
         }
 
         public static void Unsubscribe(EventTypes eventType, Action<object> listener)
         {
-            if (Instance._dataEvents.TryGetValue(eventType, out Action<object> thisEvent))
-            {
-                Instance._dataEvents[eventType] = thisEvent - listener;
-            }
+            UnsubscribeCallback(eventType, listener.Invoke);
         }
 
-        public static void TriggerEvent(EventTypes eventType, object data)
+        private static void UnsubscribeCallback(EventTypes eventType, EventCallback listener)
         {
-            if (Instance._dataEvents.TryGetValue(eventType, out Action<object> thisEvent))
+            if (Instance._events.TryGetValue(eventType, out EventCallback thisEvent))
+            {
+                thisEvent -= listener;
+                if (thisEvent == null) 
+                    Instance._events.Remove(eventType);
+                else 
+                    Instance._events[eventType] = thisEvent;
+            }
+        }
+        
+        public static void TriggerEvent(EventTypes eventType, object data = null)
+        {
+            if (Instance._events.TryGetValue(eventType, out EventCallback thisEvent))
             {
                 thisEvent?.Invoke(data);
             }
