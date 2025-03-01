@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Hi-GuardBoots
   m_EditorClassIdentifier: 
   title: Hi-Guard Boots
+  type: 1
   description: Reduce incoming damage by 15%
   image: {fileID: 21300000, guid: c661314d0ebffd844ae93cf6586cc9df, type: 3}
   modifiers:

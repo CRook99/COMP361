@@ -6,6 +6,7 @@ namespace Entities
     public class EquipmentScriptableObject : ScriptableObject
     {
         public string title;
+        public EquipmentType type;
         
         [TextArea]
         public string description;

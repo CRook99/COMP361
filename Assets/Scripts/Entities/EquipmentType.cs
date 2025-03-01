@@ -1,5 +1,6 @@
 public enum EquipmentType
     {
         Armor,
-        Boots
+        Boots,
+        Ability
     }
