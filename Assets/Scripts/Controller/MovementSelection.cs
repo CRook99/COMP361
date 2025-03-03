@@ -1,5 +1,6 @@
 using System;
 using Controller;
+using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,23 +19,27 @@ namespace Controller
         private PlayerInput _playerInput;
         private LayerMask _rayMask;
         private bool _cursorLocked;
+        private bool _isMovement;
 
         private void Awake()
         {
             _rayMask = LayerMask.GetMask("Cell");
             _cam = Camera.main;
+            _isMovement = true;
         }
         
         private void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnPause, LockCursor);
             EventManager.Subscribe(EventTypes.OnUnpause, UnlockCursor);
+            EventManager.Subscribe(EventTypes.OnPlayerChangeMode, ToggleCursor);
         }
         
         private void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnPause, LockCursor);
             EventManager.Unsubscribe(EventTypes.OnUnpause, UnlockCursor);
+            EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, ToggleCursor);
         }
 
         private void Start()
@@ -45,7 +50,7 @@ namespace Controller
 
         private void Update()
         {
-            if (_cursorLocked) return;
+            if (_cursorLocked || !_isMovement) return;
             
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             _ray = _cam.ScreenPointToRay(mousePosition);
@@ -75,12 +80,9 @@ namespace Controller
 
         private void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (_currentCell == null)
-                Debug.Log("No cell hovered");
-            else if (!_currentCell.Walkable)
-                Debug.Log("Unwalkable cell selected");
-            else
-                ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
+            if (!_isMovement || _currentCell == null || !_currentCell.Walkable) return;
+            
+            ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
         }
 
         private void LockCursor()
@@ -91,6 +93,13 @@ namespace Controller
         private void UnlockCursor()
         {
             _cursorLocked = false;
+        }
+
+        private void ToggleCursor(object data)
+        {
+            if (data is not ActionType mode) return;
+            _isMovement = mode == ActionType.Move;
+            cursor.SetActive(_isMovement);
         }
     }
 }

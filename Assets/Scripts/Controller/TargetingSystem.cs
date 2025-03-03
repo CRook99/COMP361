@@ -10,7 +10,6 @@ namespace Controller
 {
     public class TargetingSystem : PlayerComponent
     {
-        private ModeSwitcher _modeSwitcher; // see comments below
         private List<Enemy> _validTargets = new List<Enemy>();
         private bool _aiming = false;
         private int _currentTargetIndex; 
@@ -62,7 +61,8 @@ namespace Controller
         {
             if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(ActiveAllyController.ActiveAlly)) return; //_modeSwitcher == null
 
-            //_modeSwitcher.SwitchMode(ActionType.Weapon);
+            ModeSwitcher.SwitchMode(ActionType.Weapon);
+            _aiming = true;
             _validTargets = FindValidTargets();
 
             HighlightTarget(_validTargets[_currentTargetIndex]);
@@ -70,9 +70,8 @@ namespace Controller
 
         private void ExitWeaponMode()
         {
-            //if (!_modeSwitcher) return;
-
-            //_modeSwitcher.SwitchMode(ActionType.Move); 
+            ModeSwitcher.SwitchMode(ActionType.Move);
+            _aiming = false;
             reticle.Hide();
         }
 

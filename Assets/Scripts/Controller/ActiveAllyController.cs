@@ -28,13 +28,29 @@ namespace Controller
 
         private IEnumerator Start()
         {
-
             while (GameManager.Allies.Count == 0)
             {
                 yield return null;
             }
             
             ActiveAlly = GameManager.Allies[0];
+        }
+
+        private void OnEnable()
+        {
+            EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+        }
+
+        private void OnPlayerChangeMode(object data)
+        {
+            if (data is not ActionType mode) return;
+            
+            _activeAlly.SetMoveMeshActive(mode == ActionType.Move);
         }
     }
 }
