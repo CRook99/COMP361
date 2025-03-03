@@ -1,15 +1,10 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {
-    public class WeaponBottomWidget : BottomWidget
+    public class AirstrikeBottomWidget : BottomWidget
     {
-        [TextArea(3, 5)]
-        [SerializeField] private string bodyText;
-        [SerializeField] private TextMeshProUGUI textElement;
-
         [Space]
         [SerializeField] private Button backButton;
 
@@ -22,7 +17,7 @@ namespace UI.BottomWidgets
 
         private void OnClickBackButton()
         {
-            BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
+            BottomWidgetManager.Instance.Show(EBottomWidget.AirSupportBase);
         }
     }
 }
