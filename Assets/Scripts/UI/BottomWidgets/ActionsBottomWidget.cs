@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace UI.BottomWidgets
 {
-    public class MovementBottomWidget : BottomWidget
+    public class ActionsBottomWidget : BottomWidget
     {
         [SerializeField] private PrimaryActionWidget actionWidgetPrefab;
         [SerializeField] private List<ActionScriptableObject> actions; // Centralize?
