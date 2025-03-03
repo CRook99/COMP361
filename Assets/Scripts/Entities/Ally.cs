@@ -31,13 +31,11 @@ namespace Entities
 
         protected void OnEnable()
         {
-            EventManager.Subscribe(EventTypes.OnStartAllyTurn, OnStartTurn);
             EventManager.Subscribe(EventTypes.OnActiveAllyChanged, OnActiveAllyChanged);
         }
         
         protected void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnStartAllyTurn, OnStartTurn);
             EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, OnActiveAllyChanged);
         }
 
@@ -75,10 +73,7 @@ namespace Entities
             {
                 _moveArea.Hide();
             }
-        }
-
-        private void OnStartTurn()
-        {
+            
             _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }

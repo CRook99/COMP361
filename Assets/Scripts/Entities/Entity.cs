@@ -35,7 +35,7 @@ namespace Entities
 
         protected virtual void Start()
         {
-            
+            CurrentCell.Walkable = false;
         }
 
         protected virtual void Update()
@@ -73,6 +73,9 @@ namespace Entities
             Debug.Log($"Moving to {destination.Position}");
 
             Actions.UseAction(ActionType.Move);
+            
+            CurrentCell.Walkable = true;
+            destination.Walkable = false;
             yield return FollowPath(path);
         }
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Cell
@@ -24,6 +25,11 @@ public class Cell
         Walkable = walkable;
 
         Neighbours = new Cell[8];
+    }
+
+    public override string ToString()
+    {
+        return $"Cell ({Position.x}, {Position.y}) - Walkable: {Walkable}";
     }
 }
 
