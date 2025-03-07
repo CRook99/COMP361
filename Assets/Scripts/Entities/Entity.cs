@@ -14,11 +14,15 @@ namespace Entities
     {
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
         private const float MovementSpeed = 4f;
-        
+
         public EntityScriptableObject Data;
         
         public UnitModifiers Modifiers;
         public EntityActions Actions;
+        public CoverTypes Cover;
+        public bool CoverCompromised;
+        public bool CoverModeHighlighted;
+
 
         public event Action<int> OnHealthChanged;
         public event Action<int> OnTakeDamage;
@@ -31,6 +35,9 @@ namespace Entities
         {
             CurrentHealth = Data.MaxHealth;
             Actions = new EntityActions();
+            Cover = CoverTypes.NoCover;
+            CoverCompromised = false;
+            CoverModeHighlighted = false;
         }
 
         protected virtual void Start()
@@ -40,7 +47,8 @@ namespace Entities
 
         protected virtual void Update()
         {
-            
+            if (CoverModeHighlighted)
+                CoverManager.DisplayCoverStatus();
         }
 
         [ContextMenu("Test Range")]
