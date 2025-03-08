@@ -23,7 +23,7 @@ namespace Entities
         // Get best cell the enemy should move based on current position
         public Cell GetBestMove()
         {
-            List<Cell> obstacleCells = TacticsGrid.Instance.GetObstacleCells().ToList();
+            List<Cell> obstacleCells = TacticsGrid.Instance.GetCoverCells().ToList();
             List<Cell> playerPositions = GameManager.Allies.Select(a => a.CurrentCell).ToList();
             List<Cell> possibleMoves = GetAvailableCells(obstacleCells, playerPositions);
 

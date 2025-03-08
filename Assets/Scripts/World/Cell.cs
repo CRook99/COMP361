@@ -1,9 +1,11 @@
+using Entities;
 using UnityEngine;
 
 public class Cell
 {
     public Vector2Int Position { get; private set; }
     public bool Walkable { get; set; }
+    public CoverTypes Cover { get; set; }
     
     // Neighbours are defined clockwise, from N
     // 0: N, 1: NE, 2: E etc.
@@ -22,8 +24,14 @@ public class Cell
     {
         Position = position;
         Walkable = walkable;
+        Cover = CoverTypes.NoCover;
 
         Neighbours = new Cell[8];
+    }
+
+    public override string ToString()
+    {
+        return $"Cell ({Position.x}, {Position.y}) : Walkable = {Walkable} // Cover = {Cover}";
     }
 }
 

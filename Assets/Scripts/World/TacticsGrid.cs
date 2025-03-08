@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Entities;
 // using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -14,9 +15,11 @@ namespace World
     {
         public static TacticsGrid Instance { get; private set; }
 
+        public Vector2Int InspectCell;
+
         private Dictionary<Vector2Int, Cell> _cellMap; // cells of game map
-        private Dictionary<Vector2Int, Cell> _obstacles; // dict of obstacles on the map 
-        private Dictionary<Cell, GameObject> _covers; // cover items on respective cells 
+        private Dictionary<Vector2Int, Cell> _coverCells; // dict of obstacles on the map 
+        //private Dictionary<Cell, GameObject> _covers; // cover items on respective cells 
 
         private MapParser _mapParser;
 
@@ -32,20 +35,20 @@ namespace World
             }
 
             _cellMap = new Dictionary<Vector2Int, Cell>();
-            _obstacles = new Dictionary<Vector2Int, Cell>();
-            _covers = new Dictionary<Cell, GameObject>();
+            _coverCells = new Dictionary<Vector2Int, Cell>();
+            //_covers = new Dictionary<Cell, GameObject>();
             _mapParser = GetComponent<MapParser>();
 
-            _mapParser.ReadMap(out _cellMap, out _obstacles);
+            _mapParser.ReadMap(out _cellMap, out _coverCells);
             PrecomputeNeighbours();
 
-            var _coverDict = _mapParser.GetCovers();
-
-            foreach (var entry in _coverDict)
-            {
-                _cellMap.TryGetValue(entry.Key, out var cell);
-                _covers.Add(cell, entry.Value);
-            }
+            // var _coverDict = _mapParser.GetCovers();
+            //
+            // foreach (var entry in _coverDict)
+            // {
+            //     _cellMap.TryGetValue(entry.Key, out var cell);
+            //     _covers.Add(cell, entry.Value);
+            // }
         }
 
         public Cell GetCell(int x, int y)
@@ -65,9 +68,9 @@ namespace World
         }
 
         // Gets current obstacles in the game world
-        public HashSet<Cell> GetObstacleCells()
+        public HashSet<Cell> GetCoverCells()
         {
-            return _obstacles.Values.ToHashSet();
+            return _coverCells.Values.ToHashSet();
         }
 
 
@@ -82,7 +85,7 @@ namespace World
         // uses Bresenham's algorithm
         public bool ObstacleBetweenCells(Cell start, Cell end)
         {
-            HashSet<Cell> obstacles = GetObstacleCells();
+            //HashSet<Cell> obstacles = GetObstacleCells();
             int x0 = start.Position.x;
             int y0 = start.Position.y;
             int dx = Math.Abs(end.Position.x - x0);
@@ -94,7 +97,7 @@ namespace World
             while (true)
             {
                 Cell checkCell = Instance.GetCell(x0, y0);
-                if (obstacles.Contains(checkCell))
+                if (checkCell.Cover == CoverTypes.FullCover)
                     return true;
 
                 if (x0 == end.Position.x && y0 == end.Position.y)
@@ -135,8 +138,8 @@ namespace World
         public bool IsCover(Cell cell)
         {
             if (cell == null) throw new NullReferenceException("Cell is null");
-
-            HashSet<Cell> obstacles = Instance.GetObstacleCells();
+        
+            HashSet<Cell> obstacles = Instance.GetCoverCells();
             return
             obstacles.Contains(cell.N) ||
             obstacles.Contains(cell.S) ||
@@ -144,9 +147,15 @@ namespace World
             obstacles.Contains(cell.E);
         }
 
-        public Dictionary<Cell, GameObject> GetCovers()
+        // public Dictionary<Cell, GameObject> GetCovers()
+        // {
+        //     return _covers;
+        // }
+
+        [ContextMenu("Inspect Cell")]
+        private void Inspect()
         {
-            return _covers;
+            Debug.Log(_cellMap[InspectCell]);
         }
 
         private void OnDrawGizmos()
