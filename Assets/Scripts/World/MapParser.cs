@@ -95,11 +95,6 @@ namespace World
                 }
             }
         }
-
-        // public Dictionary<Vector2Int, GameObject> GetCovers()
-        // {
-        //     return covers;
-        // }
         
         [System.Serializable]
         public class Layer

@@ -19,7 +19,6 @@ namespace World
 
         private Dictionary<Vector2Int, Cell> _cellMap; // cells of game map
         private Dictionary<Vector2Int, Cell> _coverCells; // dict of obstacles on the map 
-        //private Dictionary<Cell, GameObject> _covers; // cover items on respective cells 
 
         private MapParser _mapParser;
 
@@ -36,19 +35,10 @@ namespace World
 
             _cellMap = new Dictionary<Vector2Int, Cell>();
             _coverCells = new Dictionary<Vector2Int, Cell>();
-            //_covers = new Dictionary<Cell, GameObject>();
             _mapParser = GetComponent<MapParser>();
 
             _mapParser.ReadMap(out _cellMap, out _coverCells);
             PrecomputeNeighbours();
-
-            // var _coverDict = _mapParser.GetCovers();
-            //
-            // foreach (var entry in _coverDict)
-            // {
-            //     _cellMap.TryGetValue(entry.Key, out var cell);
-            //     _covers.Add(cell, entry.Value);
-            // }
         }
 
         public Cell GetCell(int x, int y)
@@ -146,11 +136,6 @@ namespace World
             obstacles.Contains(cell.W) ||
             obstacles.Contains(cell.E);
         }
-
-        // public Dictionary<Cell, GameObject> GetCovers()
-        // {
-        //     return _covers;
-        // }
 
         [ContextMenu("Inspect Cell")]
         private void Inspect()

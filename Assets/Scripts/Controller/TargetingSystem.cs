@@ -37,7 +37,7 @@ namespace Controller
 
             if (Input.GetKeyDown(KeyCode.RightBracket) && _aiming == true)
             {
-                Debug.Log(CoverManager.Instance.GetImmediateCoverOfTargetFromOrigin(ActiveAllyController.ActiveAlly.CurrentCell,
+                Debug.Log(CoverUtilities.GetImmediateCoverOfTargetFromOrigin(ActiveAllyController.ActiveAlly.CurrentCell,
                     _validTargets[_currentTargetIndex].CurrentCell));
             }
         }

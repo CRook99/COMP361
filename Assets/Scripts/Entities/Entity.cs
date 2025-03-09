@@ -47,8 +47,7 @@ namespace Entities
 
         protected virtual void Update()
         {
-            // if (CoverModeHighlighted)
-            //     CoverManager.DisplayCoverStatus();
+            
         }
 
         [ContextMenu("Test Range")]
