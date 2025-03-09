@@ -26,9 +26,12 @@ public class CoverIndicator : PlayerComponent
     public float MeshDistance;
     
     private Dictionary<CoverTypes, Mesh> _meshMap;
+    private bool _shouldShowShields;
 
     private void Awake()
     {
+        _shouldShowShields = true;
+        
         _meshMap = new Dictionary<CoverTypes, Mesh>()
         {
             { CoverTypes.HalfCover, HalfCoverMesh },
@@ -50,15 +53,36 @@ public class CoverIndicator : PlayerComponent
     private void OnEnable()
     {
         MovementSelection.OnHoveredCellChanged += RefreshMeshes;
+        EventManager.Subscribe(EventTypes.OnCameraModeChanged, OnCameraModeChanged);
+        EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, DisallowShields);
+        EventManager.Subscribe(EventTypes.OnPlayerBeginMove, DisallowShields);
+        EventManager.Subscribe(EventTypes.OnPlayerEndAiming, AllowShields);
+        EventManager.Subscribe(EventTypes.OnPlayerEndMove, AllowShields);
+        EventManager.Subscribe(EventTypes.OnStartEnemyTurn, DisallowShields);
+        EventManager.Subscribe(EventTypes.OnEndEnemyTurn, AllowShields);
+
+        // EventManager.Subscribe(EventTypes.OnPlayerBeginAbility, DisallowShields); TODO
+        // EventManager.Subscribe(EventTypes.OnPlayerEndAbility, AllowShields); TODO
     }
     
     private void OnDisable()
     {
         MovementSelection.OnHoveredCellChanged -= RefreshMeshes;
+        EventManager.Unsubscribe(EventTypes.OnCameraModeChanged, OnCameraModeChanged);
+        EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, DisallowShields);
+        EventManager.Unsubscribe(EventTypes.OnPlayerBeginMove, DisallowShields);
+        EventManager.Unsubscribe(EventTypes.OnPlayerEndAiming, AllowShields);
+        EventManager.Unsubscribe(EventTypes.OnPlayerEndMove, AllowShields);
+        EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, DisallowShields);
+        EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, AllowShields);
+        // EventManager.Unsubscribe(EventTypes.OnPlayerBeginAbility, DisallowShields); TODO
+        // EventManager.Unsubscribe(EventTypes.OnPlayerEndAbility, AllowShields); TODO
     }
 
     private void RefreshMeshes(Cell cell)
     {
+        if (!_shouldShowShields) return;
+        
         for (int i = 0; i < 4; i++)
         {
             CoverShield shield = _shields[i];
@@ -76,5 +100,29 @@ public class CoverIndicator : PlayerComponent
 
             _shields[i] = shield;
         }
+    }
+
+    private void AllowShields()
+    {
+        _shouldShowShields = true;
+    }
+
+    private void DisallowShields()
+    {
+        Debug.Log("dis");
+        _shouldShowShields = false;
+        
+        foreach (CoverShield shield in _shields)
+        {
+            shield.Obj.SetActive(false);
+        }
+    }
+    
+    // Event subscriptions
+    private void OnCameraModeChanged(object data)
+    {
+        if (data is not CameraMode mode) return;
+
+        _shouldShowShields = mode == CameraMode.Standard;
     }
 }
