@@ -39,11 +39,15 @@ namespace Controller
         private void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+            EventManager.Subscribe(EventTypes.OnStartEnemyTurn, OnStartEnemyTurn);
+            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
         }
         
         private void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+            EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, OnStartEnemyTurn);
+            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
         }
 
         private void OnPlayerChangeMode(object data)
@@ -55,6 +59,17 @@ namespace Controller
             }
 
             _activeAlly.SetMoveMeshActive(mode == ControlMode.StandardMove && _activeAlly.Actions.CanUseAction(ActionType.Move));
+        }
+
+        private void OnStartEnemyTurn()
+        {
+            _activeAlly.SetMoveMeshActive(false);
+        }
+
+        private void OnEndEnemyTurn()
+        {
+            // TODO Make this the first alive ally
+            ActiveAlly = GameManager.Allies[0];
         }
     }
 }
