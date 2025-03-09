@@ -213,10 +213,10 @@ public class CoverManager : MonoBehaviour
         }
     }
 
-    public static void DisplayCoverStatus()
-    {
-        CoverDisplay.DisplayCoverStatus();
-    }
+    // public static void DisplayCoverStatus()
+    // {
+    //     CoverDisplay.DisplayCoverStatus();
+    // }
 
     public static CoverTypes CoverType(GameObject obj)
     {

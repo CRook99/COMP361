@@ -21,7 +21,7 @@ namespace Entities
         public EntityActions Actions;
         public CoverTypes Cover;
         public bool CoverCompromised;
-        public bool CoverModeHighlighted;
+        //public bool CoverModeHighlighted;
 
 
         public event Action<int> OnHealthChanged;
@@ -37,7 +37,7 @@ namespace Entities
             Actions = new EntityActions();
             Cover = CoverTypes.NoCover;
             CoverCompromised = false;
-            CoverModeHighlighted = false;
+            //CoverModeHighlighted = false;
         }
 
         protected virtual void Start()
@@ -47,8 +47,8 @@ namespace Entities
 
         protected virtual void Update()
         {
-            if (CoverModeHighlighted)
-                CoverManager.DisplayCoverStatus();
+            // if (CoverModeHighlighted)
+            //     CoverManager.DisplayCoverStatus();
         }
 
         [ContextMenu("Test Range")]
