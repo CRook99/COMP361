@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Entities;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace World
 {
     public class MapParser : MonoBehaviour
     {
         [SerializeField] private List<Layer> layers;
+        //private Dictionary<Vector2Int, GameObject> covers;
 
         private HashSet<Vector2Int> GetMapCells(Texture2D image)
         {
@@ -26,10 +29,10 @@ namespace World
             return mapCells;
         }
         
-        public void ReadMap(out Dictionary<Vector2Int, Cell> cellMap, out Dictionary<Vector2Int, Cell> obstacles)
+        public void ReadMap(out Dictionary<Vector2Int, Cell> cellMap, out Dictionary<Vector2Int, Cell> coveredCells)
         {
             cellMap = new Dictionary<Vector2Int, Cell>();
-            obstacles = new Dictionary<Vector2Int, Cell>();
+            coveredCells = new Dictionary<Vector2Int, Cell>();
     
             HashSet<Vector2Int> cells = GetMapCells(layers[0].Image);
     
@@ -41,10 +44,14 @@ namespace World
             int numLayers = layers.Count;
             for (int i = 1; i < numLayers; i++)
             {
-                foreach (Vector2Int cell in GetMapCells(layers[i].Image))
+                CoverTypes cover = layers[i].Cover;
+                Texture2D image = layers[i].Image;
+                
+                foreach (Vector2Int cell in GetMapCells(image))
                 {
                     cellMap[cell].Walkable = false;
-                    obstacles.Add(cell, cellMap[cell]);
+                    cellMap[cell].Cover = cover;
+                    coveredCells.Add(cell, cellMap[cell]);
                 }
             }
         }
@@ -63,6 +70,7 @@ namespace World
                 {
                     GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(layers[i].Object, layer.transform);
                     obj.transform.position = new Vector3(cell.x, layers[i].Elevation, cell.y);
+                    //covers.Add(cell, obj);
                 }
             }
         }
@@ -94,6 +102,7 @@ namespace World
             public GameObject Object;
             public Texture2D Image;
             public int Elevation;
+            public CoverTypes Cover;
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Controller
         private bool _cursorLocked;
         private bool _isMovement;
 
+        public event Action<Cell> OnHoveredCellChanged;
+
         private void Awake()
         {
             _rayMask = LayerMask.GetMask("Cell");
@@ -64,12 +66,13 @@ namespace Controller
                     Mathf.RoundToInt(position.z)
                 );
                 
-                _currentCell = TacticsGrid.Instance.GetCell(coordinate);
-                if (_currentCell != null)
-                {
-                    if (!cursor.activeSelf) cursor.SetActive(true);
-                    cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
-                }
+                Cell newCell = TacticsGrid.Instance.GetCell(coordinate);
+                if (newCell == null || newCell == _currentCell) return;
+                
+                _currentCell = newCell;
+                OnHoveredCellChanged?.Invoke(_currentCell);
+                if (!cursor.activeSelf) cursor.SetActive(true);
+                cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
             }
             else
             {

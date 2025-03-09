@@ -33,6 +33,12 @@ namespace Controller
                 EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming); // TODO: Handle last valid enemy killed
                 _aiming = false;
             }
+
+            if (Input.GetKeyDown(KeyCode.RightBracket) && _aiming == true)
+            {
+                Debug.Log(CoverUtilities.GetImmediateCoverOfTargetFromOrigin(ActiveAllyController.ActiveAlly.CurrentCell,
+                    _validTargets[_currentTargetIndex].CurrentCell));
+            }
         }
 
         private void Start()
