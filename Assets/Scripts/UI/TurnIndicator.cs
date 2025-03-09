@@ -14,35 +14,37 @@ namespace UI
         {
             turnText = GetComponent<TMP_Text>();
             turnText.text = "";
-            turnText.gameObject.SetActive(false);
+            //turnText.gameObject.SetActive(false);
         }
 
         private void OnEnable()
         {
-            EventManager.Subscribe(EventTypes.OnStartAllyTurn, ShowAllyTurn);
+            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, ShowAllyTurn);
             EventManager.Subscribe(EventTypes.OnStartEnemyTurn, ShowEnemyTurn); 
         }
 
         private void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnStartAllyTurn, ShowAllyTurn);
+            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, ShowAllyTurn);
             EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, ShowEnemyTurn);
         }
 
         private void ShowAllyTurn()
         {
+            Debug.Log("in");
             turnText.text = "Ally Turn";
             turnText.color = Color.blue;
             turnText.gameObject.SetActive(true);
-            StartCoroutine(HideAfterDelay());
+            //StartCoroutine(HideAfterDelay());
         }
 
         private void ShowEnemyTurn()
         {
+            Debug.Log("out");
             turnText.text = "Ally Turn";
             turnText.color = Color.red;
             turnText.gameObject.SetActive(true);
-            StartCoroutine(HideAfterDelay());
+            //StartCoroutine(HideAfterDelay());
         }
 
         private IEnumerator HideAfterDelay()

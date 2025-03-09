@@ -12,7 +12,6 @@ namespace Managers
         OnPlayerEndMove,
         OnPlayerUseAction,
         OnPlayerChangeMode,
-        OnStartAllyTurn,
         OnStartEnemyTurn, // on start enemy turn sequence
         OnEndEnemyTurn,
         OnEnemyBeginMove, // on start of enemy move sequence 

@@ -18,11 +18,13 @@ namespace Controller
             get => _activeAlly;
             set
             {
-                if (_activeAlly != value)
+                if (_activeAlly == value)
                 {
-                    _activeAlly = value;
-                    EventManager.TriggerEvent(EventTypes.OnActiveAllyChanged, _activeAlly);
+                    Debug.LogWarning("Changed to same ally. Was this intentional?");
                 }
+
+                _activeAlly = value;
+                EventManager.TriggerEvent(EventTypes.OnActiveAllyChanged, _activeAlly);
             }
         }
 

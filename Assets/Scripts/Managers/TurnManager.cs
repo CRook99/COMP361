@@ -59,7 +59,7 @@ public class TurnManager : MonoBehaviour
         // Reset actions
         _actedAllies.Clear();
         
-        EventManager.TriggerEvent(EventTypes.OnStartAllyTurn);
+        EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
         // Make UI element indicating whose turn it is subscribe to this
 
         _isAllyTurn = true;
