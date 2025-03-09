@@ -60,6 +60,11 @@ namespace Entities
             EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
         }
 
+        public void TryThrow(ThrowableScriptableObject throwable, Cell cell)
+        {
+            
+        }
+
         private void OnActiveAllyChanged(object data)
         {
             if (data is not Ally ally) return;
