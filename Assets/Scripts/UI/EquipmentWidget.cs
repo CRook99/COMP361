@@ -18,26 +18,26 @@ public class EquipmentWidget : MonoBehaviour
     [SerializeField] private Button RightButton;
 
     private int _itemIndex;
+    private SoldierWidget _parentSoldier;
+    private EquipmentType _equipmentType;
+
+    public void Initialize(SoldierWidget soldier, EquipmentType equipmentType)
+    {
+        _parentSoldier = soldier;
+        _equipmentType = equipmentType;
+        RefreshWidget();
+    }
 
     private void Awake()
     {
-        LeftButton.onClick.AddListener(CycleLeft);
-        RightButton.onClick.AddListener(CycleRight);
-        
+        LeftButton.onClick.AddListener(() => CycleEquipment(-1));
+        RightButton.onClick.AddListener(() => CycleEquipment(1));
         RefreshWidget();
     }
 
-    private void CycleLeft()
+    private void CycleEquipment(int direction) 
     {
-        // We use a custom mod since C# mod is actually remainder
-        _itemIndex = MathUtils.Mod(_itemIndex - 1, EquipmentItems.Count);
-        RefreshWidget();
-    }
-
-    private void CycleRight()
-    {
-        // We use a custom mod since C# mod is actually remainder
-        _itemIndex = MathUtils.Mod(_itemIndex + 1, EquipmentItems.Count);
+        _itemIndex = MathUtils.Mod(_itemIndex + direction, EquipmentItems.Count);
         RefreshWidget();
     }
 
@@ -47,5 +47,10 @@ public class EquipmentWidget : MonoBehaviour
         NameText.text = newEquipment.title;
         DescriptionText.text = newEquipment.description;
         EquipmentIcon.sprite = newEquipment.image;
+    }
+
+    public EquipmentScriptableObject GetSelectedEquipment()
+    {
+        return EquipmentItems[_itemIndex];
     }
 }

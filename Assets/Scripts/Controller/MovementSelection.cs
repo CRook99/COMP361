@@ -1,5 +1,6 @@
 using System;
 using Controller;
+using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,6 +20,8 @@ namespace Controller
         private LayerMask _rayMask;
         private bool _cursorLocked;
 
+        public event Action<Cell> OnHoveredCellChanged;
+
         private void Awake()
         {
             _rayMask = LayerMask.GetMask("Cell");
@@ -27,14 +30,16 @@ namespace Controller
         
         private void OnEnable()
         {
-            EventManager.Subscribe(EventTypes.OnPause, LockCursor);
-            EventManager.Subscribe(EventTypes.OnUnpause, UnlockCursor);
+            EventManager.Subscribe(EventTypes.OnPause, DisableCursor);
+            EventManager.Subscribe(EventTypes.OnUnpause, EnableCursor);
+            EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
         }
         
         private void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnPause, LockCursor);
-            EventManager.Unsubscribe(EventTypes.OnUnpause, UnlockCursor);
+            EventManager.Unsubscribe(EventTypes.OnPause, DisableCursor);
+            EventManager.Unsubscribe(EventTypes.OnUnpause, EnableCursor);
+            EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
         }
 
         private void Start()
@@ -45,7 +50,7 @@ namespace Controller
 
         private void Update()
         {
-            if (_cursorLocked) return;
+            if (_cursorLocked || ModeSwitcher.CurrentMode != ActionType.Move) return;
             
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             _ray = _cam.ScreenPointToRay(mousePosition);
@@ -59,12 +64,13 @@ namespace Controller
                     Mathf.RoundToInt(position.z)
                 );
                 
-                _currentCell = TacticsGrid.Instance.GetCell(coordinate);
-                if (_currentCell != null)
-                {
-                    if (!cursor.activeSelf) cursor.SetActive(true);
-                    cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
-                }
+                Cell newCell = TacticsGrid.Instance.GetCell(coordinate);
+                if (newCell == null || newCell == _currentCell) return;
+                
+                _currentCell = newCell;
+                OnHoveredCellChanged?.Invoke(_currentCell);
+                if (!cursor.activeSelf) cursor.SetActive(true);
+                cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
             }
             else
             {
@@ -75,22 +81,32 @@ namespace Controller
 
         private void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (_currentCell == null)
-                Debug.Log("No cell hovered");
-            else if (!_currentCell.Walkable)
-                Debug.Log("Unwalkable cell selected");
-            else
-                ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
+            if (ModeSwitcher.CurrentMode != ActionType.Move || _currentCell == null || !_currentCell.Walkable) return;
+            
+            ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
         }
 
-        private void LockCursor()
+        private void DisableCursor()
         {
             _cursorLocked = true;
         }
 
-        private void UnlockCursor()
+        private void EnableCursor()
         {
             _cursorLocked = false;
+        }
+
+        private void ToggleCursor(bool b)
+        {
+            _cursorLocked = !b;
+            cursor.SetActive(b);
+        }
+
+        private void OnPlayerChangeMode(object data)
+        {
+            if (data is not ActionType mode) return;
+            
+            ToggleCursor(mode == ActionType.Move);
         }
     }
 }

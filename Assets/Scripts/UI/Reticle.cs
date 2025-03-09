@@ -38,4 +38,15 @@ public class Reticle : MonoBehaviour
     {
         _spinSequence.Pause();
     }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void SetPosition(Vector3 screenPosition)
+    {
+        transform.position = screenPosition;
+        gameObject.SetActive(true);
+    }
 }

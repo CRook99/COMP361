@@ -8,7 +8,9 @@ namespace Entities
     {
         Move,
         Weapon,
-        Ability
+        Ability,
+        DropCover,
+        Airstrike
     }
     
     public class EntityActions

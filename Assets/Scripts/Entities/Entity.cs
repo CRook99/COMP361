@@ -14,16 +14,20 @@ namespace Entities
     {
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
         private const float MovementSpeed = 4f;
-        
+
         public EntityScriptableObject Data;
         
         public UnitModifiers Modifiers;
         public EntityActions Actions;
+        public CoverTypes Cover;
+        public bool CoverCompromised;
+        //public bool CoverModeHighlighted;
+
 
         public event Action<int> OnHealthChanged;
         public event Action<int> OnTakeDamage;
 
-        protected Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
+        public Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
         protected int CurrentHealth;
         public int Health => CurrentHealth; // For serialization
 
@@ -33,11 +37,14 @@ namespace Entities
         {
             CurrentHealth = Data.MaxHealth;
             Actions = new EntityActions();
+            Cover = CoverTypes.NoCover;
+            CoverCompromised = false;
+            //CoverModeHighlighted = false;
         }
 
         protected virtual void Start()
         {
-            
+            CurrentCell.Walkable = false;
         }
 
         protected virtual void Update()
@@ -65,15 +72,20 @@ namespace Entities
 
         public abstract void TryMoveToCell(Cell destination);
 
-        protected void MoveToCell(Cell destination)
+        public IEnumerator MoveToCell(Cell destination)
         {
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
-            if (path.Count == 0) return;
+            if (path.Count == 0) yield break;
 
             EventManager.TriggerEvent(EventTypes.OnSpaceMoved, path.Count); // stats manager
             
+            Debug.Log($"Moving to {destination.Position}");
+
             Actions.UseAction(ActionType.Move);
-            StartCoroutine(FollowPath(path));
+            
+            CurrentCell.Walkable = true;
+            destination.Walkable = false;
+            yield return FollowPath(path);
         }
 
         protected virtual IEnumerator FollowPath(List<Cell> path)
@@ -99,6 +111,7 @@ namespace Entities
 
                 if (pathIndex >= path.Count - 1) break;
             }
+            
         }
 
         protected void TakeDamage(int amount)
@@ -138,6 +151,12 @@ namespace Entities
         {
             yield return new WaitForSeconds(1f); 
             onTurnComplete?.Invoke(); 
+        }
+
+        // A public that function that checks if an obstacle exists between the current cell
+        // of the enemy and the input cell
+        public bool HasObstacleBetween(Cell end) {
+            return TacticsGrid.Instance.ObstacleBetweenCells(CurrentCell, end);
         }
     }
 }

@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Controller
 {
-    public class ActiveAllyController : PlayerComponent
+    public class ActiveAllyController : PlayerComponent // Locking? Event Subscription
     {
         private Ally _activeAlly;
 
@@ -32,6 +34,23 @@ namespace Controller
             }
             
             ActiveAlly = GameManager.Allies[0];
+        }
+
+        private void OnEnable()
+        {
+            EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+        }
+
+        private void OnPlayerChangeMode(object data)
+        {
+            if (data is not ActionType mode) return;
+
+            _activeAlly.SetMoveMeshActive(mode == ActionType.Move && _activeAlly.Actions.CanUseAction(ActionType.Move));
         }
     }
 }

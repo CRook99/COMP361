@@ -4,17 +4,19 @@ using Entities;
 using Managers;
 using UnityEngine;
 
-namespace UI
+namespace UI.BottomWidgets
 {
-    public class PrimaryActionsWidget : MonoBehaviour
+    public class ActionsBottomWidget : BottomWidget
     {
         [SerializeField] private PrimaryActionWidget actionWidgetPrefab;
         [SerializeField] private List<ActionScriptableObject> actions; // Centralize?
         
         private Dictionary<ActionType, PrimaryActionWidget> _actionMap;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             _actionMap = new();
 
             foreach (ActionScriptableObject action in actions)
@@ -34,13 +36,17 @@ namespace UI
         private void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnPlayerUseAction, OnUseAction);
+            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, RefreshWidgets);
         }
 
         private void OnUseAction(object data)
         {
             if (data is not ActionType type) return;
-            
-            _actionMap[type].Deactivate();
+
+            if (_actionMap.TryGetValue(type, out PrimaryActionWidget widget))
+            {
+                _actionMap[type].Deactivate();
+            }
         }
 
         private void RefreshWidgets(object data)

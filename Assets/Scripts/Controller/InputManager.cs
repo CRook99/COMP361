@@ -28,7 +28,12 @@ namespace Controller
         {
             EventManager.Subscribe(EventTypes.OnPause, DisableInput);
             EventManager.Subscribe(EventTypes.OnUnpause, EnableInput);
-
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe(EventTypes.OnPause, DisableInput);
+            EventManager.Unsubscribe(EventTypes.OnUnpause, EnableInput);
         }
 
         private void DisableInput()
