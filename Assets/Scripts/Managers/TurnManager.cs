@@ -5,11 +5,14 @@ using Entities;
 using Managers;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.UI;
 
 
 public class TurnManager : MonoBehaviour 
 {
     public static TurnManager Instance {get; private set;}
+
+    [SerializeField] private Button endTurnButton; // Button for player to manually end their turn
     
     private bool _isAllyTurn = true;
     private HashSet<Ally> _actedAllies= new HashSet<Ally>();
@@ -23,6 +26,15 @@ public class TurnManager : MonoBehaviour
         else
         {
             Instance = this;
+        }
+
+        if (endTurnButton != null)
+        {
+            endTurnButton.onClick.AddListener(StartEnemyTurn);
+        }
+        else
+        {
+            Debug.LogWarning("EndTurn button not passed to TurnManager");
         }
     }
 
