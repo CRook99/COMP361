@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class ModeSwitcher : PlayerComponent
 {
-    private ActionType _currentMode;
+    public ActionType CurrentMode;
 
     private void Awake()
     {
@@ -17,9 +17,9 @@ public class ModeSwitcher : PlayerComponent
 
     public void SwitchMode(ActionType newMode)
     {
-        if (newMode == _currentMode) return;
+        if (newMode == CurrentMode) return;
 
-        _currentMode = newMode;
-        EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, _currentMode);
+        CurrentMode = newMode;
+        EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, CurrentMode);
     }
 }

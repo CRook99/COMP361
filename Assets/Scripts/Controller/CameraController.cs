@@ -3,6 +3,7 @@ using Cinemachine;
 using DG.Tweening;
 using Controller;
 using System;
+using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -47,6 +48,8 @@ namespace Controller
         private float _currentZoom;
 
         public bool Locked => _isRotating || _isSwitching || brain.IsBlending;
+        public CameraMode Mode => _mode;
+        public float YRotation => cameraSystem.transform.eulerAngles.y;
 
         // INPUT
         private PlayerInput _playerInput;
@@ -123,7 +126,7 @@ namespace Controller
 
         private void SwitchMode(InputAction.CallbackContext context)
         {
-            if (_isRotating || brain.IsBlending) return;
+            if (_isRotating || brain.IsBlending || ModeSwitcher.CurrentMode != ActionType.Move) return;
 
             _mode = _mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard;
             Switch();

@@ -49,6 +49,7 @@ namespace Entities
             
             EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Move);
             _moveArea.Hide();
+            Actions.UseAction(ActionType.Move);
             StartCoroutine(MoveToCell(destination));
         }
 

@@ -3,10 +3,7 @@ using UnityEngine;
 using System;
 using Entities;
 using Managers;
-using World;
-using System.Runtime.ConstrainedExecution;
 using Controller;
-using Utility;
 
 [Serializable]
 public struct CoverShield
@@ -22,10 +19,14 @@ public class CoverIndicator : PlayerComponent
     public Mesh HalfCoverMesh;
     public Mesh FullCoverMesh;
     
-    public float ScaleFactor;
+    public float StandardScale;
+    public float StandardHeight = 0f;
     public float MeshDistance;
+    public float AirSupportHeight;
+    public float AirSupportScale;
     
     private Dictionary<CoverTypes, Mesh> _meshMap;
+    private Quaternion UpwardsRotation = Quaternion.Euler(90f, 0f, 0f);
     private bool _shouldShowShields;
 
     private void Awake()
@@ -38,7 +39,7 @@ public class CoverIndicator : PlayerComponent
             { CoverTypes.FullCover, FullCoverMesh }
         };
         
-        var scale = Vector3.one * ScaleFactor;
+        var scale = Vector3.one * StandardScale;
         
         for (int i = 0; i < 4; i++)
         {
@@ -47,6 +48,19 @@ public class CoverIndicator : PlayerComponent
             
             _shields[i].Obj.transform.SetLocalPositionAndRotation(offset, rotation);
             _shields[i].Obj.transform.localScale = scale;
+        }
+    }
+
+    private void Update()
+    {
+        if (CameraController.Mode == CameraMode.AirSupport)
+        {
+            Debug.Log(CameraController.YRotation);
+            
+            for (int i = 0; i < 4; i++)
+            {
+                _shields[i].Obj.transform.localRotation = Quaternion.Euler(90f, CameraController.YRotation, 0f);
+            }
         }
     }
 
@@ -109,7 +123,6 @@ public class CoverIndicator : PlayerComponent
 
     private void DisallowShields()
     {
-        Debug.Log("dis");
         _shouldShowShields = false;
         
         foreach (CoverShield shield in _shields)
@@ -123,6 +136,21 @@ public class CoverIndicator : PlayerComponent
     {
         if (data is not CameraMode mode) return;
 
-        _shouldShowShields = mode == CameraMode.Standard;
+        for (int i = 0; i < 4; i++)
+        {
+            Quaternion rotation = Quaternion.Euler(0f, 90f * i, 0f);
+            Vector3 offset = rotation * Vector3.forward * MeshDistance;
+
+            if (mode == CameraMode.AirSupport)
+            {
+                offset += Vector3.up * AirSupportHeight;
+                rotation = Quaternion.Euler(90f, 0f, 0f);
+            }
+            
+            _shields[i].Obj.transform.SetLocalPositionAndRotation(offset, rotation);
+            _shields[i].Obj.transform.localScale = Vector3.one * (mode == CameraMode.Standard
+                ? StandardScale
+                : AirSupportScale);
+        }
     }
 }
