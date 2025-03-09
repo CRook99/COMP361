@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Controller;
 using Entities;
 using Managers;
 using Unity.VisualScripting;
@@ -36,6 +37,16 @@ public class TurnManager : MonoBehaviour
         {
             Debug.LogWarning("EndTurn button not passed to TurnManager");
         }
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+    }
+    
+    private void OnDisable()
+    {
+        EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
     }
 
     private void Start() 
@@ -82,5 +93,18 @@ public class TurnManager : MonoBehaviour
     public bool HasUnitActed(Ally unit)
     {
         return _actedAllies.Contains(unit);
+    }
+
+    private void OnPlayerChangeMode(object data)
+    {
+        if (data is not ControlMode mode)
+        {
+            Debug.LogWarning("Passed incorrect type to TurnManager::OnPlayerChangeMode");
+            return;
+        }
+
+        if (endTurnButton == null) return;
+
+        endTurnButton.interactable = mode != ControlMode.Selection;
     }
 }
