@@ -13,18 +13,21 @@ namespace Entities
         Airstrike
     }
     
-    public class EntityActions
+    /**
+     * Grouping class for a set of actions available to something
+     */
+    public class Actions
     {
         private readonly Dictionary<ActionType, bool> _actionMap;
         
         public event Action<ActionType> OnUseAction;
         public event Action<ActionType> OnRefreshAction;
 
-        public EntityActions()
+        public Actions(List<ActionScriptableObject> availableActions)
         {
-            _actionMap = Enum.GetValues(typeof(ActionType))
-                .Cast<ActionType>()
-                .ToDictionary(type => type, _ => true);
+            _actionMap = availableActions
+                .Select(a => a.Type)
+                .ToDictionary(t => t, _ => true);
         }
 
         public void UseAction(ActionType type)

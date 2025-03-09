@@ -55,8 +55,6 @@ public class CoverIndicator : PlayerComponent
     {
         if (CameraController.Mode == CameraMode.AirSupport)
         {
-            Debug.Log(CameraController.YRotation);
-            
             for (int i = 0; i < 4; i++)
             {
                 _shields[i].Obj.transform.localRotation = Quaternion.Euler(90f, CameraController.YRotation, 0f);

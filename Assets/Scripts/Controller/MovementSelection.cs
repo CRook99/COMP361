@@ -50,7 +50,7 @@ namespace Controller
 
         private void Update()
         {
-            if (_cursorLocked || ModeSwitcher.CurrentMode != ActionType.Move) return;
+            if (_cursorLocked || ModeSwitcher.CurrentMode != ControlMode.StandardMove) return;
             
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             _ray = _cam.ScreenPointToRay(mousePosition);
@@ -81,7 +81,7 @@ namespace Controller
 
         private void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (ModeSwitcher.CurrentMode != ActionType.Move || _currentCell == null || !_currentCell.Walkable) return;
+            if (ModeSwitcher.CurrentMode != ControlMode.StandardMove || _currentCell == null || !_currentCell.Walkable) return;
             
             ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
         }
@@ -104,9 +104,14 @@ namespace Controller
 
         private void OnPlayerChangeMode(object data)
         {
-            if (data is not ActionType mode) return;
+            if (data is not ControlMode mode)
+            {
+                Debug.LogWarning("Passed incorrect type to MovementSelection::OnPlayerChangeMode");
+                return;
+            }
             
-            ToggleCursor(mode == ActionType.Move);
+            ToggleCursor(mode == ControlMode.StandardMove);
+            // TODO Could be mode != ControlMode.Selection?
         }
     }
 }

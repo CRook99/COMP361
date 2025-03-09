@@ -48,9 +48,13 @@ namespace Controller
 
         private void OnPlayerChangeMode(object data)
         {
-            if (data is not ActionType mode) return;
+            if (data is not ControlMode mode)
+            {
+                Debug.LogWarning("Passed incorrect type to ActiveAllyController::OnPlayerChangeMode");
+                return;
+            }
 
-            _activeAlly.SetMoveMeshActive(mode == ActionType.Move && _activeAlly.Actions.CanUseAction(ActionType.Move));
+            _activeAlly.SetMoveMeshActive(mode == ControlMode.StandardMove && _activeAlly.Actions.CanUseAction(ActionType.Move));
         }
     }
 }

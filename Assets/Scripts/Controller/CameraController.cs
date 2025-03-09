@@ -126,7 +126,7 @@ namespace Controller
 
         private void SwitchMode(InputAction.CallbackContext context)
         {
-            if (_isRotating || brain.IsBlending || ModeSwitcher.CurrentMode != ActionType.Move) return;
+            if (_isRotating || brain.IsBlending || ModeSwitcher.CurrentMode != ControlMode.StandardMove) return;
 
             _mode = _mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard;
             Switch();

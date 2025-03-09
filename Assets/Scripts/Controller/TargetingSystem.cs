@@ -67,7 +67,7 @@ namespace Controller
         {
             if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(ActiveAllyController.ActiveAlly)) return; //_modeSwitcher == null
 
-            ModeSwitcher.SwitchMode(ActionType.Weapon);
+            ModeSwitcher.SwitchMode(ControlMode.Selection);
             _aiming = true;
             _validTargets = FindValidTargets();
 
@@ -76,7 +76,7 @@ namespace Controller
 
         private void ExitWeaponMode()
         {
-            ModeSwitcher.SwitchMode(ActionType.Move);
+            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
             _aiming = false;
             reticle.Hide();
         }

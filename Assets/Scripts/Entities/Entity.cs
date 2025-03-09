@@ -18,7 +18,7 @@ namespace Entities
         public EntityScriptableObject Data;
         
         public UnitModifiers Modifiers;
-        public EntityActions Actions;
+        public Actions Actions;
         public CoverTypes Cover;
         public bool CoverCompromised;
         //public bool CoverModeHighlighted;
@@ -34,7 +34,7 @@ namespace Entities
         protected virtual void Awake()
         {
             CurrentHealth = Data.MaxHealth;
-            Actions = new EntityActions();
+            Actions = new Actions(Data.AvailableActions);
             Cover = CoverTypes.NoCover;
             CoverCompromised = false;
             //CoverModeHighlighted = false;
