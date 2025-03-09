@@ -5,12 +5,15 @@ using Controller;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace UI
 {
     public class PauseMenu : MonoBehaviour
     {
         [SerializeField] private GameObject toggleObject;
+        [SerializeField] private Button resumeButton;
+        [SerializeField] private Button quitButton;
         
         private PlayerInput _playerInput;
         
@@ -19,17 +22,19 @@ namespace UI
             toggleObject.SetActive(false);
             
             _playerInput = InputManager.Instance.PlayerInput;
-            _playerInput.Combat.Pause.performed += OnPause;
+            _playerInput.Combat.Pause.performed += _ => Pause();
+            resumeButton.onClick.AddListener(Unpause);
+            quitButton.onClick.AddListener(OnSaveAndQuitButtonClicked);
         }
 
-        public void OnPause(InputAction.CallbackContext _)
+        private void Pause()
         {
             EventManager.TriggerEvent(EventTypes.OnPause);
             toggleObject.SetActive(true);
             Time.timeScale = 0f;
         }
 
-        public void OnResumeButtonClicked()
+        private void Unpause()
         {
             EventManager.TriggerEvent(EventTypes.OnUnpause);
             toggleObject.SetActive(false);
