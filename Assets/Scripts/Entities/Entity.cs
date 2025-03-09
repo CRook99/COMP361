@@ -112,7 +112,7 @@ namespace Entities
             
         }
 
-        protected void TakeDamage(int amount)
+        public void TakeDamage(int amount)
         {
             CurrentHealth -= amount;
             OnTakeDamage?.Invoke(amount);
@@ -126,7 +126,7 @@ namespace Entities
             }
         }
 
-        protected void Heal(int amount)
+        public void Heal(int amount)
         {
             CurrentHealth += amount;
             CurrentHealth = Mathf.Min(amount, Data.MaxHealth); // Clamp health to maximum

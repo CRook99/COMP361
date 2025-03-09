@@ -1,0 +1,35 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Net;
+using Controller;
+using Managers;
+using UnityEngine;
+using Utility;
+using World;
+
+namespace Entities
+{
+    //One class to keep all the different abilities together
+    public class abilities
+    {
+        private readonly int FRAG_DAMAGE = 10;
+        private readonly int CARE_HEAL = 15;
+        private readonly int EMP_DISARM = 1;
+
+        public void HealAbility(Ally ally)
+        {
+            ally.Heal(CARE_HEAL);
+        }
+
+        public void DamageAbility(Enemy enemy)
+        {
+            enemy.TakeDamage(FRAG_DAMAGE);
+        }
+
+        public void DisarmAbility(Enemy enemy)
+        {
+            //TODO: Implementation
+        }
+    }
+}

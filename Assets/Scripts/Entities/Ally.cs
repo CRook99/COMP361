@@ -62,7 +62,16 @@ namespace Entities
 
         public void TryThrow(ThrowableScriptableObject throwable, Cell cell)
         {
+            if (!Actions.CanUseAction(ActionType.Ability) || !_reachableCells.Contains(destination))
+            {
+                // Handle unable
+                return;
+            }
             
+            EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Move);
+            _moveArea.Hide();
+            Actions.UseAction(ActionType.Ability);
+            //TODO: Probably going to want a parabolic throw arc here
         }
 
         private void OnActiveAllyChanged(object data)
