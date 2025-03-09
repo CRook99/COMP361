@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 namespace UI
 {
     public class ResultsScreen : MonoBehaviour
     {
+        public Button MenuButton;
+        
         public TMP_Text enemiesKilledText;
         public TMP_Text damageDealtText;
         public TMP_Text shotsLandedText;
@@ -21,6 +24,8 @@ namespace UI
         private void Start()
         {
             UpdateResultsScreen();
+            
+            MenuButton.onClick.AddListener(OnMainMenuButtonClicked);
         }
 
         private void UpdateResultsScreen()
@@ -38,8 +43,9 @@ namespace UI
         public void OnMainMenuButtonClicked()
         {
             Debug.Log("Return to main menu");
-            StatisticsManager.Instance. ResetStats();
+            StatisticsManager.Instance.ResetStats();
             // Scene transition logic
+            SceneManager.LoadSceneAsync("MainMenu");
         }
     }
 }

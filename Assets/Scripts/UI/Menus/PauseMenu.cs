@@ -43,9 +43,12 @@ namespace UI
 
         public void OnSaveAndQuitButtonClicked()
         {
-            Debug.Log("Save and quit");
-            // Saving logic
-            // Scene transition logic
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else          
+            // TODO Serialize here
+            Application.Quit();
+#endif
         }
     }
 }
