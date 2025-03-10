@@ -7,7 +7,7 @@ using Managers;
 using UnityEngine;
 using World;
 using System.IO;
-
+using Utility.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -68,84 +68,21 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L)){
             //Debug.Log("L");
-            SaveGameState();
+
+            GameObject gameStateGO = new GameObject("GameState");
+            GameState gameState = gameStateGO.AddComponent<GameState>();
+            gameState.SaveGameState();
+            //gameState.LoadGameState(@"Assets\Scripts\Serialization\Save_File.json");
         }
 
         if (Input.GetKeyDown(KeyCode.T)){
             Debug.Log("Turn++");
-            if (TurnManager.Instance.IsAllyTurn == true){
+            if (TurnManager.Instance.IsAllyTurn() == true){
                 TurnManager.Instance.StartEnemyTurn();
             }else{
                 TurnManager.Instance.StartAllyTurn();
             }
         }
-    }
-
-    public void SaveGameState(bool overwriteSave = true)
-    {
-        GameState state = new GameState
-        {
-            Allies = new List<AllyData>(),
-            Enemies = new List<EnemyData>(),
-            isAllyTurn = TurnManager.Instance != null ? TurnManager.Instance.IsAllyTurn : true, // Default to ally turn if no instance
-            turnNumber = TurnManager.Instance != null ? TurnManager.Instance.TurnNumber : 0,
-            enemiesVanquished = StatisticsManager.Instance.GetEnemiesVanquished(),
-            damageDealt = StatisticsManager.Instance.GetDamageDealt(),
-            shotsLanded = StatisticsManager.Instance.GetShotsLanded(),
-            spacesMoved = StatisticsManager.Instance.GetSpacesMoved(),
-            fallenSoldiers = StatisticsManager.Instance.GetFallenSoldiers(),
-            damageReceived = StatisticsManager.Instance.GetDamageReceived(),
-            shotsTaken = StatisticsManager.Instance.GetShotsTaken(),
-            chanceShotsDodged = StatisticsManager.Instance.GetChanceShotsDodged()
-        };
-
-        foreach (Ally ally in Allies)
-        {
-            AllyData data = new AllyData
-            {
-                posX = ally.transform.position.x,
-                posY = ally.transform.position.y,
-                posZ = ally.transform.position.z,
-                currentHealth = ally.Health,
-                entityDataName = ally.Data != null ? ally.Data.name : "Unknown"
-            };
-
-            state.Allies.Add(data);
-        }
-
-        foreach (Enemy enemy in Enemies)
-        {
-            EnemyData data = new EnemyData
-            {
-                posX = enemy.transform.position.x,
-                posY = enemy.transform.position.y,
-                posZ = enemy.transform.position.z,
-                currentHealth = enemy.Health,
-                entityDataName = enemy.Data != null ? enemy.Data.name : "Unknown"
-            };
-
-            state.Enemies.Add(data);
-        }
-
-        string json = state.Serialize();
-
-        string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
-        if (!Directory.Exists(folderPath))
-        {
-            Directory.CreateDirectory(folderPath);
-        }
- 
-        string filePathTimeStamp = Path.Combine(folderPath, $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json");
-        string filePathOverwrite = Path.Combine(folderPath, "Save_File.json");
-
-        if (overwriteSave){
-            File.WriteAllText(filePathOverwrite, json);
-            Debug.Log("Game saved successfully to " + filePathOverwrite);
-        }else{
-            File.WriteAllText(filePathTimeStamp, json);
-            Debug.Log("Game saved successfully to " + filePathTimeStamp);
-        }
-
     }
 
 }

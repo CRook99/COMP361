@@ -6,9 +6,9 @@ using Managers;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
+using Utility.Serialization;
 
-
-public class TurnManager : MonoBehaviour 
+public class TurnManager : MonoBehaviour, IGameSerializable 
 {
     public static TurnManager Instance {get; private set;}
 
@@ -17,9 +17,6 @@ public class TurnManager : MonoBehaviour
     private bool _isAllyTurn = true;
     private HashSet<Ally> _actedAllies= new HashSet<Ally>();
     private int _turnNumber = 0;
-    // Getters for the gameManager -> Serialize
-    public bool IsAllyTurn => _isAllyTurn; 
-    public int TurnNumber => _turnNumber;
 
     private void Awake() 
     {
@@ -94,6 +91,25 @@ public class TurnManager : MonoBehaviour
     public bool HasUnitActed(Ally unit)
     {
         return _actedAllies.Contains(unit);
+    }
+
+    // --- IGameSerializable Implementation ---
+    public bool Validate() {
+        return _turnNumber >= 0;
+    }
+
+    public string Serialize() {
+        TurnDTO dto = new TurnDTO {
+            isAllyTurn = _isAllyTurn,
+            turnNumber = _turnNumber
+        };
+        return JsonUtility.ToJson(dto, true);
+    }
+
+    public void Deserialize(string json) {
+        TurnDTO dto = JsonUtility.FromJson<TurnDTO>(json);
+        _isAllyTurn = dto.isAllyTurn;
+        _turnNumber = dto.turnNumber;
     }
 
 }
