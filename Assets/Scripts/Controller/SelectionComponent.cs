@@ -19,7 +19,6 @@ namespace Controller
         private PlayerInput _playerInput;
         protected LayerMask _rayMask;
         protected bool _cursorLocked;
-        protected ActionType action;
 
         public event Action<Cell> OnHoveredCellChanged;
 
@@ -51,7 +50,7 @@ namespace Controller
 
         protected virtual void Update()
         {
-            if (_cursorLocked || ModeSwitcher.CurrentMode != action) return;
+            if (_cursorLocked || ModeSwitcher.CurrentMode != ControlMode.Selection) return;
             
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             _ray = _cam.ScreenPointToRay(mousePosition);

@@ -4,7 +4,6 @@ using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Entities;
 using Utility;
 using World;
 
@@ -16,8 +15,6 @@ namespace Controller
         protected override void Awake()
         {
             base.Awake();
-            action = ActionType.Move;
-
         }
         
         protected override void OnEnable()
@@ -42,7 +39,7 @@ namespace Controller
 
         protected override void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (ModeSwitcher.CurrentMode != ControlMode.StandardMove || _currentCell == null || !_currentCell.Walkable) return;
+            if (ModeSwitcher.CurrentMode != ControlMode.Selection || _currentCell == null || !_currentCell.Walkable) return;
             
             ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
         }
