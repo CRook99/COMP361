@@ -39,6 +39,11 @@ public class Reticle : MonoBehaviour
         _spinSequence.Pause();
     }
 
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
     public void Hide()
     {
         gameObject.SetActive(false);

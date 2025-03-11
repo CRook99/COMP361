@@ -43,13 +43,9 @@ namespace Managers
                 {
                     yield return RunEnemyAction(enemy);
                 }
-                EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
             }
-            else
-            {
-                _enemies = null;
-                EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
-            }
+            
+            TurnManager.Instance.EndEnemyTurn();
         }
 
         private IEnumerator RunEnemyAction(Enemy enemy)

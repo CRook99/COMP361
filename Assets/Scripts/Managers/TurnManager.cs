@@ -16,7 +16,7 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private Button endTurnButton; // Button for player to manually end their turn
     
     private bool _isAllyTurn = true;
-    private HashSet<Ally> _actedAllies= new HashSet<Ally>();
+    private HashSet<Ally> _actedAllies = new HashSet<Ally>();
 
     private void Awake() 
     {
@@ -59,7 +59,7 @@ public class TurnManager : MonoBehaviour
         // Reset actions
         _actedAllies.Clear();
         
-        EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
+        //EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
         // Make UI element indicating whose turn it is subscribe to this
 
         _isAllyTurn = true;
@@ -75,6 +75,12 @@ public class TurnManager : MonoBehaviour
         _isAllyTurn = false;
         Debug.Log("Enemy's Turn");
 
+    }
+
+    public void EndEnemyTurn()
+    {
+        EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
+        StartAllyTurn();
     }
 
     public bool IsAllyTurn()
