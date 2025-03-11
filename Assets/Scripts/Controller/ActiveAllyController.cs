@@ -18,11 +18,13 @@ namespace Controller
             get => _activeAlly;
             set
             {
-                if (_activeAlly != value)
+                if (_activeAlly == value)
                 {
-                    _activeAlly = value;
-                    EventManager.TriggerEvent(EventTypes.OnActiveAllyChanged, _activeAlly);
+                    Debug.LogWarning("Changed to same ally. Was this intentional?");
                 }
+
+                _activeAlly = value;
+                EventManager.TriggerEvent(EventTypes.OnActiveAllyChanged, _activeAlly);
             }
         }
 
@@ -39,18 +41,37 @@ namespace Controller
         private void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+            EventManager.Subscribe(EventTypes.OnStartEnemyTurn, OnStartEnemyTurn);
+            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
         }
         
         private void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+            EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, OnStartEnemyTurn);
+            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
         }
 
         private void OnPlayerChangeMode(object data)
         {
-            if (data is not ActionType mode) return;
+            if (data is not ControlMode mode)
+            {
+                Debug.LogWarning("Passed incorrect type to ActiveAllyController::OnPlayerChangeMode");
+                return;
+            }
 
-            _activeAlly.SetMoveMeshActive(mode == ActionType.Move && _activeAlly.Actions.CanUseAction(ActionType.Move));
+            _activeAlly.SetMoveMeshActive(mode == ControlMode.StandardMove && _activeAlly.Actions.CanUseAction(ActionType.Move));
+        }
+
+        private void OnStartEnemyTurn()
+        {
+            _activeAlly.SetMoveMeshActive(false);
+        }
+
+        private void OnEndEnemyTurn()
+        {
+            // TODO Make this the first alive ally
+            ActiveAlly = GameManager.Allies[0];
         }
     }
 }

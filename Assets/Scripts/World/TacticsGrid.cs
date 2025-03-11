@@ -87,7 +87,7 @@ namespace World
             while (true)
             {
                 Cell checkCell = Instance.GetCell(x0, y0);
-                if (checkCell.Cover == CoverTypes.FullCover)
+                if (checkCell != null && checkCell.Cover == CoverTypes.FullCover)
                     return true;
 
                 if (x0 == end.Position.x && y0 == end.Position.y)

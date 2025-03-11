@@ -6,20 +6,31 @@ using Entities;
 using Managers;
 using UnityEngine;
 
-public class ModeSwitcher : PlayerComponent
+namespace Controller 
 {
-    public ActionType CurrentMode;
-
-    private void Awake()
+    public enum ControlMode
     {
-        SwitchMode(ActionType.Move);
+        StandardMove,
+        AirSupportMove,
+        Selection,
     }
-
-    public void SwitchMode(ActionType newMode)
+    
+    public class ModeSwitcher : PlayerComponent
     {
-        if (newMode == CurrentMode) return;
+        public ControlMode CurrentMode;
+        //public ActionType CurrentMode;
 
-        CurrentMode = newMode;
-        EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, CurrentMode);
+        private void Awake()
+        {
+            SwitchMode(ControlMode.StandardMove);
+        }
+
+        public void SwitchMode(ControlMode newMode)
+        {
+            if (newMode == CurrentMode) return;
+
+            CurrentMode = newMode;
+            EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, CurrentMode);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI
 {
@@ -10,6 +11,7 @@ namespace UI
         {
             Debug.Log("New game");
             // Scene transition logic
+            SceneManager.LoadSceneAsync("Equipment");
         }
 
         public void OnClickLoadGameButton()

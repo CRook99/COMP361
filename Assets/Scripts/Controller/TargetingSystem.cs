@@ -66,17 +66,25 @@ namespace Controller
         private void EnterWeaponMode()
         {
             if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(ActiveAllyController.ActiveAlly)) return; //_modeSwitcher == null
-
-            ModeSwitcher.SwitchMode(ActionType.Weapon);
-            _aiming = true;
+            
             _validTargets = FindValidTargets();
+            if (_validTargets.Count == 0)
+            {
+                Debug.Log("none");
+                // Indicate this
+                return;
+            }
+
+            ModeSwitcher.SwitchMode(ControlMode.Selection);
+            _aiming = true;
+            _currentTargetIndex = 0;
 
             HighlightTarget(_validTargets[_currentTargetIndex]);
         }
 
         private void ExitWeaponMode()
         {
-            ModeSwitcher.SwitchMode(ActionType.Move);
+            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
             _aiming = false;
             reticle.Hide();
         }
@@ -103,6 +111,7 @@ namespace Controller
             
             Vector3 targetPosition = target.CenterOfMass != null ? target.CenterOfMass.position : target.transform.position;
 
+            reticle.Show();
             reticle.SetPosition(Camera.main.WorldToScreenPoint(targetPosition));
         }
 
@@ -131,10 +140,7 @@ namespace Controller
             if (enemy == null) return false;
 
             // TODO: Weapon range
-
-            if (TacticsGrid.Instance.ObstacleBetweenCells(ActiveAllyController.ActiveAlly.CurrentCell, enemy.CurrentCell)) return false;
-
-            return true;
+            return !TacticsGrid.Instance.ObstacleBetweenCells(ActiveAllyController.ActiveAlly.CurrentCell, enemy.CurrentCell);
         }
     }
 

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Entities
@@ -8,5 +10,6 @@ namespace Entities
         public string Name;
         public int MaxHealth;
         public int MovementRange;
+        public List<ActionScriptableObject> AvailableActions;
     }
 }

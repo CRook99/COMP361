@@ -76,9 +76,9 @@ namespace UI.BottomWidgets
         {
             if (!_widgets.ContainsKey(type)) return;
             
-            if (_activeWidget != null) _activeWidget.Hide();
+            if (_activeWidget != null) _activeWidget.Close();
             _activeWidget = _widgets[type];
-            _activeWidget.Show();
+            _activeWidget.Open();
         }
 
         private void OnCameraModeChanged(object data)

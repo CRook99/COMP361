@@ -24,13 +24,23 @@ namespace UI.BottomWidgets
 
             _rect.anchoredPosition = new Vector2(0f, -_height);
         }
+
+        public virtual void Open()
+        {
+            Show();
+        }
+
+        public virtual void Close()
+        {
+            Hide();
+        }
     
-        public void Show()
+        private void Show()
         {
             _rect.DOAnchorPosY(0f, ChangeTime).SetEase(Ease.OutQuad);
         }
     
-        public void Hide()
+        private void Hide()
         {
             _rect.DOAnchorPosY(-_height, ChangeTime).SetEase(Ease.OutQuad);
         }

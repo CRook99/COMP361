@@ -32,11 +32,14 @@ namespace Entities
         protected void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnActiveAllyChanged, OnActiveAllyChanged);
+            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
         }
         
         protected void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, OnActiveAllyChanged);
+            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
+
         }
 
         public override void TryMoveToCell(Cell destination)
@@ -91,6 +94,11 @@ namespace Entities
             
             _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
+        }
+
+        private void OnEndEnemyTurn()
+        {
+            Actions.Refresh();
         }
 
         public void SetMoveMeshActive(bool toggle)

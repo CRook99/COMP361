@@ -11,7 +11,7 @@ namespace UI.BottomWidgets
         [SerializeField] private PrimaryActionWidget actionWidgetPrefab;
         [SerializeField] private List<ActionScriptableObject> actions; // Centralize?
         
-        private Dictionary<ActionType, PrimaryActionWidget> _actionMap;
+        protected Dictionary<ActionType, PrimaryActionWidget> _actionMap;
 
         protected override void Awake()
         {
@@ -27,16 +27,15 @@ namespace UI.BottomWidgets
             }
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnPlayerUseAction, OnUseAction);
-            EventManager.Subscribe(EventTypes.OnActiveAllyChanged, RefreshWidgets);
         }
         
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnPlayerUseAction, OnUseAction);
-            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, RefreshWidgets);
+            
         }
 
         private void OnUseAction(object data)
@@ -46,23 +45,6 @@ namespace UI.BottomWidgets
             if (_actionMap.TryGetValue(type, out PrimaryActionWidget widget))
             {
                 _actionMap[type].Deactivate();
-            }
-        }
-
-        private void RefreshWidgets(object data)
-        {
-            if (data is not Ally activeAlly) return;
-
-            foreach (var item in _actionMap)
-            {
-                if (activeAlly.Actions.CanUseAction(item.Key) && !item.Value.Active)
-                {
-                    item.Value.Activate();
-                }
-                else if (!activeAlly.Actions.CanUseAction(item.Key) && item.Value.Active)
-                {
-                    item.Value.Deactivate();
-                }
             }
         }
     }

@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4536210411513785759, guid: 891fdf8833ff66c48b5b394fe6173c3d, type: 3}
       propertyPath: m_Name
-      value: Movement Variant
+      value: Movement
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -98,14 +98,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4536210411513785759, guid: 891fdf8833ff66c48b5b394fe6173c3d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2366691498637172975}
+      addedObject: {fileID: 4997919088908980991}
   m_SourcePrefab: {fileID: 100100000, guid: 891fdf8833ff66c48b5b394fe6173c3d, type: 3}
 --- !u!1 &6511532349961813322 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4536210411513785759, guid: 891fdf8833ff66c48b5b394fe6173c3d, type: 3}
   m_PrefabInstance: {fileID: 7254814638687457493}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2366691498637172975
+--- !u!114 &4997919088908980991
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6511532349961813322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47d3b44d1e224df299b6c354c066a88c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f03aca9e2fa4a39b9ea0ad3b5d40334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 0

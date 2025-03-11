@@ -11,12 +11,20 @@ namespace Managers
     {
         private List<Enemy> _enemies = null;
 
-        private void Update()
+        private void OnEnable()
         {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                StartCoroutine(HandleEnemyTurn());
-            }
+            EventManager.Subscribe(EventTypes.OnStartEnemyTurn, EnterEnemyTurn);
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, EnterEnemyTurn);
+        }
+
+        // Void method to expose to events
+        private void EnterEnemyTurn()
+        {
+            StartCoroutine(HandleEnemyTurn());
         }
         
         public IEnumerator HandleEnemyTurn()
@@ -30,18 +38,14 @@ namespace Managers
             
             if (_enemies.Count > 0)
             {
-                EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);
+                // We subscribe to OnStartEnemyTurn so don't trigger it here
                 foreach (Enemy enemy in _enemies)
                 {
                     yield return RunEnemyAction(enemy);
                 }
-                EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
             }
-            else
-            {
-                _enemies = null;
-                EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
-            }
+            
+            TurnManager.Instance.EndEnemyTurn();
         }
 
         private IEnumerator RunEnemyAction(Enemy enemy)
