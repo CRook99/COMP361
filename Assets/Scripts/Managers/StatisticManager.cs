@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Managers; 
+using Utility.Serialization;
 
-public class StatisticsManager : MonoBehaviour
+public class StatisticsManager : MonoBehaviour, IGameSerializable
 {
     private static StatisticsManager _instance;
 
@@ -99,6 +100,39 @@ public class StatisticsManager : MonoBehaviour
     damageReceived = 0;
     shotsTaken = 0;
     chanceShotsDodged = 0;
+    }
+
+    // --- IGameSerializable Implementation ---
+    public bool Validate() {
+        return enemiesVanquished >= 0 && damageDealt >= 0 && shotsLanded >= 0 &&
+               spacesMoved >= 0 && fallenSoldiers >= 0 && damageReceived >= 0 &&
+               shotsTaken >= 0 && chanceShotsDodged >= 0;
+    }
+
+    public string Serialize() {
+        StatisticsDTO dto = new StatisticsDTO {
+            enemiesVanquished = GetEnemiesVanquished(),
+            damageDealt = GetDamageDealt(),
+            shotsLanded = GetShotsLanded(),
+            spacesMoved = GetSpacesMoved(),
+            fallenSoldiers = GetFallenSoldiers(),
+            damageReceived = GetDamageReceived(),
+            shotsTaken = GetShotsTaken(),
+            chanceShotsDodged = GetChanceShotsDodged()
+        };
+        return JsonUtility.ToJson(dto, true);
+    }
+
+    public void Deserialize(string json) {
+        StatisticsDTO dto = JsonUtility.FromJson<StatisticsDTO>(json);
+        enemiesVanquished = dto.enemiesVanquished;
+        damageDealt = dto.damageDealt;
+        shotsLanded = dto.shotsLanded;
+        spacesMoved = dto.spacesMoved;
+        fallenSoldiers = dto.fallenSoldiers;
+        damageReceived = dto.damageReceived;
+        shotsTaken = dto.shotsTaken;
+        chanceShotsDodged = dto.chanceShotsDodged;
     }
     
 }
