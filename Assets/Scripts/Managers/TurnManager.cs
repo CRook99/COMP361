@@ -83,8 +83,8 @@ public class TurnManager : MonoBehaviour, IGameSerializable
   public void EndEnemyTurn()
   {
     EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
+    GameState.Instance.SaveGameState();
     StartAllyTurn();
-    
   }
 
   public bool IsAllyTurn()

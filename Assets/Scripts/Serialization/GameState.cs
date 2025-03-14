@@ -7,6 +7,20 @@ using Utility.Serialization;
 [Serializable]
 public class GameState : MonoBehaviour
 {
+    private static GameState _instance;
+    public static GameState Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject go = new GameObject("GameState");
+                _instance = go.AddComponent<GameState>();
+                DontDestroyOnLoad(go);
+            }
+            return _instance;
+        }
+    }
 
     public void SaveGameState(bool overwriteSave = true)
     {
