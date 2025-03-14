@@ -67,7 +67,7 @@ namespace Controller
             if (_affectedCells.Count == 0) return;
             
             throwAOE.GenerateMesh(_affectedCells, _currentCell.Position);
-            throwAOE.transform.position = _currentCell.Position.ToVector3XZ(0.1f);
+            throwAOE.transform.position = _currentCell.Position.ToVector3XZ();
         }
 
         private void Activate()
