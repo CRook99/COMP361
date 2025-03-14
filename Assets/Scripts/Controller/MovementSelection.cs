@@ -39,7 +39,7 @@ namespace Controller
 
         protected override void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (ModeSwitcher.CurrentMode != ControlMode.Selection || _currentCell == null || !_currentCell.Walkable) return;
+            if (ModeSwitcher.CurrentMode != ControlMode.StandardMove || _currentCell == null || !_currentCell.Walkable) return;
             
             ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
         }

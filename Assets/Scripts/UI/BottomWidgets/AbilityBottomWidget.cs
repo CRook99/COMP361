@@ -1,3 +1,4 @@
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,20 @@ namespace UI.BottomWidgets
             base.Awake();
 
             backButton.onClick.AddListener(OnClickBackButton);
+        }
+
+        public override void Open()
+        {
+            base.Open();
+
+            EventManager.TriggerEvent(EventTypes.OnPlayerBeginAbility);
+        }
+        
+        public override void Close()
+        {
+            base.Close();
+
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndAbility);
         }
 
         private void OnClickBackButton()

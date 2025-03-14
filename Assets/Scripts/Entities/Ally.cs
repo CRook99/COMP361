@@ -13,12 +13,15 @@ namespace Entities
         private HashSet<Cell> _reachableCells;
         [SerializeField] private string _name;
         private Abilities abilities;
+
+        public HashSet<Cell> ReachableCells => _reachableCells;
         
         protected override void Awake()
         {
             base.Awake();
 
             _moveArea= GetComponentInChildren<MoveArea>();
+            abilities = new Abilities();
         }
 
         protected override void Start()
@@ -64,9 +67,10 @@ namespace Entities
             EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
         }
 
-        public void EnableThrow(int range)
+        public void EnableThrow(int range, out HashSet<Cell> cells)
         {
             var _possibleCells = Pathfinder.FindReachableCells(CurrentCell, range);
+            cells = _possibleCells;
             _moveArea.GenerateMesh(_possibleCells, CurrentCell.Position);
             _moveArea.Show();
         }
@@ -98,7 +102,7 @@ namespace Entities
             {
                 //Enemy-focused abilities
                 case AbilityType.Frag:
-                    ability = abilities.DamageAbility; 
+                    ability = abilities.DamageAbility;
                     allies = false;
                     break;
                 case AbilityType.EMP:

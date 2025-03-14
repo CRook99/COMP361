@@ -5,6 +5,8 @@ using Utility;
 
 namespace World
 {
+    [RequireComponent(typeof(MeshFilter))]
+    [RequireComponent(typeof(MeshRenderer))]
     public class MoveArea : MonoBehaviour
     {
         private const float Offset = 0.5f;

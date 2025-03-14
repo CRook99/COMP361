@@ -14,7 +14,7 @@ namespace Entities{
 
     public delegate void AbilityFunction(Entity entity);
 
-    public class Abilities : MonoBehaviour
+    public class Abilities
     {
         private readonly int FRAG_DAMAGE = 10;
         private readonly int CARE_HEAL = 15;
@@ -30,6 +30,7 @@ namespace Entities{
         {
             if (entity is not Enemy enemy) return;
             enemy.TakeDamage(FRAG_DAMAGE);
+            Debug.Log("OWWWW");
         }
 
         public void DisarmAbility(Entity entity)

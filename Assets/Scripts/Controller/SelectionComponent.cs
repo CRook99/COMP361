@@ -50,7 +50,7 @@ namespace Controller
 
         protected virtual void Update()
         {
-            if (_cursorLocked || ModeSwitcher.CurrentMode != ControlMode.Selection) return;
+            if (_cursorLocked) return; //|| ModeSwitcher.CurrentMode != ControlMode.Selection
             
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             _ray = _cam.ScreenPointToRay(mousePosition);
@@ -79,9 +79,7 @@ namespace Controller
             }
         }
 
-        protected virtual void OnSelectTile(InputAction.CallbackContext context)
-        {
-        }
+        protected abstract void OnSelectTile(InputAction.CallbackContext context);
 
         private void DisableCursor()
         {
