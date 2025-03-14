@@ -9,109 +9,39 @@ using World;
 
 namespace Controller
 {
-    public class MovementSelection : PlayerComponent
+    public class MovementSelection : SelectionComponent
     {
-        [SerializeField] private GameObject cursor;
 
-        private Camera _cam;
-        private Ray _ray;
-        private Cell _currentCell;
-        private PlayerInput _playerInput;
-        private LayerMask _rayMask;
-        private bool _cursorLocked;
-
-        public event Action<Cell> OnHoveredCellChanged;
-
-        private void Awake()
+        protected override void Awake()
         {
-            _rayMask = LayerMask.GetMask("Cell");
-            _cam = Camera.main;
+            base.Awake();
         }
         
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            EventManager.Subscribe(EventTypes.OnPause, DisableCursor);
-            EventManager.Subscribe(EventTypes.OnUnpause, EnableCursor);
-            EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+            base.OnEnable();
         }
         
-        private void OnDisable()
+        protected override void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnPause, DisableCursor);
-            EventManager.Unsubscribe(EventTypes.OnUnpause, EnableCursor);
-            EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+            base.OnDisable();
         }
 
-        private void Start()
+        protected override void Start()
         {
-            _playerInput = InputManager.Instance.PlayerInput;
-            _playerInput.Combat.Select.performed += OnSelectTile;
+            base.Start();
         }
 
-        private void Update()
+        protected override void Update()
         {
-            if (_cursorLocked || ModeSwitcher.CurrentMode != ControlMode.StandardMove) return;
-            
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            _ray = _cam.ScreenPointToRay(mousePosition);
-
-            if (Physics.Raycast(_ray, out var hit, 100f, _rayMask))
-            {
-                Vector3 position = hit.transform.position;
-                Vector2Int coordinate = new Vector2Int
-                (
-                    Mathf.RoundToInt(position.x),
-                    Mathf.RoundToInt(position.z)
-                );
-                
-                Cell newCell = TacticsGrid.Instance.GetCell(coordinate);
-                if (newCell == null || newCell == _currentCell) return;
-                
-                _currentCell = newCell;
-                OnHoveredCellChanged?.Invoke(_currentCell);
-                if (!cursor.activeSelf) cursor.SetActive(true);
-                cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
-            }
-            else
-            {
-                _currentCell = null;
-                if (cursor.activeSelf) cursor.SetActive(false);
-            }
+            base.Update();
         }
 
-        private void OnSelectTile(InputAction.CallbackContext context)
+        protected override void OnSelectTile(InputAction.CallbackContext context)
         {
-            if (ModeSwitcher.CurrentMode != ControlMode.StandardMove || _currentCell == null || !_currentCell.Walkable) return;
+            if (ModeSwitcher.CurrentMode != ControlMode.Selection || _currentCell == null || !_currentCell.Walkable) return;
             
             ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
-        }
-
-        private void DisableCursor()
-        {
-            _cursorLocked = true;
-        }
-
-        private void EnableCursor()
-        {
-            _cursorLocked = false;
-        }
-
-        private void ToggleCursor(bool b)
-        {
-            _cursorLocked = !b;
-            cursor.SetActive(b);
-        }
-
-        private void OnPlayerChangeMode(object data)
-        {
-            if (data is not ControlMode mode)
-            {
-                Debug.LogWarning("Passed incorrect type to MovementSelection::OnPlayerChangeMode");
-                return;
-            }
-            
-            ToggleCursor(mode == ControlMode.StandardMove);
-            // TODO Could be mode != ControlMode.Selection?
         }
     }
 }

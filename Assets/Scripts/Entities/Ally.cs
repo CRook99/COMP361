@@ -12,6 +12,7 @@ namespace Entities
         private MoveArea _moveArea;
         private HashSet<Cell> _reachableCells;
         [SerializeField] private string _name;
+        private Abilities abilities;
         
         protected override void Awake()
         {
@@ -61,6 +62,62 @@ namespace Entities
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginMove, this);
             yield return base.FollowPath(path);
             EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
+        }
+
+        public void EnableThrow(int range)
+        {
+            var _possibleCells = Pathfinder.FindReachableCells(CurrentCell, range);
+            _moveArea.GenerateMesh(_possibleCells, CurrentCell.Position);
+            _moveArea.Show();
+        }
+
+        public void DisableThrow()
+        {
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange);
+            _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
+        }
+
+        public void TryThrow(ThrowableScriptableObject throwable, Cell destination, HashSet<Cell> area)
+        {
+            if (!Actions.CanUseAction(ActionType.Ability) || !_reachableCells.Contains(destination))
+            {
+                // Handle unable
+                return;
+            }
+            
+            EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Ability);
+            _moveArea.Hide();
+            Actions.UseAction(ActionType.Ability);
+            
+            //TODO: Probably going to want a parabolic throw arc here
+
+            AbilityFunction ability;
+            bool allies;
+
+            switch (throwable.ability)
+            {
+                //Enemy-focused abilities
+                case AbilityType.Frag:
+                    ability = abilities.DamageAbility; 
+                    allies = false;
+                    break;
+                case AbilityType.EMP:
+                    ability = abilities.DisarmAbility;
+                    allies = false;
+                    break;
+                //Ally-focused abilities
+                case AbilityType.Care: 
+                    ability = abilities.HealAbility; 
+                    allies = true;
+                    break;
+
+                default:
+                    ability = abilities.DebugAbility;
+                    allies = false;
+                    break;
+            }
+
+            abilities.DoForAllInArea(ability, allies, area);
         }
 
         private void OnActiveAllyChanged(object data)
