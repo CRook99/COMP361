@@ -168,7 +168,8 @@ namespace Entities
                 posY = transform.position.y,
                 posZ = transform.position.z,
                 health = CurrentHealth,
-                entityDataName = Data != null ? Data.name : "Unknown"
+                entityDataName = Data != null ? Data.name : "Unknown",
+                modifiers = Modifiers
             };
             return JsonUtility.ToJson(data, true);
         }
@@ -177,6 +178,7 @@ namespace Entities
             EntityDTO data = JsonUtility.FromJson<EntityDTO>(json);
             transform.position = new Vector3(data.posX, data.posY, data.posZ);
             CurrentHealth = data.health;
+            Modifiers = data.modifiers;
             // Restore other data here.
         }
     }

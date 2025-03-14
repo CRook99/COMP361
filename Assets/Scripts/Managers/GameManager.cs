@@ -69,8 +69,8 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L)){
             GameObject gameStateGO = new GameObject("GameState");
             GameState gameState = gameStateGO.AddComponent<GameState>();
-            gameState.SaveGameState();
-            //gameState.LoadGameState(@"Assets\Scripts\Serialization\Save_File.json");
+            //gameState.SaveGameState();
+            gameState.LoadGameState(@"Assets\Scripts\Serialization\Save_File.json");
         }
 
         if (Input.GetKeyDown(KeyCode.T)){
