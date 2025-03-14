@@ -67,8 +67,6 @@ public class GameManager : MonoBehaviour
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.L)){
-            //Debug.Log("L");
-
             GameObject gameStateGO = new GameObject("GameState");
             GameState gameState = gameStateGO.AddComponent<GameState>();
             gameState.SaveGameState();

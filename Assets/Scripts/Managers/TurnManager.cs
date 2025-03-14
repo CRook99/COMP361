@@ -7,6 +7,7 @@ using Managers;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
+using Utility.Serialization;
 
 
 public class TurnManager : MonoBehaviour, IGameSerializable
@@ -16,6 +17,7 @@ public class TurnManager : MonoBehaviour, IGameSerializable
   [SerializeField] private Button endTurnButton; // Button for player to manually end their turn
 
   private bool _isAllyTurn = true;
+  private int _turnNumber = 0;
   private HashSet<Ally> _actedAllies = new HashSet<Ally>();
 
   private void Awake()
