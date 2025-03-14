@@ -63,7 +63,7 @@ namespace Controller
 
             if (!_throwableCells.Contains(_currentCell)) return;
             
-            var _affectedCells = Pathfinder.FindReachableCells(_currentCell, Throwable.EffectRadius);
+            var _affectedCells = Pathfinder.FindReachableCells(_currentCell, Throwable.EffectRadius, false);
             if (_affectedCells.Count == 0) return;
             
             throwAOE.GenerateMesh(_affectedCells, _currentCell.Position);
@@ -92,7 +92,7 @@ namespace Controller
         {
             if (ModeSwitcher.CurrentMode != ControlMode.Selection || _currentCell == null || !_currentCell.Walkable) return;
             
-            var _affectedCells = Pathfinder.FindReachableCells(_currentCell, Throwable.EffectRadius);
+            var _affectedCells = Pathfinder.FindReachableCells(_currentCell, Throwable.EffectRadius, false);
             ActiveAllyController.ActiveAlly.TryThrow(Throwable, _currentCell, _affectedCells);
         }
     }

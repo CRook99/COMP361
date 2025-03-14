@@ -53,7 +53,7 @@ namespace Entities
         [ContextMenu("Test Range")]
         private void TestRange()
         {
-            HashSet<Cell> cells = Pathfinder.FindReachableCells(CurrentCell, 5);
+            HashSet<Cell> cells = Pathfinder.FindReachableCells(CurrentCell, 5, true);
             foreach (Cell cell in cells)
             {
                 Debug.Log(cell.Position);

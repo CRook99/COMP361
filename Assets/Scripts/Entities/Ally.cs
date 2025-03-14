@@ -69,7 +69,7 @@ namespace Entities
 
         public void EnableThrow(int range, out HashSet<Cell> cells)
         {
-            var _possibleCells = Pathfinder.FindReachableCells(CurrentCell, range);
+            var _possibleCells = Pathfinder.FindReachableCells(CurrentCell, range, true);
             cells = _possibleCells;
             _moveArea.GenerateMesh(_possibleCells, CurrentCell.Position);
             _moveArea.Show();
@@ -77,7 +77,7 @@ namespace Entities
 
         public void DisableThrow()
         {
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }
 
@@ -122,6 +122,7 @@ namespace Entities
             }
 
             abilities.DoForAllInArea(ability, allies, area);
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndAbility);
         }
 
         private void OnActiveAllyChanged(object data)
@@ -139,7 +140,7 @@ namespace Entities
                 _moveArea.Hide();
             }
             
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }
 
