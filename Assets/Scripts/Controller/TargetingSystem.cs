@@ -100,9 +100,22 @@ namespace Controller
             reticle.SetPosition(Camera.main.WorldToScreenPoint(targetPosition));
         }
 
-        private void HandleShot() // Not yet
+        private void HandleShot() // Not yet Edit: yet
         {
-            return;
+            if (!_aiming || _validTargets.Count == 0) return; 
+
+            Enemy target = _validTargets[_currentTargetIndex]; 
+            if (target == null) return;
+
+            // Lock all controls
+            InputManager.Instance.PlayerInput.Disable();
+
+            // Fire a shot using ShootingManager - tbd
+            //ShootingManager.Instance.FireShot(ActiveAllyController.ActiveAlly, target, ActiveAllyController.ActiveAlly.Data.WeaponDamage);
+
+            // Exit aiming mode after shooting
+            _aiming = false;
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming);
         }
 
         private List<Enemy> FindValidTargets() // We want to copy GameManager.Enemies so we can remove invalid enemies from the list
