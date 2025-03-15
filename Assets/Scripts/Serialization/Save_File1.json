@@ -1,0 +1,16 @@
+{
+    "keys": [
+        "Enemy_-15718",
+        "Ally_-15272",
+        "Ally_-10522",
+        "Ally_-10448",
+        "TurnManager_26732"
+    ],
+    "values": [
+        "{\n    \"posX\": 20.0,\n    \"posY\": 0.0,\n    \"posZ\": 20.0,\n    \"health\": 100,\n    \"entityDataName\": \"Pawn\"\n}",
+        "{\n    \"posX\": 15.0,\n    \"posY\": 0.0,\n    \"posZ\": 8.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\"\n}",
+        "{\n    \"posX\": 10.0,\n    \"posY\": 0.0,\n    \"posZ\": 5.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\"\n}",
+        "{\n    \"posX\": 9.0,\n    \"posY\": 0.0,\n    \"posZ\": 11.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\"\n}",
+        "{\n    \"isAllyTurn\": true,\n    \"turnNumber\": 1\n}"
+    ]
+}

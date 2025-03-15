@@ -1,18 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using Entities;
 using Managers;
 using UnityEngine;
 
-public class ModeSwitcher : MonoBehaviour
+namespace Controller 
 {
-    private ActionType _currentMode;
-
-    public void SwitchMode(ActionType newMode)
+    public enum ControlMode
     {
-        if (newMode == _currentMode) return;
+        StandardMove,
+        AirSupportMove,
+        Selection,
+    }
+    
+    public class ModeSwitcher : PlayerComponent
+    {
+        public ControlMode CurrentMode;
+        //public ActionType CurrentMode;
 
-        _currentMode = newMode;
-        EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, _currentMode);
+        private void Awake()
+        {
+            SwitchMode(ControlMode.StandardMove);
+        }
+
+        public void SwitchMode(ControlMode newMode)
+        {
+            if (newMode == CurrentMode) return;
+
+            CurrentMode = newMode;
+            EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, CurrentMode);
+        }
     }
 }

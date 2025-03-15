@@ -54,6 +54,9 @@ MonoBehaviour:
     EvasionBonusPercent: 0
     BonusMovementRange: 0
     AbilityCooldownTurnReduction: 0
+  Cover: 0
+  CoverCompromised: 0
+  _name: 
 --- !u!1 &4711598414960997253
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +215,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 79f64ed6f5d6d374d91c3a0af4070258, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

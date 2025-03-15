@@ -44,7 +44,7 @@ namespace UI
         public void Activate()
         {
             bar.DOFade(1f, 0f).SetEase(Ease.Linear);
-            icon.rectTransform.DOMoveY(activePosition.position.y, SwitchTime).SetEase(Ease.Linear);
+            icon.rectTransform.DOAnchorPosY(activePosition.anchoredPosition.y, SwitchTime).SetEase(Ease.Linear);
             icon.color = Color.white;
             _active = true;
         }
@@ -52,7 +52,7 @@ namespace UI
         public void Deactivate()
         {
             bar.DOFade(0f, 0f).SetEase(Ease.Linear);
-            icon.rectTransform.DOMoveY(inactivePosition.position.y, SwitchTime).SetEase(Ease.Linear);
+            icon.rectTransform.DOAnchorPosY(inactivePosition.anchoredPosition.y, SwitchTime).SetEase(Ease.Linear);
             icon.color = inactiveColor;
             _active = false;
         }

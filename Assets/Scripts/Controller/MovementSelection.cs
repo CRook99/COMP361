@@ -1,5 +1,6 @@
 using System;
 using Controller;
+using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,89 +9,39 @@ using World;
 
 namespace Controller
 {
-    public class MovementSelection : PlayerComponent
+    public class MovementSelection : SelectionComponent
     {
-        [SerializeField] private GameObject cursor;
 
-        private Camera _cam;
-        private Ray _ray;
-        private Cell _currentCell;
-        private PlayerInput _playerInput;
-        private LayerMask _rayMask;
-        private bool _cursorLocked;
-
-        private void Awake()
+        protected override void Awake()
         {
-            _rayMask = LayerMask.GetMask("Cell");
-            _cam = Camera.main;
+            base.Awake();
         }
         
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            EventManager.Subscribe(EventTypes.OnPause, LockCursor);
-            EventManager.Subscribe(EventTypes.OnUnpause, UnlockCursor);
+            base.OnEnable();
         }
         
-        private void OnDisable()
+        protected override void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnPause, LockCursor);
-            EventManager.Unsubscribe(EventTypes.OnUnpause, UnlockCursor);
+            base.OnDisable();
         }
 
-        private void Start()
+        protected override void Start()
         {
-            _playerInput = InputManager.Instance.PlayerInput;
-            _playerInput.Combat.Select.performed += OnSelectTile;
+            base.Start();
         }
 
-        private void Update()
+        protected override void Update()
         {
-            if (_cursorLocked) return;
+            base.Update();
+        }
+
+        protected override void OnSelectTile(InputAction.CallbackContext context)
+        {
+            if (ModeSwitcher.CurrentMode != ControlMode.StandardMove || _currentCell == null || !_currentCell.Walkable) return;
             
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            _ray = _cam.ScreenPointToRay(mousePosition);
-
-            if (Physics.Raycast(_ray, out var hit, 100f, _rayMask))
-            {
-                Vector3 position = hit.transform.position;
-                Vector2Int coordinate = new Vector2Int
-                (
-                    Mathf.RoundToInt(position.x),
-                    Mathf.RoundToInt(position.z)
-                );
-                
-                _currentCell = TacticsGrid.Instance.GetCell(coordinate);
-                if (_currentCell != null)
-                {
-                    if (!cursor.activeSelf) cursor.SetActive(true);
-                    cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
-                }
-            }
-            else
-            {
-                _currentCell = null;
-                if (cursor.activeSelf) cursor.SetActive(false);
-            }
-        }
-
-        private void OnSelectTile(InputAction.CallbackContext context)
-        {
-            if (_currentCell == null)
-                Debug.Log("No cell hovered");
-            else if (!_currentCell.Walkable)
-                Debug.Log("Unwalkable cell selected");
-            else
-                ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
-        }
-
-        private void LockCursor()
-        {
-            _cursorLocked = true;
-        }
-
-        private void UnlockCursor()
-        {
-            _cursorLocked = false;
+            ActiveAllyController.ActiveAlly.TryMoveToCell(_currentCell);
         }
     }
 }

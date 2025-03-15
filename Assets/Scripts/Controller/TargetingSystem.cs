@@ -10,7 +10,6 @@ namespace Controller
 {
     public class TargetingSystem : PlayerComponent
     {
-        private ModeSwitcher _modeSwitcher; // see comments below
         private List<Enemy> _validTargets = new List<Enemy>();
         private bool _aiming = false;
         private int _currentTargetIndex; 
@@ -34,12 +33,20 @@ namespace Controller
                 EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming); // TODO: Handle last valid enemy killed
                 _aiming = false;
             }
+
+            if (Input.GetKeyDown(KeyCode.RightBracket) && _aiming == true)
+            {
+                Debug.Log(CoverUtilities.GetImmediateCoverOfTargetFromOrigin(ActiveAllyController.ActiveAlly.CurrentCell,
+                    _validTargets[_currentTargetIndex].CurrentCell));
+            }
         }
 
         private void Start()
         {
             _playerInput = InputManager.Instance.PlayerInput;
             _playerInput.Combat.Cycle.performed += CycleTarget;
+
+            reticle.Hide();
         }
 
         private void OnEnable()
@@ -59,18 +66,26 @@ namespace Controller
         private void EnterWeaponMode()
         {
             if (!TurnManager.Instance.IsAllyTurn() || TurnManager.Instance.HasUnitActed(ActiveAllyController.ActiveAlly)) return; //_modeSwitcher == null
-
-            //_modeSwitcher.SwitchMode(ActionType.Weapon);
+            
             _validTargets = FindValidTargets();
+            if (_validTargets.Count == 0)
+            {
+                Debug.Log("none");
+                // Indicate this
+                return;
+            }
+
+            ModeSwitcher.SwitchMode(ControlMode.Selection);
+            _aiming = true;
+            _currentTargetIndex = 0;
 
             HighlightTarget(_validTargets[_currentTargetIndex]);
         }
 
         private void ExitWeaponMode()
         {
-            //if (!_modeSwitcher) return;
-
-            //_modeSwitcher.SwitchMode(ActionType.Move); 
+            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
+            _aiming = false;
             reticle.Hide();
         }
 
@@ -93,10 +108,10 @@ namespace Controller
                 reticle.Hide();
                 return;
             }
+            
+            Vector3 targetPosition = target.CenterOfMass != null ? target.CenterOfMass.position : target.transform.position;
 
-            Transform centerOfMass = target.transform.Find("CenterOfMass");
-            Vector3 targetPosition = centerOfMass != null ? centerOfMass.position : target.transform.position;
-
+            reticle.Show();
             reticle.SetPosition(Camera.main.WorldToScreenPoint(targetPosition));
         }
 
@@ -138,10 +153,7 @@ namespace Controller
             if (enemy == null) return false;
 
             // TODO: Weapon range
-
-            if (TacticsGrid.Instance.ObstacleBetweenCells(ActiveAllyController.ActiveAlly.CurrentCell, enemy.CurrentCell)) return false;
-
-            return true;
+            return !TacticsGrid.Instance.ObstacleBetweenCells(ActiveAllyController.ActiveAlly.CurrentCell, enemy.CurrentCell);
         }
     }
 

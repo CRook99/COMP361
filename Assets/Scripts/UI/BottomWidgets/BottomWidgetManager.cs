@@ -8,7 +8,7 @@ namespace UI.BottomWidgets
 {
     public enum EBottomWidget
     {
-        Base,
+        Movement,
         Weapon,
         Ability,
         AirSupportBase,
@@ -21,7 +21,6 @@ namespace UI.BottomWidgets
         public static BottomWidgetManager Instance {get; private set;}
         
         private Dictionary<EBottomWidget, BottomWidget> _widgets;
-        private Stack<BottomWidget> _activeWidgets;
         private BottomWidget _activeWidget;
 
         private void Awake()
@@ -36,7 +35,6 @@ namespace UI.BottomWidgets
             }
             
             _widgets = new Dictionary<EBottomWidget, BottomWidget>();
-            _activeWidgets = new Stack<BottomWidget>();
             
             foreach (Transform tr in transform)
             {
@@ -45,7 +43,7 @@ namespace UI.BottomWidgets
                 _widgets.Add(widget.Type, widget);
             }
             
-            Show(EBottomWidget.Base);
+            Show(EBottomWidget.Movement);
         }
 
         private void OnEnable()
@@ -70,55 +68,24 @@ namespace UI.BottomWidgets
             }
             else if (Input.GetKeyDown(KeyCode.F3))
             {
-                HideActive();
+                Show((EBottomWidget.Movement));
             }
         }
 
         public void Show(EBottomWidget type)
         {
             if (!_widgets.ContainsKey(type)) return;
-
-            BottomWidget newWidget = _widgets[type];
-            if (newWidget is SubBottomWidget newSubWidget)
-            {
-                if (_activeWidgets.Peek() is SubBottomWidget) // Can hide active widget as it is sub
-                {
-                    HideActive();
-                }
-
-                newSubWidget.OnClickBackButton += HideActive;
-            }
-            else // New widget is base
-            {
-                HideAllActive();
-            }
             
-            newWidget.Show();
-            _activeWidgets.Push(newWidget);
-        }
-
-        public void HideActive()
-        {
-            if (_activeWidgets.Count == 0 || _activeWidgets.Peek() is not SubBottomWidget) return;
-
-            SubBottomWidget popWidget = _activeWidgets.Pop() as SubBottomWidget;
-            popWidget!.Hide();
-            popWidget.OnClickBackButton -= HideActive;
-        }
-
-        public void HideAllActive()
-        {
-            while (_activeWidgets.Count > 0)
-            {
-                _activeWidgets.Pop().Hide();
-            }
+            if (_activeWidget != null) _activeWidget.Close();
+            _activeWidget = _widgets[type];
+            _activeWidget.Open();
         }
 
         private void OnCameraModeChanged(object data)
         {
             if (data is not CameraMode mode) return;
             
-            Show(mode == CameraMode.Standard ? EBottomWidget.Base : EBottomWidget.AirSupportBase);
+            Show(mode == CameraMode.Standard ? EBottomWidget.Movement : EBottomWidget.AirSupportBase);
         }
     }
 }

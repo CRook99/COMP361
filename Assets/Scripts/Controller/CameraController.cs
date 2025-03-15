@@ -3,6 +3,7 @@ using Cinemachine;
 using DG.Tweening;
 using Controller;
 using System;
+using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -47,6 +48,8 @@ namespace Controller
         private float _currentZoom;
 
         public bool Locked => _isRotating || _isSwitching || brain.IsBlending;
+        public CameraMode Mode => _mode;
+        public float YRotation => cameraSystem.transform.eulerAngles.y;
 
         // INPUT
         private PlayerInput _playerInput;
@@ -86,11 +89,9 @@ namespace Controller
         {
             EventManager.Subscribe(EventTypes.OnPlayerBeginMove, AttachToTransform);
             EventManager.Subscribe(EventTypes.OnPlayerEndMove, DetachFromTransform);
-            EventManager.Subscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
-
-            // EventManager.Subscribe(EventTypes.OnStartEnemyTurn, AttachToTransform);
             EventManager.Subscribe(EventTypes.OnEnemyBeginMove, AttachToTransform);
             EventManager.Subscribe(EventTypes.OnEnemyEndMove, DetachFromTransform);
+            EventManager.Subscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
         }
 
         private void OnDisable()
@@ -102,11 +103,9 @@ namespace Controller
 
             EventManager.Unsubscribe(EventTypes.OnPlayerBeginMove, AttachToTransform);
             EventManager.Unsubscribe(EventTypes.OnPlayerEndMove, DetachFromTransform);
-            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
-
-            // EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, DetachFromTransform);
             EventManager.Unsubscribe(EventTypes.OnEnemyBeginMove, AttachToTransform);
             EventManager.Unsubscribe(EventTypes.OnEnemyEndMove, DetachFromTransform);
+            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, MoveToPosition);
         }
 
         private void Update()
@@ -127,7 +126,7 @@ namespace Controller
 
         private void SwitchMode(InputAction.CallbackContext context)
         {
-            if (_isRotating || brain.IsBlending) return;
+            if (_isRotating || brain.IsBlending || ModeSwitcher.CurrentMode != ControlMode.StandardMove) return;
 
             _mode = _mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard;
             Switch();

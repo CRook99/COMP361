@@ -99,9 +99,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1611207494771340225, guid: 8177e8887d502604ba9d57878a127b54, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2703570442235574984}
-    - targetCorrespondingSourceObject: {fileID: 1611207494771340225, guid: 8177e8887d502604ba9d57878a127b54, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3482503647386956477}
   m_SourcePrefab: {fileID: 100100000, guid: 8177e8887d502604ba9d57878a127b54, type: 3}
 --- !u!1 &4536210411513785759 stripped
@@ -109,25 +106,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1611207494771340225, guid: 8177e8887d502604ba9d57878a127b54, type: 3}
   m_PrefabInstance: {fileID: 2931830145259920990}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2703570442235574984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4536210411513785759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bfda1583eae40abab4a9b5c8d2d4b1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 0
-  IsBase: 1
-  actionWidgetPrefab: {fileID: 3955074986491586438, guid: 63103983d141d714b969d4e38779e96e, type: 3}
-  actions:
-  - {fileID: 11400000, guid: a486144543439174facccf68972c128a, type: 2}
-  - {fileID: 11400000, guid: 05be3872d39b31f4bae827b3b118cbe3, type: 2}
-  - {fileID: 11400000, guid: 093e8e835d014e742ad69da51a2e191b, type: 2}
 --- !u!114 &3482503647386956477
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {
-    public class BottomWidget : MonoBehaviour
+   public abstract class BottomWidget : MonoBehaviour
     {
         private const float ChangeTime = 0.25f;
 
@@ -14,7 +16,6 @@ namespace UI.BottomWidgets
         
         private RectTransform _rect;
         private float _height;
-        private bool _visible;
     
         protected virtual void Awake()
         {
@@ -22,19 +23,26 @@ namespace UI.BottomWidgets
             _height = _rect.rect.height;
 
             _rect.anchoredPosition = new Vector2(0f, -_height);
-            _visible = false;
+        }
+
+        public virtual void Open()
+        {
+            Show();
+        }
+
+        public virtual void Close()
+        {
+            Hide();
         }
     
-        public void Show()
+        private void Show()
         {
             _rect.DOAnchorPosY(0f, ChangeTime).SetEase(Ease.OutQuad);
-            _visible = true;
         }
     
-        public void Hide()
+        private void Hide()
         {
             _rect.DOAnchorPosY(-_height, ChangeTime).SetEase(Ease.OutQuad);
-            _visible = false;
         }
     }
 }
