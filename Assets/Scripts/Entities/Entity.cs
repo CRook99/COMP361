@@ -7,10 +7,11 @@ using Managers;
 using UnityEngine;
 using Utility;
 using World;
+using Utility.Serialization;  // Contains IGameSerializable
 
 namespace Entities
 {
-    public abstract class Entity : MonoBehaviour
+    public abstract class Entity : MonoBehaviour, IGameSerializable
     {
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
         private const float MovementSpeed = 4f;
@@ -28,8 +29,7 @@ namespace Entities
         public event Action<int> OnTakeDamage;
 
         public Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
-        protected int CurrentHealth;
-
+        public int CurrentHealth;
 
         protected virtual void Awake()
         {
@@ -53,7 +53,7 @@ namespace Entities
         [ContextMenu("Test Range")]
         private void TestRange()
         {
-            HashSet<Cell> cells = Pathfinder.FindReachableCells(CurrentCell, 5);
+            HashSet<Cell> cells = Pathfinder.FindReachableCells(CurrentCell, 5, true);
             foreach (Cell cell in cells)
             {
                 Debug.Log(cell.Position);
@@ -112,7 +112,7 @@ namespace Entities
             
         }
 
-        protected void TakeDamage(int amount)
+        public void TakeDamage(int amount)
         {
             CurrentHealth -= amount;
             OnTakeDamage?.Invoke(amount);
@@ -126,7 +126,7 @@ namespace Entities
             }
         }
 
-        protected void Heal(int amount)
+        public void Heal(int amount)
         {
             CurrentHealth += amount;
             CurrentHealth = Mathf.Min(amount, Data.MaxHealth); // Clamp health to maximum
@@ -155,6 +155,31 @@ namespace Entities
         // of the enemy and the input cell
         public bool HasObstacleBetween(Cell end) {
             return TacticsGrid.Instance.ObstacleBetweenCells(CurrentCell, end);
+        }
+
+        // --- IGameSerializable Implementation ---
+        public virtual bool Validate() {
+            return CurrentHealth >= 0;
+        }
+
+        public virtual string Serialize() {
+            EntityDTO data = new EntityDTO {
+                posX = transform.position.x,
+                posY = transform.position.y,
+                posZ = transform.position.z,
+                health = CurrentHealth,
+                entityDataName = Data != null ? Data.name : "Unknown",
+                modifiers = Modifiers
+            };
+            return JsonUtility.ToJson(data, true);
+        }
+
+        public virtual void Deserialize(string json) {
+            EntityDTO data = JsonUtility.FromJson<EntityDTO>(json);
+            transform.position = new Vector3(data.posX, data.posY, data.posZ);
+            CurrentHealth = data.health;
+            Modifiers = data.modifiers;
+            // Restore other data here.
         }
     }
 }

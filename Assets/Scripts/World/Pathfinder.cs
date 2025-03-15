@@ -68,7 +68,7 @@ namespace World
             return new List<Cell>();
         }
         
-        public static HashSet<Cell> FindReachableCells(Cell start, int range)
+        public static HashSet<Cell> FindReachableCells(Cell start, int range, bool walkable)
         {
             if (start == null)
             {
@@ -100,8 +100,11 @@ namespace World
                 for (int i = 0; i < 8; i++)
                 {
                     Cell neighbour = current.Neighbours[i];
+
+                    if (neighbour == null)
+                        continue;
                     
-                    if (neighbour is not { Walkable: true })
+                    if (walkable && neighbour is not { Walkable: true })
                         continue;
                     
                     if (IsDiagonalMove(i) && !IsDiagonalMoveValid(current, i))

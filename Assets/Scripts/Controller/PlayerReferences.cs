@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Controller
@@ -12,6 +13,7 @@ namespace Controller
         [SerializeField] private ModeSwitcher modeSwitcher;
         [SerializeField] private MovementSelection movementSelection;
         [SerializeField] private TargetingSystem targetingSystem;
+        [SerializeField] private ThrowableSelection throwableSelection;
 
         public ActiveAllyController ActiveAllyController => activeAllyController;
         public AllySwitcher AllySwitcher => allySwitcher;
@@ -20,6 +22,7 @@ namespace Controller
         public ModeSwitcher ModeSwitcher => modeSwitcher;
         public MovementSelection MovementSelection => movementSelection;
         public TargetingSystem TargetingSystem => targetingSystem;
+        public ThrowableSelection ThrowableSelection => throwableSelection;
 
         public void BuildReferences()
         {
@@ -30,6 +33,7 @@ namespace Controller
             modeSwitcher = GetComponent<ModeSwitcher>();
             movementSelection = GetComponent<MovementSelection>();
             targetingSystem= GetComponent<TargetingSystem>();
+            throwableSelection = GetComponent<ThrowableSelection>();
         }
     }
 
@@ -58,5 +62,6 @@ namespace Controller
         public ModeSwitcher ModeSwitcher => References.ModeSwitcher;
         public MovementSelection MovementSelection => References.MovementSelection;
         public TargetingSystem TargetingSystem => References.TargetingSystem;
+        public ThrowableSelection ThrowableSelection => References.ThrowableSelection;
     }
 }

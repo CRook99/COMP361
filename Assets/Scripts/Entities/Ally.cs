@@ -12,12 +12,16 @@ namespace Entities
         private MoveArea _moveArea;
         private HashSet<Cell> _reachableCells;
         [SerializeField] private string _name;
+        private Abilities abilities;
+
+        public HashSet<Cell> ReachableCells => _reachableCells;
         
         protected override void Awake()
         {
             base.Awake();
 
             _moveArea= GetComponentInChildren<MoveArea>();
+            abilities = new Abilities();
         }
 
         protected override void Start()
@@ -63,6 +67,64 @@ namespace Entities
             EventManager.TriggerEvent(EventTypes.OnPlayerEndMove);
         }
 
+        public void EnableThrow(int range, out HashSet<Cell> cells)
+        {
+            var _possibleCells = Pathfinder.FindReachableCells(CurrentCell, range, true);
+            cells = _possibleCells;
+            _moveArea.GenerateMesh(_possibleCells, CurrentCell.Position);
+            _moveArea.Show();
+        }
+
+        public void DisableThrow()
+        {
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
+            _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
+        }
+
+        public void TryThrow(ThrowableScriptableObject throwable, Cell destination, HashSet<Cell> area)
+        {
+            if (!Actions.CanUseAction(ActionType.Ability) || !_reachableCells.Contains(destination))
+            {
+                // Handle unable
+                return;
+            }
+            
+            EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Ability);
+            _moveArea.Hide();
+            Actions.UseAction(ActionType.Ability);
+            
+            //TODO: Probably going to want a parabolic throw arc here
+
+            AbilityFunction ability;
+            bool allies;
+
+            switch (throwable.ability)
+            {
+                //Enemy-focused abilities
+                case AbilityType.Frag:
+                    ability = abilities.DamageAbility;
+                    allies = false;
+                    break;
+                case AbilityType.EMP:
+                    ability = abilities.DisarmAbility;
+                    allies = false;
+                    break;
+                //Ally-focused abilities
+                case AbilityType.Care: 
+                    ability = abilities.HealAbility; 
+                    allies = true;
+                    break;
+
+                default:
+                    ability = abilities.DebugAbility;
+                    allies = false;
+                    break;
+            }
+
+            abilities.DoForAllInArea(ability, allies, area);
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndAbility);
+        }
+
         private void OnActiveAllyChanged(object data)
         {
             if (data is not Ally ally) return;
@@ -78,7 +140,7 @@ namespace Entities
                 _moveArea.Hide();
             }
             
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }
 

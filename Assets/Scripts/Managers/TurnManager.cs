@@ -7,110 +7,148 @@ using Managers;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
+using Utility.Serialization;
 
 
-public class TurnManager : MonoBehaviour 
+public class TurnManager : MonoBehaviour, IGameSerializable
 {
-    public static TurnManager Instance {get; private set;}
+  public static TurnManager Instance { get; private set; }
 
-    [SerializeField] private Button endTurnButton; // Button for player to manually end their turn
-    
-    private bool _isAllyTurn = true;
-    private HashSet<Ally> _actedAllies = new HashSet<Ally>();
+  [SerializeField] private Button endTurnButton; // Button for player to manually end their turn
 
-    private void Awake() 
+  private bool _isAllyTurn = true;
+  private int _turnNumber = 0;
+  private HashSet<Ally> _actedAllies = new HashSet<Ally>();
+
+  private void Awake()
+  {
+    if (Instance != null && Instance != this)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-
-        if (endTurnButton != null)
-        {
-            endTurnButton.onClick.AddListener(StartEnemyTurn);
-        }
-        else
-        {
-            Debug.LogWarning("EndTurn button not passed to TurnManager");
-        }
+      Destroy(this);
+    }
+    else
+    {
+      Instance = this;
     }
 
-    private void OnEnable()
+    if (endTurnButton != null)
     {
-        EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+      endTurnButton.onClick.AddListener(StartEnemyTurn);
     }
-    
-    private void OnDisable()
+    else
     {
-        EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+      Debug.LogWarning("EndTurn button not passed to TurnManager");
     }
+  }
 
-    private void Start() 
+  private void OnEnable()
+  {
+    EventManager.Subscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+  }
+
+  private void OnDisable()
+  {
+    EventManager.Unsubscribe(EventTypes.OnPlayerChangeMode, OnPlayerChangeMode);
+  }
+
+  private void Start()
+  {
+    StartAllyTurn();
+  }
+
+  public void StartAllyTurn()
+  {
+    // Reset actions
+    _actedAllies.Clear();
+
+    //EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
+    // Make UI element indicating whose turn it is subscribe to this
+
+    _isAllyTurn = true;
+    _turnNumber++;
+    Debug.Log("Ally's Turn");
+  }
+
+  [ContextMenu("Enemy Turn")]
+  public void StartEnemyTurn()
+  {
+    EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);
+    // Make UI element indicating whose turn it is subscribe to this
+
+    _isAllyTurn = false;
+    Debug.Log("Enemy's Turn");
+
+  }
+
+  public void EndEnemyTurn()
+  {
+    EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
+    GameState.Instance.SaveGameState();
+    StartAllyTurn();
+  }
+
+  public bool IsAllyTurn()
+  {
+    return _isAllyTurn;
+  }
+
+  public void SetTurnNumber(int turn)
+  {
+    _turnNumber = turn;
+  }
+
+  public void RegisterAction(Ally unit)
+  {
+    if (!HasUnitActed(unit))
     {
-        StartAllyTurn();
+      _actedAllies.Add(unit);
     }
+  }
 
-    public void StartAllyTurn() 
+  public bool HasUnitActed(Ally unit)
+  {
+    return _actedAllies.Contains(unit);
+  }
+
+  private void OnPlayerChangeMode(object data)
+  {
+    if (data is not ControlMode mode)
     {
-        // Reset actions
-        _actedAllies.Clear();
-        
-        //EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
-        // Make UI element indicating whose turn it is subscribe to this
-
-        _isAllyTurn = true;
-        Debug.Log("Ally's Turn");
+      Debug.LogWarning("Passed incorrect type to TurnManager::OnPlayerChangeMode");
+      return;
     }
 
-    [ContextMenu("Enemy Turn")]
-    public void StartEnemyTurn() 
+    if (endTurnButton == null) return;
+
+    endTurnButton.interactable = mode != ControlMode.Selection;
+  }
+
+  // --- IGameSerializable Implementation ---
+  public bool Validate()
+  {
+    return _turnNumber >= 0;
+  }
+
+  public string Serialize()
+  {
+    TurnDTO dto = new TurnDTO
     {
-        EventManager.TriggerEvent(EventTypes.OnStartEnemyTurn);
-        // Make UI element indicating whose turn it is subscribe to this
+      isAllyTurn = _isAllyTurn,
+      turnNumber = _turnNumber
+    };
+    return JsonUtility.ToJson(dto, true);
+  }
 
-        _isAllyTurn = false;
-        Debug.Log("Enemy's Turn");
+  public void Deserialize(string json)
+  {
+    TurnDTO dto = JsonUtility.FromJson<TurnDTO>(json);
+    _isAllyTurn = dto.isAllyTurn;
+    _turnNumber = dto.turnNumber;
+  }
+  // --- End interface ---
 
-    }
+  public void Autosave()
+  {
 
-    public void EndEnemyTurn()
-    {
-        EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
-        StartAllyTurn();
-    }
-
-    public bool IsAllyTurn()
-    {
-        return _isAllyTurn;
-    }
-
-    public void RegisterAction(Ally unit)
-    {
-        if (!HasUnitActed(unit))
-        {
-            _actedAllies.Add(unit);
-        }
-    }
-
-    public bool HasUnitActed(Ally unit)
-    {
-        return _actedAllies.Contains(unit);
-    }
-
-    private void OnPlayerChangeMode(object data)
-    {
-        if (data is not ControlMode mode)
-        {
-            Debug.LogWarning("Passed incorrect type to TurnManager::OnPlayerChangeMode");
-            return;
-        }
-
-        if (endTurnButton == null) return;
-
-        endTurnButton.interactable = mode != ControlMode.Selection;
-    }
+  }
 }

@@ -6,6 +6,8 @@ using Entities;
 using Managers;
 using UnityEngine;
 using World;
+using System.IO;
+using Utility.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -60,4 +62,25 @@ public class GameManager : MonoBehaviour
         
         Enemies.Add(enemy);
     }
+
+    // Temporary method to demonstrate json serialization
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L)){
+            //GameObject gameStateGO = new GameObject("GameState");
+            //GameState gameState = gameStateGO.AddComponent<GameState>();
+            //GameState.Instance.SaveGameState();
+            GameState.Instance.LoadGameState(@"Assets\Scripts\Serialization\Save_File.json");
+        }
+
+        if (Input.GetKeyDown(KeyCode.T)){
+            Debug.Log("Turn++");
+            if (TurnManager.Instance.IsAllyTurn() == true){
+                TurnManager.Instance.StartEnemyTurn();
+            }else{
+                TurnManager.Instance.StartAllyTurn();
+            }
+        }
+    }
+
 }
