@@ -19,7 +19,8 @@ namespace Managers
         OnEnemyBeginShoot, // on start of enemy shooting sequence
         OnEnemyEndShoot, // on end of enemy shooting sequence
         OnSpawnAlly,
-        OnSpawnEnemy,
+        OnSpawnEnemyStartGame,
+        OnSpawnEnemyLoadHealthBar,
         OnPause,
         OnUnpause,
         OnPlayerBeginAiming,

@@ -40,27 +40,32 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Subscribe(EventTypes.OnSpawnAlly, AddAlly);
-        EventManager.Subscribe(EventTypes.OnSpawnEnemy, AddEnemy);
+        EventManager.Subscribe(EventTypes.OnSpawnEnemyStartGame, AddEnemy);
+        EventManager.Subscribe(EventTypes.OnEnemyKilled, RemoveEnemy);
     }
     
     private void OnDisable()
     {
         EventManager.Unsubscribe(EventTypes.OnSpawnAlly, AddAlly);
-        EventManager.Unsubscribe(EventTypes.OnSpawnEnemy, AddEnemy);
+        EventManager.Unsubscribe(EventTypes.OnSpawnEnemyStartGame, AddEnemy);
+        EventManager.Unsubscribe(EventTypes.OnEnemyKilled, RemoveEnemy);
     }
 
     public void AddAlly(object data)
     {
         if (data is not Ally ally) return;
-        
         Allies.Add(ally);
     }
 
     public void AddEnemy(object data)
     {
         if (data is not Enemy enemy) return;
-        
         Enemies.Add(enemy);
+    }
+
+    public void RemoveEnemy(object data) {
+        if (data is not Enemy enemy) return;
+        Enemies.Remove(enemy);
     }
 
     // Temporary method to demonstrate json serialization

@@ -6,6 +6,8 @@ using UnityEngine;
 using World;
 using Managers;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
 
 namespace Entities
 {
@@ -46,7 +48,7 @@ namespace Entities
     protected override void Start()
     {
       base.Start();
-      EventManager.TriggerEvent(EventTypes.OnSpawnEnemy, this);
+      EventManager.TriggerEvent(EventTypes.OnSpawnEnemyStartGame, this);
     }
 
     // Gets available Cells based on current position, does not include obstacle cells or cells with enemies 
@@ -222,6 +224,21 @@ namespace Entities
       EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
       yield return base.FollowPath(path);
       EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
+    }
+
+    [ContextMenu("Kill Enemy Test")]
+    protected override void Die() {
+        Debug.Log($"{gameObject.name} died!");
+        
+        EventManager.TriggerEvent(EventTypes.OnEnemyKilled, this);
+        
+        // Destroys Enemy Object
+        Destroy(gameObject);
+
+        if(GameManager.Enemies.Count == 0) {
+            Debug.Log($"All Enemies are dead!!!");
+            SceneManager.LoadSceneAsync("Results");
+        }
     }
   }
 }
