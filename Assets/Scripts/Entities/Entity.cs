@@ -136,7 +136,7 @@ namespace Entities
         {
             Debug.Log($"{gameObject.name} died!");
 
-             EventManager.TriggerEvent(EventTypes.OnAllyFallen); // stats manager
+            EventManager.TriggerEvent(EventTypes.OnAllyFallen); // stats manager
         }
 
         public virtual void TakeTurn(System.Action onTurnComplete)

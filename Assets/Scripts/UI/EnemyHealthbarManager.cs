@@ -12,13 +12,13 @@ public class EnemyHealthbarManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Subscribe(EventTypes.OnSpawnEnemy, OnEnemySpawned);
+        EventManager.Subscribe(EventTypes.OnSpawnEnemyLoadHealthBar, OnEnemySpawned);
         EventManager.Subscribe(EventTypes.OnEnemyKilled, OnEnemyKilled);
     }
 
     private void OnDisable()
     {
-        EventManager.Unsubscribe(EventTypes.OnSpawnEnemy, OnEnemySpawned);
+        EventManager.Unsubscribe(EventTypes.OnSpawnEnemyLoadHealthBar, OnEnemySpawned);
         EventManager.Unsubscribe(EventTypes.OnEnemyKilled, OnEnemyKilled);
     }
 
@@ -30,11 +30,11 @@ public class EnemyHealthbarManager : MonoBehaviour
         GameObject healthbarObj = Instantiate(enemyHealthbarPrefab, uiCanvas);
         EnemyHealthbar healthbar = healthbarObj.GetComponent<EnemyHealthbar>();
 
+        // Add to dictionary (needs to be done first otherwise Initialize() returns early for some reason)
+        _enemyHealthbars[enemy] = healthbar;
+
         // Initialize health bar with enemy reference
         healthbar.Initialize(enemy);
-
-        // Add to dictionary
-        _enemyHealthbars[enemy] = healthbar;
     }
 
     private void OnEnemyKilled(object data)
