@@ -49,6 +49,7 @@ namespace Entities
     {
       base.Start();
       EventManager.TriggerEvent(EventTypes.OnSpawnEnemyStartGame, this);
+      EventManager.TriggerEvent(EventTypes.OnSpawnEnemyLoadHealthBar, this);
     }
 
     // Gets available Cells based on current position, does not include obstacle cells or cells with enemies 
