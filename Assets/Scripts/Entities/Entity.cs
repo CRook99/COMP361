@@ -29,7 +29,7 @@ namespace Entities
         public event Action<int> OnTakeDamage;
 
         public Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
-        protected int CurrentHealth;
+        public int CurrentHealth;
 
         protected virtual void Awake()
         {
