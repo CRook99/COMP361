@@ -113,6 +113,8 @@ namespace Controller
 
             reticle.Show();
             reticle.SetPosition(Camera.main.WorldToScreenPoint(targetPosition));
+            
+            EventManager.TriggerEvent(EventTypes.OnCycleTarget, target);
         }
 
         private void HandleShot() // Not yet
