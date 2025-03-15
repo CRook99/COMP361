@@ -42,7 +42,10 @@ namespace UI.BottomWidgets
                 
                 _widgets.Add(widget.Type, widget);
             }
-            
+        }
+
+        private void Start()
+        {
             Show(EBottomWidget.Movement);
         }
 
@@ -75,6 +78,9 @@ namespace UI.BottomWidgets
         public void Show(EBottomWidget type)
         {
             if (!_widgets.ContainsKey(type)) return;
+
+            var newWidget = _widgets[type];
+            if (!newWidget.CanOpen()) return;
             
             if (_activeWidget != null) _activeWidget.Close();
             _activeWidget = _widgets[type];

@@ -1,3 +1,4 @@
+using Entities;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -21,10 +22,13 @@ namespace UI.BottomWidgets
             base.Awake();
 
             backButton.onClick.AddListener(OnClickBackButton);
+            ActionType = ActionType.Ability;
         }
 
         public override void Open()
         {
+            if (!_playerReferences.ActiveAllyController.ActiveAlly.Actions.CanUseAction(ActionType.Ability)) return;
+
             base.Open();
 
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAbility);

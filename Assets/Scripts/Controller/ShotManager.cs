@@ -5,7 +5,9 @@ using Controller;
 using DG.Tweening;
 using Entities;
 using Managers;
+using UI.BottomWidgets;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ShotManager : PlayerComponent
 {
@@ -26,55 +28,70 @@ public class ShotManager : PlayerComponent
         }
     }
 
-    private void OnEnable()
+    public void FireShot(Entity shooter, Entity target)
     {
-        EventManager.Subscribe(EventTypes.OnPlayerConfirmShot, FireShot);
+        if (shooter == null || target == null) return;
+
+        ShotData shot = new ShotData()
+        {
+            Shooter = shooter,
+            Target = target,
+            Cover = CoverUtilities.GetImmediateCoverLevel(shooter.CurrentCell, target.CurrentCell, out var coverObject),
+            CoverObject = coverObject,
+            TotalDamage = 10,
+        };
+        shot.ReturnDamage = (Random.value < target.Modifiers.PercentDamageReturnChance)
+            ? (int)(target.Modifiers.PercentDamageReturnAmount * shot.TotalDamage) // Change to total damage
+            : 0;
+
+        StartCoroutine(FireSequence(shot));
     }
 
-    private void OnDisable()
+    private IEnumerator FireSequence(ShotData shot)
     {
-        EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, FireShot);
-    }
-
-    public void FireShot(object data)
-    {
-        if (data is not ShotData shot) return;
-        if (shot.Shooter == null || shot.Target == null) return;
-
-        // Get cover info
-        shot.Cover = CoverUtilities.GetImmediateCoverOfTargetFromOrigin(shot.Shooter.CurrentCell, shot.Target.CurrentCell);
-
-        // Lock player controlls
+        // Lock player controls
         InputManager.Instance.PlayerInput.Disable();
-
+        BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
+        
         // Move camera to focus on both shooter & target
         Vector3 focusPoint = (shot.Shooter.transform.position + shot.Target.transform.position) / 2;
         CameraController.MoveToPosition(focusPoint);
 
-        // Delay before firing the projectile
-        DOVirtual.DelayedCall(shotDelay / 2, () =>
-        {
-            if (CalculateHit(shot)) FireProjectile(shot);
-        });
+        yield return new WaitForSeconds(shotDelay / 2);
 
+        FireProjectile(shot);
     }
 
     private void FireProjectile(ShotData shot)
     {
         // Ensure CenterOfMass exists, otherwise use transform position as fallback
         Vector3 shooterPos = shot.Shooter.CenterOfMass != null ? shot.Shooter.CenterOfMass.position : shot.Shooter.transform.position;
-        Vector3 targetPos = shot.Target.CenterOfMass != null ? shot.Target.CenterOfMass.position : shot.Target.transform.position;
-
-        GameObject projectile = Instantiate(projectilePrefab, shot.Shooter.CenterOfMass.position, Quaternion.identity);
-        projectile.transform.DOMove(shot.Target.CenterOfMass.position, projectileSpeed).OnComplete(() =>
+        
+        Vector3 targetPos;
+        if (DetermineHit(shot))
         {
-            shot.Target.TakeDamage(shot.Damage);
-            Destroy(projectile);
-            ReturnToNormalState(shot.Shooter);
-        });
+            targetPos = shot.Target.CenterOfMass != null ? shot.Target.CenterOfMass.position : shot.Target.transform.position;
+        }
+        else
+        {
+            targetPos = shot.CoverObject.transform.Find("CenterOfMass").position;
+        }
+
+        shot.Shooter.Actions.UseAction(ActionType.Weapon);
+        
+        GameObject projectile = Instantiate(projectilePrefab, shooterPos, Quaternion.identity);
+        projectile.transform.DOMove(targetPos, projectileSpeed)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                shot.Target.TakeDamage(shot.TotalDamage);
+                shot.Shooter.TakeDamage(shot.ReturnDamage);
+                Destroy(projectile);
+                ReturnToNormalState(shot.Shooter);
+            });
     }
 
-    private bool CalculateHit(ShotData shot)
+    private bool DetermineHit(ShotData shot)
     {
         if (shot.Cover == CoverTypes.FullCover) return false; // Shot blocked
         if (shot.Cover == CoverTypes.HalfCover) return UnityEngine.Random.value > 0.5f; // 50% chance to hit
@@ -92,7 +109,7 @@ public class ShotManager : PlayerComponent
         }
         else
         {
-            TurnManager.Instance.EndEnemyTurn(); // right?
+            // TurnManager.Instance.EndEnemyTurn(); // right?
         }
     }
 }

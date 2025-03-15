@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using DG.Tweening;
+using Entities;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -13,9 +15,12 @@ namespace UI.BottomWidgets
         private const float ChangeTime = 0.25f;
 
         public EBottomWidget Type;
+        protected ActionType ActionType;
         
         private RectTransform _rect;
         private float _height;
+
+        protected PlayerReferences _playerReferences;
     
         protected virtual void Awake()
         {
@@ -23,6 +28,8 @@ namespace UI.BottomWidgets
             _height = _rect.rect.height;
 
             _rect.anchoredPosition = new Vector2(0f, -_height);
+
+            _playerReferences = FindObjectOfType<PlayerReferences>();
         }
 
         public virtual void Open()
@@ -43,6 +50,11 @@ namespace UI.BottomWidgets
         private void Hide()
         {
             _rect.DOAnchorPosY(-_height, ChangeTime).SetEase(Ease.OutQuad);
+        }
+
+        public bool CanOpen()
+        {
+            return _playerReferences.ActiveAllyController.ActiveAlly.Actions.CanUseAction(ActionType);
         }
     }
 }

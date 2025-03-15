@@ -41,7 +41,6 @@ namespace UI
         private void Update()
         {
             if (_enemyTransform == null) return;
-            Debug.Log("hi");
             
             transform.position = _camera.WorldToScreenPoint(_enemyTransform.position) + new Vector3(offset.x, offset.y, 0);
         }

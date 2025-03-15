@@ -1,4 +1,5 @@
 using Entities;
+using UnityEngine;
 
 namespace System
 {
@@ -7,6 +8,10 @@ namespace System
         public Entity Shooter;
         public Entity Target;
         public CoverTypes Cover;
-        public int Damage;
+        public GameObject CoverObject;
+        public int TotalDamage;
+        
+        // Modifiers
+        public int ReturnDamage;
     }
 }

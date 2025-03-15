@@ -54,7 +54,10 @@ MonoBehaviour:
     EvasionBonusPercent: 0
     BonusMovementRange: 0
     AbilityCooldownTurnReduction: 0
-  CenterOfMass: {fileID: 9119136110547083960}
+  Cover: 0
+  CoverCompromised: 0
+  CurrentHealth: 0
+  centerOfMass: {fileID: 9119136110547083960}
 --- !u!1 &4849602414312888649
 GameObject:
   m_ObjectHideFlags: 0

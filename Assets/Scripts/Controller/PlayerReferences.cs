@@ -12,6 +12,7 @@ namespace Controller
         [SerializeField] private CoverIndicator coverIndicator;
         [SerializeField] private ModeSwitcher modeSwitcher;
         [SerializeField] private MovementSelection movementSelection;
+        [SerializeField] private ShotManager shotManager;
         [SerializeField] private TargetingSystem targetingSystem;
         [SerializeField] private ThrowableSelection throwableSelection;
 
@@ -21,6 +22,7 @@ namespace Controller
         public CoverIndicator CoverIndicator => coverIndicator;
         public ModeSwitcher ModeSwitcher => modeSwitcher;
         public MovementSelection MovementSelection => movementSelection;
+        public ShotManager ShotManager => shotManager;
         public TargetingSystem TargetingSystem => targetingSystem;
         public ThrowableSelection ThrowableSelection => throwableSelection;
 
@@ -32,6 +34,7 @@ namespace Controller
             coverIndicator = GetComponent<CoverIndicator>();
             modeSwitcher = GetComponent<ModeSwitcher>();
             movementSelection = GetComponent<MovementSelection>();
+            shotManager = GetComponent<ShotManager>();
             targetingSystem= GetComponent<TargetingSystem>();
             throwableSelection = GetComponent<ThrowableSelection>();
         }
@@ -61,6 +64,7 @@ namespace Controller
         public CoverIndicator CoverIndicator => References.CoverIndicator;
         public ModeSwitcher ModeSwitcher => References.ModeSwitcher;
         public MovementSelection MovementSelection => References.MovementSelection;
+        public ShotManager ShotManager => References.ShotManager;
         public TargetingSystem TargetingSystem => References.TargetingSystem;
         public ThrowableSelection ThrowableSelection => References.ThrowableSelection;
     }

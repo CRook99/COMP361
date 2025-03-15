@@ -34,12 +34,6 @@ namespace Controller
                 EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming); // TODO: Handle last valid enemy killed
                 _aiming = false;
             }
-
-            if (Input.GetKeyDown(KeyCode.RightBracket) && _aiming == true)
-            {
-                Debug.Log(CoverUtilities.GetImmediateCoverOfTargetFromOrigin(ActiveAllyController.ActiveAlly.CurrentCell,
-                    _validTargets[_currentTargetIndex].CurrentCell));
-            }
         }
 
         private void Start()
@@ -123,17 +117,10 @@ namespace Controller
         private void ConfirmShot()
         {
             if (_validTargets.Count == 0 || !_aiming) return;
-
-            ShotData shot = new()
-            {
-                Shooter = ActiveAllyController.ActiveAlly,
-                Target = _validTargets[_currentTargetIndex],
-                Cover = CoverUtilities.GetImmediateCoverOfTargetFromOrigin(ActiveAllyController.ActiveAlly.CurrentCell, _validTargets[_currentTargetIndex].CurrentCell),
-                Damage = 10 // Placeholder damage value
-            };
-
-            EventManager.TriggerEvent(EventTypes.OnPlayerConfirmShot, shot);
+            
+            ShotManager.Instance.FireShot(ActiveAllyController.ActiveAlly, _validTargets[_currentTargetIndex]);
             _aiming = false;
+            reticle.Hide();
         }
 
         private List<Enemy> FindValidTargets() // We want to copy GameManager.Enemies so we can remove invalid enemies from the list

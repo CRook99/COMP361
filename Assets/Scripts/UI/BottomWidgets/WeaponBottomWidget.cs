@@ -1,3 +1,4 @@
+using Entities;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -13,16 +14,21 @@ namespace UI.BottomWidgets
 
         [Space]
         [SerializeField] private Button backButton;
+        [SerializeField] private Button fireButton;
 
         protected override void Awake()
         {
             base.Awake();
 
             backButton.onClick.AddListener(OnClickBackButton);
+            fireButton.onClick.AddListener(OnClickFireButton);
+            ActionType = ActionType.Weapon;
         }
 
         public override void Open()
         {
+            if (!_playerReferences.ActiveAllyController.ActiveAlly.Actions.CanUseAction(ActionType.Weapon)) return;
+            
             base.Open();
             
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
@@ -38,6 +44,11 @@ namespace UI.BottomWidgets
         private void OnClickBackButton()
         {
             BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
+        }
+
+        private void OnClickFireButton()
+        {
+            EventManager.TriggerEvent(EventTypes.OnPlayerConfirmShot);
         }
     }
 }

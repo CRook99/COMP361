@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Managers;
+using UI.BottomWidgets;
 using UnityEngine;
 using World;
 
@@ -92,6 +93,7 @@ namespace Entities
             EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Ability);
             _moveArea.Hide();
             Actions.UseAction(ActionType.Ability);
+            BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
             
             //TODO: Probably going to want a parabolic throw arc here
 
