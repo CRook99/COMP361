@@ -23,6 +23,7 @@ namespace Managers
         OnPause,
         OnUnpause,
         OnPlayerBeginAiming,
+        OnPlayerShotFired,
         OnPlayerConfirmShot,
         OnCycleTarget,
         OnPlayerEndAiming,

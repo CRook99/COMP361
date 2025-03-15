@@ -31,6 +31,14 @@ namespace Entities
         public Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
         public int CurrentHealth;
 
+        [SerializeField] private Transform centerOfMass;
+
+        public Transform CenterOfMass
+        {
+            get => centerOfMass != null ? centerOfMass : transform; // Fallback to transform if null
+            protected set => centerOfMass = value;
+        }
+
         protected virtual void Awake()
         {
             CurrentHealth = Data.MaxHealth;

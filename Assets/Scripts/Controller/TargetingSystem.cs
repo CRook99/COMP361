@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Entities;
@@ -52,14 +53,16 @@ namespace Controller
         private void OnEnable()
         {
             EventManager.Subscribe(EventTypes.OnPlayerBeginAiming, EnterWeaponMode);
-            //EventManager.Subscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
+            EventManager.Subscribe(EventTypes.OnPlayerConfirmShot, ConfirmShot);
+            EventManager.Subscribe(EventTypes.OnPlayerShotFired, ExitWeaponMode);
             EventManager.Subscribe(EventTypes.OnPlayerEndAiming, ExitWeaponMode);
         }
 
         private void OnDisable()
         {
             EventManager.Unsubscribe(EventTypes.OnPlayerBeginAiming, EnterWeaponMode);
-            //EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, HandleShot);
+            EventManager.Unsubscribe(EventTypes.OnPlayerConfirmShot, ConfirmShot);
+            EventManager.Unsubscribe(EventTypes.OnPlayerShotFired, ExitWeaponMode);
             EventManager.Unsubscribe(EventTypes.OnPlayerEndAiming, ExitWeaponMode);
         }
 
@@ -117,22 +120,20 @@ namespace Controller
             EventManager.TriggerEvent(EventTypes.OnCycleTarget, target);
         }
 
-        private void HandleShot() // Not yet Edit: yet
+        private void ConfirmShot()
         {
-            if (!_aiming || _validTargets.Count == 0) return; 
+            if (_validTargets.Count == 0 || !_aiming) return;
 
-            Enemy target = _validTargets[_currentTargetIndex]; 
-            if (target == null) return;
+            ShotData shot = new()
+            {
+                Shooter = ActiveAllyController.ActiveAlly,
+                Target = _validTargets[_currentTargetIndex],
+                Cover = CoverUtilities.GetImmediateCoverOfTargetFromOrigin(ActiveAllyController.ActiveAlly.CurrentCell, _validTargets[_currentTargetIndex].CurrentCell),
+                Damage = 10 // Placeholder damage value
+            };
 
-            // Lock all controls
-            InputManager.Instance.PlayerInput.Disable();
-
-            // Fire a shot using ShootingManager - tbd
-            //ShootingManager.Instance.FireShot(ActiveAllyController.ActiveAlly, target, ActiveAllyController.ActiveAlly.Data.WeaponDamage);
-
-            // Exit aiming mode after shooting
+            EventManager.TriggerEvent(EventTypes.OnPlayerConfirmShot, shot);
             _aiming = false;
-            EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming);
         }
 
         private List<Enemy> FindValidTargets() // We want to copy GameManager.Enemies so we can remove invalid enemies from the list
