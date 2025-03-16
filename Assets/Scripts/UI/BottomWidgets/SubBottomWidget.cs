@@ -1,20 +1,17 @@
 using System;
+using Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {
-    // public class SubBottomWidget : BottomWidget
-    // {
-    //     [SerializeField] private Button backButton;
-    //
-    //     public event Action OnClickBackButton;
-    //
-    //     protected override void Awake()
-    //     {
-    //         base.Awake();
-    //
-    //         backButton.onClick.AddListener(() => OnClickBackButton?.Invoke());
-    //     }
-    // }
+    public class SubBottomWidget : BottomWidget
+    {
+        [SerializeField] protected ActionType ActionType;
+        
+        public override bool CanOpen()
+        {
+            return _playerReferences.ActiveAllyController.ActiveAlly.Actions.CanUseAction(ActionType);
+        }
+    }
 }

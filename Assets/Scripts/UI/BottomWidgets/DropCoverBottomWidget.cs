@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {
-    public class DropCoverBottomWidget : BottomWidget
+    public class DropCoverBottomWidget : SubBottomWidget
     {
         [Space]
         [SerializeField] private Button backButton;

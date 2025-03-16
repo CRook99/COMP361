@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {
-    public class WeaponBottomWidget : BottomWidget
+    public class WeaponBottomWidget : SubBottomWidget
     {
         [TextArea(3, 5)]
         [SerializeField] private string bodyText;
@@ -22,7 +22,6 @@ namespace UI.BottomWidgets
 
             backButton.onClick.AddListener(OnClickBackButton);
             fireButton.onClick.AddListener(OnClickFireButton);
-            ActionType = ActionType.Weapon;
         }
 
         public override void Open()

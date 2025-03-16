@@ -16,7 +16,7 @@ namespace Entities{
 
     public class Abilities
     {
-        private readonly int FRAG_DAMAGE = 10;
+        private readonly int FRAG_DAMAGE = 20;
         private readonly int CARE_HEAL = 15;
         private readonly int EMP_DISARM = 1;
 
@@ -30,7 +30,6 @@ namespace Entities{
         {
             if (entity is not Enemy enemy) return;
             enemy.TakeDamage(FRAG_DAMAGE);
-            Debug.Log("OWWWW");
         }
 
         public void DisarmAbility(Entity entity)

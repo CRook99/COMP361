@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {
-    public class AirstrikeBottomWidget : BottomWidget
+    public class AirstrikeBottomWidget : SubBottomWidget
     {
         [Space]
         [SerializeField] private Button backButton;

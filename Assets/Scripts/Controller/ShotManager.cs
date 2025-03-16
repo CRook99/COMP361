@@ -14,7 +14,7 @@ public class ShotManager : PlayerComponent
     public static ShotManager Instance { get; private set; }
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float shotDelay = 0.5f;
-    [SerializeField] private float projectileSpeed = 1.5f;
+    [SerializeField] private float projectileSpeed = 4f;
 
     private void Awake()
     {
@@ -40,7 +40,7 @@ public class ShotManager : PlayerComponent
             Target = target,
             Cover = cover,
             CoverObject = coverObject,
-            TotalDamage = 10,
+            TotalDamage = 20,
         };
         shot.ReturnDamage = (Random.value < target.Modifiers.PercentDamageReturnChance)
             ? (int)(target.Modifiers.PercentDamageReturnAmount * shot.TotalDamage) // Change to total damage
@@ -83,7 +83,9 @@ public class ShotManager : PlayerComponent
         shot.Shooter.Actions.UseAction(ActionType.Weapon);
         
         GameObject projectile = Instantiate(projectilePrefab, shooterPos, Quaternion.identity);
-        projectile.transform.DOMove(targetPos, projectileSpeed)
+        float duration = Vector3.Distance(shot.Shooter.transform.position, shot.Target.transform.position) /
+                         projectileSpeed;
+        projectile.transform.DOMove(targetPos, duration)
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {

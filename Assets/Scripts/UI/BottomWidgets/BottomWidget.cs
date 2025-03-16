@@ -15,7 +15,6 @@ namespace UI.BottomWidgets
         private const float ChangeTime = 0.25f;
 
         public EBottomWidget Type;
-        protected ActionType ActionType;
         
         private RectTransform _rect;
         private float _height;

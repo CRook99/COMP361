@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {
-    public class AbilityBottomWidget : BottomWidget
+    public class AbilityBottomWidget : SubBottomWidget
     {
         [SerializeField] private string titleText;
         [SerializeField] private TextMeshProUGUI titleTextElement;

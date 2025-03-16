@@ -48,6 +48,7 @@ namespace UI.BottomWidgets
             }
         }
 
+        // inherited by movement and air support base so always true
         public override bool CanOpen()
         {
             return true;

@@ -129,4 +129,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 5
+  ActionType: 4
   backButton: {fileID: 2894820714348387430}

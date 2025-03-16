@@ -118,11 +118,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  titleText: 
-  titleTextElement: {fileID: 0}
-  bodyText: 
-  bodyTextElement: {fileID: 0}
+  ActionType: 2
+  titleText: Frag Grenade
+  titleTextElement: {fileID: 2189079440128076453}
+  bodyText: Throw a frag grenade, dealing 20 damage to all enemies in the area
+  bodyTextElement: {fileID: 3075864112542725857}
   backButton: {fileID: 8056370042875752980}
+--- !u!114 &2189079440128076453 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5611686442330489494, guid: 8d7bfb2d4baff274a87783439e7e0e54, type: 3}
+  m_PrefabInstance: {fileID: 6017261213309593651}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3075864112542725857 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8731970793798819538, guid: 8d7bfb2d4baff274a87783439e7e0e54, type: 3}
+  m_PrefabInstance: {fileID: 6017261213309593651}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8056370042875752980 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4344956522577058343, guid: 8d7bfb2d4baff274a87783439e7e0e54, type: 3}

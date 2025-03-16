@@ -349,7 +349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8731970793798819538, guid: 8d7bfb2d4baff274a87783439e7e0e54, type: 3}
       propertyPath: m_text
-      value: Fire your weapon, dealing X damage
+      value: Fire your weapon, dealing 20 damage to a selected enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -402,7 +402,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 1
-  bodyText: Fire your weapon, dealing X damage
+  ActionType: 1
+  bodyText: Fire your weapon, dealing 10 damage
   textElement: {fileID: 5807811716562935369}
   backButton: {fileID: 1583910545119763132}
   fireButton: {fileID: 6622919334409453389}

@@ -15010,7 +15010,7 @@ MonoBehaviour:
   coverIndicator: {fileID: 696803298}
   modeSwitcher: {fileID: 696803297}
   movementSelection: {fileID: 696803291}
-  shotManager: {fileID: 0}
+  shotManager: {fileID: 696803300}
   targetingSystem: {fileID: 696803296}
   throwableSelection: {fileID: 696803299}
 --- !u!114 &696803294
@@ -15144,7 +15144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 8134217976240395592, guid: 84f4c6e9ceb4a3340ac2f3883989bac6, type: 3}
   shotDelay: 0.5
-  projectileSpeed: 1.5
+  projectileSpeed: 7
 --- !u!4 &697774481 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4206245746946307640, guid: 73939fa910c1ccd40bc4a3579a41f58b, type: 3}
