@@ -66,7 +66,8 @@ public static class CoverUtilities
         }
         
         RaycastHit hit;
-        if (Physics.Raycast(neighbour.Position.ToVector3XZ(0f), Vector3.up, out hit, 1f))
+        LayerMask mask = LayerMask.GetMask("Cover");
+        if (Physics.Raycast(neighbour.Position.ToVector3XZ(2f), Vector3.down, out hit, 2f, mask))
         {
             coverObject = hit.transform.gameObject;
         }

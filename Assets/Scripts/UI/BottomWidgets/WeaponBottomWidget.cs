@@ -34,21 +34,21 @@ namespace UI.BottomWidgets
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
         }
 
-        public override void Close()
-        {
-            base.Close();
-            
-            EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming);
-        }
-
         private void OnClickBackButton()
         {
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming);
             BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
         }
 
         private void OnClickFireButton()
         {
             EventManager.TriggerEvent(EventTypes.OnPlayerConfirmShot);
+            EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming);
+        }
+        
+        public override bool CanOpen()
+        {
+            return _playerReferences.ActiveAllyController.ActiveAlly.Actions.CanUseAction(ActionType);
         }
     }
 }

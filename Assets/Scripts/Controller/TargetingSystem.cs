@@ -9,6 +9,12 @@ using World;
 
 namespace Controller
 {
+    public struct TargetData
+    {
+        public Enemy Target;
+        public CoverTypes Cover;
+    }
+    
     public class TargetingSystem : PlayerComponent
     {
         private List<Enemy> _validTargets = new List<Enemy>();
@@ -67,7 +73,6 @@ namespace Controller
             _validTargets = FindValidTargets();
             if (_validTargets.Count == 0)
             {
-                Debug.Log("none");
                 // Indicate this
                 return;
             }
@@ -105,13 +110,20 @@ namespace Controller
                 reticle.Hide();
                 return;
             }
+
+
+            TargetData data = new TargetData()
+            {
+                Target = target,
+                Cover = CoverUtilities.GetImmediateCoverLevel(ActiveAllyController.ActiveAlly.CurrentCell,
+                    target.CurrentCell, out _),
+            };
             
             Vector3 targetPosition = target.CenterOfMass != null ? target.CenterOfMass.position : target.transform.position;
-
             reticle.Show();
             reticle.SetPosition(Camera.main.WorldToScreenPoint(targetPosition));
             
-            EventManager.TriggerEvent(EventTypes.OnCycleTarget, target);
+            EventManager.TriggerEvent(EventTypes.OnCycleTarget, data);
         }
 
         private void ConfirmShot()

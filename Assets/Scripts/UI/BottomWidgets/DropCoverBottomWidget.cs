@@ -15,6 +15,11 @@ namespace UI.BottomWidgets
             backButton.onClick.AddListener(OnClickBackButton);
         }
 
+        public override bool CanOpen()
+        {
+            return _playerReferences.ActiveAllyController.ActiveAlly.Actions.CanUseAction(ActionType);
+        }
+
         private void OnClickBackButton()
         {
             BottomWidgetManager.Instance.Show(EBottomWidget.AirSupportBase);

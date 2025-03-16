@@ -47,5 +47,10 @@ namespace UI.BottomWidgets
                 _actionMap[type].Deactivate();
             }
         }
+
+        public override bool CanOpen()
+        {
+            return true;
+        }
     }
 }

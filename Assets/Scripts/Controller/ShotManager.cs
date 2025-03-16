@@ -32,11 +32,13 @@ public class ShotManager : PlayerComponent
     {
         if (shooter == null || target == null) return;
 
+        var cover = CoverUtilities.GetImmediateCoverLevel(shooter.CurrentCell, target.CurrentCell, out var coverObject);
+        
         ShotData shot = new ShotData()
         {
             Shooter = shooter,
             Target = target,
-            Cover = CoverUtilities.GetImmediateCoverLevel(shooter.CurrentCell, target.CurrentCell, out var coverObject),
+            Cover = cover,
             CoverObject = coverObject,
             TotalDamage = 10,
         };
@@ -68,7 +70,8 @@ public class ShotManager : PlayerComponent
         Vector3 shooterPos = shot.Shooter.CenterOfMass != null ? shot.Shooter.CenterOfMass.position : shot.Shooter.transform.position;
         
         Vector3 targetPos;
-        if (DetermineHit(shot))
+        bool hit = DetermineHit(shot);
+        if (hit)
         {
             targetPos = shot.Target.CenterOfMass != null ? shot.Target.CenterOfMass.position : shot.Target.transform.position;
         }
@@ -84,8 +87,11 @@ public class ShotManager : PlayerComponent
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {
-                shot.Target.TakeDamage(shot.TotalDamage);
-                shot.Shooter.TakeDamage(shot.ReturnDamage);
+                if (hit)
+                {
+                    shot.Target.TakeDamage(shot.TotalDamage);
+                    shot.Shooter.TakeDamage(shot.ReturnDamage);
+                }
                 Destroy(projectile);
                 ReturnToNormalState(shot.Shooter);
             });

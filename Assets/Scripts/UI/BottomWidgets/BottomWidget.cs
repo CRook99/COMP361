@@ -52,9 +52,6 @@ namespace UI.BottomWidgets
             _rect.DOAnchorPosY(-_height, ChangeTime).SetEase(Ease.OutQuad);
         }
 
-        public bool CanOpen()
-        {
-            return _playerReferences.ActiveAllyController.ActiveAlly.Actions.CanUseAction(ActionType);
-        }
+        public abstract bool CanOpen();
     }
 }
