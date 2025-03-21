@@ -20,13 +20,8 @@ namespace Entities
         
         public UnitModifiers Modifiers;
         public Actions Actions;
-        public CoverTypes Cover;
-        public bool CoverCompromised;
-        //public bool CoverModeHighlighted;
-
 
         public event Action<int> OnHealthChanged;
-        public event Action<int> OnTakeDamage;
 
         public Cell CurrentCell => TacticsGrid.Instance.GetCell((int)transform.position.x, (int)transform.position.z);
         public int CurrentHealth;
@@ -42,20 +37,14 @@ namespace Entities
         protected virtual void Awake()
         {
             CurrentHealth = Data.MaxHealth;
+            TakeDamage(0); // Force widget refresh
+            
             Actions = new Actions(Data.AvailableActions);
-            Cover = CoverTypes.NoCover;
-            CoverCompromised = false;
-            //CoverModeHighlighted = false;
         }
 
         protected virtual void Start()
         {
             CurrentCell.Walkable = false;
-        }
-
-        protected virtual void Update()
-        {
-            
         }
 
         [ContextMenu("Test Range")]
@@ -123,7 +112,7 @@ namespace Entities
         public void TakeDamage(int amount)
         {
             CurrentHealth -= amount;
-            OnTakeDamage?.Invoke(amount);
+            CurrentHealth = Mathf.Max(CurrentHealth, 0);
             OnHealthChanged?.Invoke(CurrentHealth);
 
             EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
@@ -137,7 +126,8 @@ namespace Entities
         public void Heal(int amount)
         {
             CurrentHealth += amount;
-            CurrentHealth = Mathf.Min(amount, Data.MaxHealth); // Clamp health to maximum
+            CurrentHealth = Mathf.Min(CurrentHealth, Data.MaxHealth); // Clamp health to maximum
+            OnHealthChanged?.Invoke(CurrentHealth);
         }
 
         protected virtual void Die()
@@ -145,18 +135,6 @@ namespace Entities
             Debug.Log($"{gameObject.name} died!");
 
             EventManager.TriggerEvent(EventTypes.OnAllyFallen); // stats manager
-        }
-
-        public virtual void TakeTurn(System.Action onTurnComplete)
-        {
-            Debug.Log($"{gameObject.name} is taking their turn.");
-            StartCoroutine(EndTurnAfterDelay(onTurnComplete));
-        }
-
-        private IEnumerator EndTurnAfterDelay(System.Action onTurnComplete)
-        {
-            yield return new WaitForSeconds(1f); 
-            onTurnComplete?.Invoke(); 
         }
 
         // A public that function that checks if an obstacle exists between the current cell
