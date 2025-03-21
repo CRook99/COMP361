@@ -130,6 +130,7 @@ namespace Controller
         {
             if (_validTargets.Count == 0 || !_aiming) return;
             
+            EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Weapon);
             ShotManager.Instance.FireShot(ActiveAllyController.ActiveAlly, _validTargets[_currentTargetIndex]);
             _aiming = false;
             reticle.Hide();

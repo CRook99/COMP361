@@ -72,9 +72,9 @@ namespace Entities
 
         public void EnableThrow(int range, out HashSet<Cell> cells)
         {
-            var _possibleCells = Pathfinder.FindReachableCells(CurrentCell, range, true);
-            cells = _possibleCells;
-            _moveArea.GenerateMesh(_possibleCells, CurrentCell.Position);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, range, true);
+            cells = _reachableCells;
+            _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
             _moveArea.Show();
         }
 
