@@ -41,7 +41,7 @@ namespace Controller
 
             Vector3 spawnPoint = _camera.position + (_camera.right * 5f) + (_camera.up * (-1 * 5f));
             Vector3 strikePoint = target.Position.ToVector3XZ();
-            GameObject missile = Instantiate(MissilePrefab, spawnPoint, Quaternion.LookRotation(strikePoint - spawnPoint));
+            Missile missile = Instantiate(MissilePrefab, spawnPoint, Quaternion.LookRotation(strikePoint - spawnPoint)).GetComponent<Missile>();
 
             missile.transform.DOMove(strikePoint, StrikeTime)
                 .SetEase(Ease.Linear)
@@ -54,8 +54,13 @@ namespace Controller
                             enemy.TakeDamage(StrikeDamage);
                         }
                     }
+
+                    missile.TrailParticleSystem.transform.parent = null;
+                    missile.TrailParticleSystem.Stop();
+                    missile.ExplosionParticleSystem.transform.parent = null;
+                    missile.ExplosionParticleSystem.Play();
                     
-                    Destroy(missile);
+                    Destroy(missile.gameObject);
                     // Play VFX/SFX
                     InputManager.Instance.PlayerInput.Enable();
                 });
