@@ -19,7 +19,7 @@ namespace UI.BottomWidgets
             EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, RefreshWidgets);
         }
         
-        private void RefreshWidgets(object data)
+        protected override void RefreshWidgets(object data)
         {
             if (data is not Ally activeAlly) return;
 
