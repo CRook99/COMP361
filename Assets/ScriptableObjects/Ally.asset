@@ -15,6 +15,7 @@ MonoBehaviour:
   Name: Ally
   MaxHealth: 150
   MovementRange: 9
+  WeaponDamage: 20
   AvailableActions:
   - {fileID: 11400000, guid: a486144543439174facccf68972c128a, type: 2}
   - {fileID: 11400000, guid: 05be3872d39b31f4bae827b3b118cbe3, type: 2}
