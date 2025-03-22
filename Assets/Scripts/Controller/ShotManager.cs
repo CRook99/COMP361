@@ -40,7 +40,7 @@ public class ShotManager : PlayerComponent
             Target = target,
             Cover = cover,
             CoverObject = coverObject,
-            TotalDamage = 20,
+            TotalDamage = shooter.Data.WeaponDamage,
         };
         shot.ReturnDamage = (Random.value < target.Modifiers.PercentDamageReturnChance)
             ? (int)(target.Modifiers.PercentDamageReturnAmount * shot.TotalDamage) // Change to total damage

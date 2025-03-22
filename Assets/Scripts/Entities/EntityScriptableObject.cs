@@ -10,6 +10,7 @@ namespace Entities
         public string Name;
         public int MaxHealth;
         public int MovementRange;
+        public int WeaponDamage;
         public List<ActionScriptableObject> AvailableActions;
     }
 }
