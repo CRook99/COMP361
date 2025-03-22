@@ -31,7 +31,6 @@ namespace UI
 
         private void ShowAllyTurn()
         {
-            Debug.Log("in");
             turnText.text = "Ally Turn";
             turnText.color = Color.blue;
             turnText.gameObject.SetActive(true);
@@ -40,7 +39,6 @@ namespace UI
 
         private void ShowEnemyTurn()
         {
-            Debug.Log("out");
             turnText.text = "Ally Turn";
             turnText.color = Color.red;
             turnText.gameObject.SetActive(true);
