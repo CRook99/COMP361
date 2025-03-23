@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Entities;
 // using System.Linq;
 using Unity.VisualScripting;
@@ -60,14 +61,14 @@ namespace World
         // Gets current obstacles in the game world
         public HashSet<Cell> GetCoverCells()
         {
-            return _coverCells.Values.ToHashSet();
+            return LinqUtility.ToHashSet(_coverCells.Values);
         }
 
 
         // Gets all cells in the game world
         public HashSet<Cell> GetAllCells()
         {
-            return _cellMap.Values.ToHashSet();
+            return LinqUtility.ToHashSet(_cellMap.Values);
         }
 
         // Given start and end cells, checks if an obstacle exists somewhere between them
@@ -122,6 +123,15 @@ namespace World
                         cell.Neighbours[i] = neighbour;
                 }
             }
+        }
+
+        public void AddCover(Cell cell, CoverTypes cover)
+        {
+            if (cell == null || !_cellMap.Values.Contains(cell) || _coverCells.Values.Contains(cell)) return;
+
+            cell.Walkable = false;
+            cell.Cover = cover;
+            _coverCells.Add(cell.Position, cell);
         }
 
         // Checks if cell is as cover next to it

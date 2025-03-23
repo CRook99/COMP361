@@ -29,6 +29,11 @@ namespace Managers
             _cellLayer = LayerMask.GetMask("Cell");
         }
 
+        private void OnEnable()
+        {
+            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, RefreshActions);
+        }
+
         public Cell GetHoveredCell()
         {
             Ray ray = new Ray(_camera.transform.position, _camera.transform.forward);
@@ -43,6 +48,12 @@ namespace Managers
             }
 
             return null;
+        }
+
+        private void RefreshActions()
+        {
+            Debug.Log("refresh");
+            Actions.Refresh();
         }
     }
 }
