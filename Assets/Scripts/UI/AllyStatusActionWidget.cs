@@ -14,9 +14,9 @@ namespace UI
         
         public ActionScriptableObject Data;
 
-        private void Start()
+        public void SetIcon(Sprite sprite)
         {
-            icon.sprite = Data.Icon;
+            icon.sprite = sprite;
         }
 
         public void Activate()

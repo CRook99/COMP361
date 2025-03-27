@@ -5,6 +5,7 @@ using DG.Tweening;
 using Entities;
 using Managers;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,6 +51,16 @@ namespace UI
             {
                 AllyStatusActionWidget widget = Instantiate(actionWidgetPrefab, actionsParent);
                 widget.Data = action;
+
+                if (action.Type == ActionType.Ability && ally.ChosenAbility != null)
+                {
+                    widget.SetIcon(ally.ChosenAbility.image);
+                }
+                else 
+                {
+                    widget.SetIcon(action.Icon);
+                }
+
                 _actionMap.Add(action.Type, widget);
             }
         }
