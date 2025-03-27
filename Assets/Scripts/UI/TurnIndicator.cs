@@ -13,7 +13,7 @@ namespace UI
         private void Awake()
         {
             turnText = GetComponent<TMP_Text>();
-            turnText.text = "";
+            ShowAllyTurn();
             //turnText.gameObject.SetActive(false);
         }
 
@@ -39,7 +39,7 @@ namespace UI
 
         private void ShowEnemyTurn()
         {
-            turnText.text = "Ally Turn";
+            turnText.text = "Enemy Turn";
             turnText.color = Color.red;
             turnText.gameObject.SetActive(true);
             //StartCoroutine(HideAfterDelay());

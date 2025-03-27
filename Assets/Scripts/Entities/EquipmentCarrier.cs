@@ -58,4 +58,5 @@ public class EquipmentCarrier : MonoBehaviour
         }
         return null;
     }
+    
 }

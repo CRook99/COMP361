@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 254351ace77dafa45b12705e4a832249, type: 3}
-  m_Name: EMP
+  m_Name: CarePackage
   m_EditorClassIdentifier: 
-  title: EMP
-  type: 0
-  description: Disarms enemies in range for one turn
-  image: {fileID: 0}
+  title: Care Package
+  type: 2
+  description: Heals allies in range by 15%.
+  image: {fileID: 21300000, guid: f8ac4d5b6a48635469c190bed6ff1e6c, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 0
@@ -23,7 +23,7 @@ MonoBehaviour:
     EvasionBonusPercent: 0
     BonusMovementRange: 0
     AbilityCooldownTurnReduction: 0
-  Cooldown: 3
-  ability: 0
-  ThrowRadius: 5
-  EffectRadius: 4
+  Cooldown: 4
+  ability: 2
+  ThrowRadius: 4
+  EffectRadius: 3

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Entities
@@ -7,5 +8,6 @@ namespace Entities
     {
         public int Cooldown;
         public AbilityType ability;
+
     }
 }

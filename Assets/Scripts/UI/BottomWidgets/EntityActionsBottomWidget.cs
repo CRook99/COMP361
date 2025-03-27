@@ -1,3 +1,4 @@
+using Controller;
 using Entities;
 using Managers;
 
@@ -34,6 +35,9 @@ namespace UI.BottomWidgets
                     item.Value.Deactivate();
                 }
             }
+
+            _actionMap[ActionType.Ability].AbilityData = activeAlly.ChosenAbility;
+            _actionMap[ActionType.Ability].RefreshGraphics();
         }
     }
 }
