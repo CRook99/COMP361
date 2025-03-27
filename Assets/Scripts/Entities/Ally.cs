@@ -188,7 +188,11 @@ namespace Entities
                 AbilityCooldownTurnReduction = abilityCooldownTurnReduction
             };
 
-            ChosenAbility = DELETEME;
+            AbilityScriptableObject ability = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Ability) as AbilityScriptableObject;
+            if (ability != null)
+            {
+                ChosenAbility = ability;
+            }
         }
     }
 }

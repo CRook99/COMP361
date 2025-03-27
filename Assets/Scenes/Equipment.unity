@@ -962,15 +962,15 @@ PrefabInstance:
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: ab2f7c6b9a2a04a9a9b7b9f39db22001, type: 2}
+      objectReference: {fileID: 11400000, guid: 797adb0d08ba1d84fbd7449241e37786, type: 2}
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 8b292d9f68ef04f00a7f2d74f519157c, type: 2}
+      objectReference: {fileID: 11400000, guid: 4bd0318d44572f647af07e7f684ca094, type: 2}
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 88cd594d5522b4a94af6c79a241f36a9, type: 2}
+      objectReference: {fileID: 11400000, guid: 8ee4178b0e968de4d8ee43d7f5061406, type: 2}
     - target: {fileID: 4417462346369483210, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: m_text
       value: GAMMA
@@ -1261,15 +1261,15 @@ PrefabInstance:
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: ab2f7c6b9a2a04a9a9b7b9f39db22001, type: 2}
+      objectReference: {fileID: 11400000, guid: 797adb0d08ba1d84fbd7449241e37786, type: 2}
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 8b292d9f68ef04f00a7f2d74f519157c, type: 2}
+      objectReference: {fileID: 11400000, guid: 4bd0318d44572f647af07e7f684ca094, type: 2}
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 88cd594d5522b4a94af6c79a241f36a9, type: 2}
+      objectReference: {fileID: 11400000, guid: 8ee4178b0e968de4d8ee43d7f5061406, type: 2}
     - target: {fileID: 4417462346369483210, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: m_text
       value: OMEGA
@@ -1970,15 +1970,15 @@ PrefabInstance:
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: ab2f7c6b9a2a04a9a9b7b9f39db22001, type: 2}
+      objectReference: {fileID: 11400000, guid: 797adb0d08ba1d84fbd7449241e37786, type: 2}
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 8b292d9f68ef04f00a7f2d74f519157c, type: 2}
+      objectReference: {fileID: 11400000, guid: 4bd0318d44572f647af07e7f684ca094, type: 2}
     - target: {fileID: 3242247470962022904, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: EquipmentItems.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 88cd594d5522b4a94af6c79a241f36a9, type: 2}
+      objectReference: {fileID: 11400000, guid: 8ee4178b0e968de4d8ee43d7f5061406, type: 2}
     - target: {fileID: 4417462346369483210, guid: d74962dd22522e54ab8e0807c8709543, type: 3}
       propertyPath: m_text
       value: ALPHA
