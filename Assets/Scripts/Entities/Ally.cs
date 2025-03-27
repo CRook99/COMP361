@@ -14,6 +14,8 @@ namespace Entities
         private HashSet<Cell> _reachableCells;
         [SerializeField] private string _name;
         private Abilities abilities;
+        public AbilityScriptableObject ChosenAbility;
+        public AbilityScriptableObject DELETEME;
 
         public HashSet<Cell> ReachableCells => _reachableCells;
         
@@ -29,7 +31,7 @@ namespace Entities
         {
             base.Start();
             
-            ApplyEquipmentModifiers();
+            LoadEquipment();
 
             EventManager.TriggerEvent(EventTypes.OnSpawnAlly, this);
         }
@@ -157,7 +159,7 @@ namespace Entities
             else _moveArea.Hide();
         }
 
-        private void ApplyEquipmentModifiers()
+        private void LoadEquipment()
         {
             EquipmentScriptableObject armor = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Armor);
             EquipmentScriptableObject boots = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Boots);
@@ -185,6 +187,8 @@ namespace Entities
                 BonusMovementRange = bonusMovementRange,
                 AbilityCooldownTurnReduction = abilityCooldownTurnReduction
             };
+
+            ChosenAbility = DELETEME;
         }
     }
 }

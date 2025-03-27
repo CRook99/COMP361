@@ -1,18 +1,18 @@
 {
     "keys": [
-        "Ally_-7264",
-        "Ally_-6354",
-        "Ally_-4432",
-        "Enemy_-4340",
-        "Enemy_-2784",
-        "TurnManager_25084"
+        "Ally_-50484",
+        "Enemy_-47838",
+        "Ally_-44732",
+        "Enemy_-44506",
+        "Ally_-43038",
+        "TurnManager_89420"
     ],
     "values": [
-        "{\n    \"posX\": 15.0,\n    \"posY\": 0.0,\n    \"posZ\": 8.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 0,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
-        "{\n    \"posX\": 9.0,\n    \"posY\": 0.0,\n    \"posZ\": 11.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 0,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
-        "{\n    \"posX\": 10.0,\n    \"posY\": 0.0,\n    \"posZ\": 5.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 0,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
-        "{\n    \"posX\": 20.0,\n    \"posY\": 0.0,\n    \"posZ\": 19.0,\n    \"health\": 100,\n    \"entityDataName\": \"Pawn\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 0,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
+        "{\n    \"posX\": 15.0,\n    \"posY\": 0.0,\n    \"posZ\": 8.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 40,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
+        "{\n    \"posX\": 11.0,\n    \"posY\": 0.0,\n    \"posZ\": 13.0,\n    \"health\": 80,\n    \"entityDataName\": \"Pawn\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 0,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
+        "{\n    \"posX\": 10.0,\n    \"posY\": 0.0,\n    \"posZ\": 5.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 40,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
         "{\n    \"posX\": 11.0,\n    \"posY\": 0.0,\n    \"posZ\": 19.0,\n    \"health\": 100,\n    \"entityDataName\": \"Pawn\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 0,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
-        "{\n    \"isAllyTurn\": false,\n    \"turnNumber\": 2\n}"
+        "{\n    \"posX\": 9.0,\n    \"posY\": 0.0,\n    \"posZ\": 11.0,\n    \"health\": 150,\n    \"entityDataName\": \"Ally\",\n    \"modifiers\": {\n        \"PercentDamageReduction\": 40,\n        \"PercentDamageReturnChance\": 0,\n        \"PercentDamageReturnAmount\": 0,\n        \"EvasionBonusPercent\": 0,\n        \"BonusMovementRange\": 0,\n        \"AbilityCooldownTurnReduction\": 0\n    }\n}",
+        "{\n    \"isAllyTurn\": false,\n    \"turnNumber\": 1\n}"
     ]
 }

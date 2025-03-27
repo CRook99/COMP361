@@ -21,6 +21,7 @@ namespace UI
         [SerializeField] private Color inactiveColor;
         
         public ActionScriptableObject Data;
+        public AbilityScriptableObject AbilityData; // Will be null for non-abilities
 
         private bool _active;
         public bool Active => _active;
@@ -55,6 +56,15 @@ namespace UI
             icon.rectTransform.DOAnchorPosY(inactivePosition.anchoredPosition.y, SwitchTime).SetEase(Ease.Linear);
             icon.color = inactiveColor;
             _active = false;
+        }
+
+        // Only to be called by ability widget
+        public void RefreshGraphics()
+        {
+            if (AbilityData == null) return; // TODO Try to get rid of this
+            
+            text.text = AbilityData.title;
+            icon.sprite = AbilityData.image;
         }
     }
 }

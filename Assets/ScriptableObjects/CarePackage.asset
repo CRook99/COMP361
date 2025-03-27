@@ -15,7 +15,7 @@ MonoBehaviour:
   title: Care Package
   type: 2
   description: Heals allies in range by 15%.
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: f8ac4d5b6a48635469c190bed6ff1e6c, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 0
