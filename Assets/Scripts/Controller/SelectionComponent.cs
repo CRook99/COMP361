@@ -12,8 +12,6 @@ namespace Controller
     public abstract class SelectionComponent : PlayerComponent
     {
         [SerializeField] private GameObject cursor;
-        [SerializeField] private RectTransform mouseGraphic;
-        [SerializeField] private Vector2 mouseOffset;
         
         protected Camera _cam;
         protected Ray _ray;
@@ -74,9 +72,6 @@ namespace Controller
                 OnHoveredCellChanged?.Invoke(_currentCell);
                 if (!cursor.activeSelf) cursor.SetActive(true);
                 cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
-
-                Vector3 cellPos = _cam.WorldToScreenPoint(_currentCell.Position.ToVector3XZ());
-                mouseGraphic.position = cellPos + new Vector3(mouseOffset.x, mouseOffset.y, 0f);
             }
             else
             {
@@ -91,24 +86,12 @@ namespace Controller
         {
             cursor.SetActive(true);
             _cursorLocked = false;
-            EnableMouseGraphic();
         }
         
         private void DisableCursor()
         {
             cursor.SetActive(false);
             _cursorLocked = true;
-            DisableMouseGraphic();
-        }
-
-        private void EnableMouseGraphic()
-        {
-            mouseGraphic.gameObject.SetActive(true);
-        }
-        
-        private void DisableMouseGraphic()
-        {
-            mouseGraphic.gameObject.SetActive(false);
         }
 
         private void ToggleCursor(bool b)
