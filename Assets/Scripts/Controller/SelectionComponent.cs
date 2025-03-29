@@ -12,13 +12,16 @@ namespace Controller
     public abstract class SelectionComponent : PlayerComponent
     {
         [SerializeField] private GameObject cursor;
-
+        [SerializeField] private RectTransform mouseGraphic;
+        [SerializeField] private Vector2 mouseOffset;
+        
         protected Camera _cam;
         protected Ray _ray;
         protected Cell _currentCell;
         private PlayerInput _playerInput;
         protected LayerMask _rayMask;
         protected bool _cursorLocked;
+        
 
         public event Action<Cell> OnHoveredCellChanged;
 
@@ -71,6 +74,9 @@ namespace Controller
                 OnHoveredCellChanged?.Invoke(_currentCell);
                 if (!cursor.activeSelf) cursor.SetActive(true);
                 cursor.transform.position = _currentCell.Position.ToVector3XZ(0.5f);
+
+                Vector3 cellPos = _cam.WorldToScreenPoint(_currentCell.Position.ToVector3XZ());
+                mouseGraphic.position = cellPos + new Vector3(mouseOffset.x, mouseOffset.y, 0f);
             }
             else
             {
@@ -81,20 +87,34 @@ namespace Controller
 
         protected abstract void OnSelectTile(InputAction.CallbackContext context);
 
-        private void DisableCursor()
-        {
-            _cursorLocked = true;
-        }
-
         private void EnableCursor()
         {
+            cursor.SetActive(true);
             _cursorLocked = false;
+            EnableMouseGraphic();
+        }
+        
+        private void DisableCursor()
+        {
+            cursor.SetActive(false);
+            _cursorLocked = true;
+            DisableMouseGraphic();
+        }
+
+        private void EnableMouseGraphic()
+        {
+            mouseGraphic.gameObject.SetActive(true);
+        }
+        
+        private void DisableMouseGraphic()
+        {
+            mouseGraphic.gameObject.SetActive(false);
         }
 
         private void ToggleCursor(bool b)
         {
-            _cursorLocked = !b;
-            cursor.SetActive(b);
+            if (b) EnableCursor();
+            else DisableCursor();
         }
 
         private void OnPlayerChangeMode(object data)
