@@ -8,6 +8,7 @@ using TMPro;
 public class EnemyHealthbar : MonoBehaviour
 {
     [SerializeField] private Image healthFill; 
+    [SerializeField] private TextMeshProUGUI healthText;
     
     // TARGETING
     [SerializeField] private GameObject targetingParent;
@@ -26,6 +27,7 @@ public class EnemyHealthbar : MonoBehaviour
         _enemy = enemy;
         _enemyTransform = enemy.transform;
         _camera = Camera.main;
+        healthText = GetComponentInChildren<TextMeshProUGUI>();
 
         _enemy.OnHealthChanged += UpdateHealth;
         
@@ -43,6 +45,7 @@ public class EnemyHealthbar : MonoBehaviour
     private void UpdateHealth(int newHealth)
     {
         healthFill.fillAmount = (float)newHealth / _enemy.Data.MaxHealth;
+        healthText.text = $"{newHealth}";
     }
 
     private void LateUpdate()
