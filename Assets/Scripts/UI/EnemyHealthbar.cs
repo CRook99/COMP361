@@ -30,8 +30,10 @@ public class EnemyHealthbar : MonoBehaviour
         healthText = GetComponentInChildren<TextMeshProUGUI>();
 
         _enemy.OnHealthChanged += UpdateHealth;
-        
+
         UpdateHealth(_enemy.CurrentHealth);
+        
+        HideTargetingInfo();
     }
 
     private void OnDestroy()
