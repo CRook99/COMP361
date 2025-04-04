@@ -12,13 +12,14 @@ namespace Controller
     public abstract class SelectionComponent : PlayerComponent
     {
         [SerializeField] private GameObject cursor;
-
+        
         protected Camera _cam;
         protected Ray _ray;
         protected Cell _currentCell;
         private PlayerInput _playerInput;
         protected LayerMask _rayMask;
         protected bool _cursorLocked;
+        
 
         public event Action<Cell> OnHoveredCellChanged;
 
@@ -81,20 +82,22 @@ namespace Controller
 
         protected abstract void OnSelectTile(InputAction.CallbackContext context);
 
-        private void DisableCursor()
-        {
-            _cursorLocked = true;
-        }
-
         private void EnableCursor()
         {
+            cursor.SetActive(true);
             _cursorLocked = false;
+        }
+        
+        private void DisableCursor()
+        {
+            cursor.SetActive(false);
+            _cursorLocked = true;
         }
 
         private void ToggleCursor(bool b)
         {
-            _cursorLocked = !b;
-            cursor.SetActive(b);
+            if (b) EnableCursor();
+            else DisableCursor();
         }
 
         private void OnPlayerChangeMode(object data)

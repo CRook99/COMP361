@@ -31,6 +31,9 @@ namespace UI.BottomWidgets
 
             base.Open();
 
+            AbilityScriptableObject ability = _playerReferences.ActiveAllyController.ActiveAlly.ChosenAbility;
+            titleTextElement.text = ability.title;
+            bodyTextElement.text = ability.description;
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAbility);
         }
         
