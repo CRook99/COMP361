@@ -109,6 +109,15 @@ namespace World
             return false;
         }
 
+        // Gets the Euclidian Distance between 2 cells
+        public double GetEuclideanDistanceBetweenCells(Cell start, Cell end) {
+            return 
+            Math.Sqrt(
+                Math.Pow(Math.Abs(start.Position.x - end.Position.x), 2.0) + 
+                Math.Pow(Math.Abs(start.Position.y - end.Position.y), 2.0)
+            );
+        }
+
         private void PrecomputeNeighbours()
         {
             int[] xMap = { 0, 1, 1, 1, 0, -1, -1, -1 };

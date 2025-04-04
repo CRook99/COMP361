@@ -186,7 +186,7 @@ namespace Entities
 
       List<Cell> neighbourCells = new List<Cell>
             {
-                CurrentCell.N, CurrentCell.S, CurrentCell.E, CurrentCell.W
+                CurrentCell.N, CurrentCell.S, CurrentCell.E, CurrentCell.W, CurrentCell
             };
 
       foreach (Ally ally in GameManager.Allies)
@@ -194,10 +194,12 @@ namespace Entities
         // goes over all neighbor cells that the enemy can move to 
         foreach (Cell cell in neighbourCells)
         {
-          if (cell == null || !cell.Walkable) continue;
+          if(cell != CurrentCell) {
+            if (cell == null || !cell.Walkable) continue;
 
-          if (TacticsGrid.Instance.ObstacleBetweenCells(cell, ally.CurrentCell))
-            continue;
+            if (TacticsGrid.Instance.ObstacleBetweenCells(cell, ally.CurrentCell))
+              continue;
+          }
 
           Vector3 cellPosition3D = new Vector3(cell.Position.x, 0, cell.Position.y);
           float distance = Vector3.Distance(cellPosition3D, ally.transform.position);

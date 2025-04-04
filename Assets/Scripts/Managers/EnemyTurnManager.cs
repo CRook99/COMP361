@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Entities;
+using Unity.PlasticSCM.Editor.WebApi;
+using Unity.VisualScripting;
 
 namespace Managers
 {
@@ -26,7 +28,7 @@ namespace Managers
         {
             StartCoroutine(HandleEnemyTurn());
         }
-        
+    
         public IEnumerator HandleEnemyTurn()
         {
             // make sure camera is in standard mode before running enemy turn
@@ -34,17 +36,19 @@ namespace Managers
             // TODO Introduce new event OnForceCameraMode and subscribe to this in CameraController?
             // EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, CameraMode.Standard);
             
-            _enemies ??= new List<Enemy>(GameManager.Enemies);
+            _enemies = new List<Enemy>(GameManager.Enemies);
             
-            if (_enemies.Count > 0)
+            // We subscribe to OnStartEnemyTurn so don't trigger it here
+            foreach (Enemy enemy in _enemies)
             {
-                // We subscribe to OnStartEnemyTurn so don't trigger it here
-                foreach (Enemy enemy in _enemies)
-                {
-                    yield return RunEnemyAction(enemy);
-                }
+                yield return RunEnemyAction(enemy);
             }
             
+            foreach (Enemy enemy in _enemies)
+            {
+                yield return RunEnemyShootingAction(enemy);
+            }
+
             TurnManager.Instance.EndEnemyTurn();
         }
 
@@ -53,14 +57,21 @@ namespace Managers
             // Movement
             Cell bestMove = enemy.GetBestMove();
             yield return enemy.MoveToCell(bestMove);
-            
-            // Shooting
+        }
+
+        private IEnumerator RunEnemyShootingAction(Enemy enemy) {
             (Cell cell, Ally ally) = enemy.FindClosestVisibleAllyToShoot();
             if (ally != null)
             {
-                // TODO: Implement shooting logic
-                // yield return shooty shooty
-                Debug.Log($"{enemy.name} is shooting at {ally.name}");
+                yield return new WaitForSeconds(0.25f);
+
+                Cell enemycell = enemy.CurrentCell;
+                if(enemycell != cell) yield return enemy.MoveToCell(cell);
+                
+                ShotManager.Instance.FireShot(enemy, ally);
+                yield return new WaitForSeconds(0.25f);
+
+                if(enemycell != cell) yield return enemy.MoveToCell(enemycell);
             }
         }
     }

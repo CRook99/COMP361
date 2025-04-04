@@ -154,6 +154,7 @@ namespace Controller
         private bool IsTargetValid(Enemy enemy) // Works - more rules need to be defined
         {
             if (enemy == null) return false;
+            
 
             // TODO: Weapon range
             return !TacticsGrid.Instance.ObstacleBetweenCells(ActiveAllyController.ActiveAlly.CurrentCell, enemy.CurrentCell);
