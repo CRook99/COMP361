@@ -31,7 +31,18 @@ public class ShotManager : PlayerComponent
     public void FireShot(Entity shooter, Entity target)
     {
         if (shooter == null || target == null) return;
+        ShotData shot = CreateShotData(shooter, target);
 
+        StartCoroutine(FireSequence(shot));
+    }
+
+    // Useful for when we want until the shot as reached its destination
+    public IEnumerator FireShotEnumerator(Entity shooter, Entity target) {
+        ShotData shot = CreateShotData(shooter, target);
+        yield return FireSequence(shot, true);
+    }
+
+    private ShotData CreateShotData(Entity shooter, Entity target) {
         var cover = CoverUtilities.GetImmediateCoverLevel(shooter.CurrentCell, target.CurrentCell, out var coverObject);
         
         ShotData shot = new ShotData()
@@ -46,11 +57,20 @@ public class ShotManager : PlayerComponent
             ? (int)(target.Modifiers.PercentDamageReturnAmount * shot.TotalDamage) // Change to total damage
             : 0;
 
-        StartCoroutine(FireSequence(shot));
+        return shot;
     }
 
-    private IEnumerator FireSequence(ShotData shot)
+    // The fire_projectile_enumerator=false argument is useful when we want to wait until the shot
+    // reached its destination. The enemy shooting sequence requires this
+    private IEnumerator FireSequence(ShotData shot, bool fire_projectile_enumerator=false)
     {
+        // Waits 0.1 sec before shooting
+        yield return new WaitForSeconds(0.1f);
+        Cell CurrentShooterCell = shot.Shooter.CurrentCell;
+        (Cell ShootingCell, float distance) = shot.Shooter.FindPeakableCellInLightOfSight(shot.Target);
+        if(CurrentShooterCell != ShootingCell) yield return shot.Shooter.MoveToCell(ShootingCell);
+
+
         // Lock player controls
         InputManager.Instance.PlayerInput.Disable();
         BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
@@ -58,10 +78,18 @@ public class ShotManager : PlayerComponent
         // Move camera to focus on both shooter & target
         Vector3 focusPoint = (shot.Shooter.transform.position + shot.Target.transform.position) / 2;
         CameraController.MoveToPosition(focusPoint);
-
         yield return new WaitForSeconds(shotDelay / 2);
+        
+        if(!fire_projectile_enumerator)
+            FireProjectile(shot);
+        else 
+            yield return FireProjectileEnumerator(shot);
+        
 
-        FireProjectile(shot);
+        // Waits 0.4 sec after shooting
+        yield return new WaitForSeconds(0.4f);
+        if(CurrentShooterCell != ShootingCell) yield return shot.Shooter.MoveToCell(CurrentShooterCell);
+
     }
 
     private void FireProjectile(ShotData shot)
@@ -98,6 +126,50 @@ public class ShotManager : PlayerComponent
                 ReturnToNormalState(shot.Shooter);
             });
     }
+
+    // Same as FireProjectile() but returns a IEnumerator
+    private IEnumerator FireProjectileEnumerator(ShotData shot)
+    {
+        // Ensure CenterOfMass exists, otherwise use transform position as fallback
+        Vector3 shooterPos = shot.Shooter.CenterOfMass != null 
+            ? shot.Shooter.CenterOfMass.position 
+            : shot.Shooter.transform.position;
+        
+        Vector3 targetPos;
+        bool hit = DetermineHit(shot);
+        if (hit)
+        {
+            targetPos = shot.Target.CenterOfMass != null 
+                ? shot.Target.CenterOfMass.position 
+                : shot.Target.transform.position;
+        }
+        else
+        {
+            targetPos = shot.CoverObject.transform.Find("CenterOfMass").position;
+        }
+
+        shot.Shooter.Actions.UseAction(ActionType.Weapon);
+        
+        GameObject projectile = Instantiate(projectilePrefab, shooterPos, Quaternion.identity);
+        float duration = Vector3.Distance(shot.Shooter.transform.position, shot.Target.transform.position) / projectileSpeed;
+        
+        // Create and start the tween
+        Tween moveTween = projectile.transform.DOMove(targetPos, duration)
+            .SetEase(Ease.Linear);
+        
+        // Wait until the tween is complete
+        yield return moveTween.WaitForCompletion();
+
+        // After the projectile reaches its target, handle hit logic
+        if (hit)
+        {
+            shot.Target.TakeDamage(shot.TotalDamage);
+            shot.Shooter.TakeDamage(shot.ReturnDamage);
+        }
+        Destroy(projectile);
+        ReturnToNormalState(shot.Shooter);
+    }
+
 
     private bool DetermineHit(ShotData shot)
     {

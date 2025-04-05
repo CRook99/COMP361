@@ -63,15 +63,7 @@ namespace Managers
             (Cell cell, Ally ally) = enemy.FindClosestVisibleAllyToShoot();
             if (ally != null)
             {
-                yield return new WaitForSeconds(0.25f);
-
-                Cell enemycell = enemy.CurrentCell;
-                if(enemycell != cell) yield return enemy.MoveToCell(cell);
-                
-                ShotManager.Instance.FireShot(enemy, ally);
-                yield return new WaitForSeconds(0.25f);
-
-                if(enemycell != cell) yield return enemy.MoveToCell(enemycell);
+                yield return ShotManager.Instance.FireShotEnumerator(enemy, ally);
             }
         }
     }

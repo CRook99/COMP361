@@ -184,35 +184,17 @@ namespace Entities
       float closestDistance = float.MaxValue;
       Cell shootingCell = null; // Cell to shoot from
 
-      List<Cell> neighbourCells = new List<Cell>
-            {
-                CurrentCell.N, CurrentCell.S, CurrentCell.E, CurrentCell.W, CurrentCell
-            };
-
       foreach (Ally ally in GameManager.Allies)
       {
-        // goes over all neighbor cells that the enemy can move to 
-        foreach (Cell cell in neighbourCells)
+        (Cell cell, float distance) = FindPeakableCellInLightOfSight(ally);
+
+        if (distance < closestDistance)
         {
-          if(cell != CurrentCell) {
-            if (cell == null || !cell.Walkable) continue;
-
-            if (TacticsGrid.Instance.ObstacleBetweenCells(cell, ally.CurrentCell))
-              continue;
-          }
-
-          Vector3 cellPosition3D = new Vector3(cell.Position.x, 0, cell.Position.y);
-          float distance = Vector3.Distance(cellPosition3D, ally.transform.position);
-
-          if (distance < closestDistance)
-          {
             closestDistance = distance;
             closestAlly = ally;
             shootingCell = cell;
-          }
         }
       }
-
       return (shootingCell, closestAlly);
     }
 

@@ -109,6 +109,37 @@ namespace Entities
             
         }
 
+        // Helper function to get the cell at or adjacent to the current cell,
+        // where it would have a line of sight to the entity, it also returns the distance to the entity
+        // returns null if not possible to find a line of sight
+        public (Cell, float distance) FindPeakableCellInLightOfSight(Entity entity) {
+            if(!TacticsGrid.Instance.ObstacleBetweenCells(CurrentCell, entity.CurrentCell)) {
+                Vector3 cellPosition3D = new Vector3(CurrentCell.Position.x, 0, CurrentCell.Position.y);
+                float distance = Vector3.Distance(cellPosition3D, entity.transform.position);
+                return (CurrentCell, distance);
+            }
+
+            List<Cell> neighbourCells = new List<Cell>
+            {
+                CurrentCell.N, CurrentCell.S, CurrentCell.E, CurrentCell.W
+            };
+            
+            foreach (Cell cell in neighbourCells)
+            {
+                if (cell == null || !cell.Walkable) continue;
+                if (TacticsGrid.Instance.ObstacleBetweenCells(cell, entity.CurrentCell))
+                    continue;
+                
+                Vector3 cellPosition3D = new Vector3(cell.Position.x, 0, cell.Position.y);
+                float distance = Vector3.Distance(cellPosition3D, entity.transform.position);
+
+                return (cell, distance);
+            }
+
+            // Not possible to get line of sight
+            return (null, -1);
+        }
+
         public void TakeDamage(int amount)
         {
             CurrentHealth -= amount;
