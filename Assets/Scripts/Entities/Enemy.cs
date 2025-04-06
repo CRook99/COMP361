@@ -198,6 +198,19 @@ namespace Entities
       return (shootingCell, closestAlly);
     }
 
+    public bool ThereIsAllyToShoot() {
+        List<Cell> playerPositions = GameManager.Allies.Select(a => a.CurrentCell).ToList();
+        foreach (Ally ally in GameManager.Allies)
+        {
+            (Cell cell, float distance) = FindPeakableCellInLightOfSight(ally);
+
+            if(cell != null)
+                return true;
+        }
+        return false;
+        
+    }
+
     // Moves the enemy to the cell during its enemy turn
     public override void TryMoveToCell(Cell destination)
     {

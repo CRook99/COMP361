@@ -7,6 +7,8 @@ namespace System
     {
         public Entity Shooter;
         public Entity Target;
+
+        public Cell ShootingCell; // Cell to shoot from 
         public CoverTypes Cover;
         public GameObject CoverObject;
         public int TotalDamage;

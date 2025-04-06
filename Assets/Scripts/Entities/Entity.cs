@@ -69,6 +69,7 @@ namespace Entities
 
         public IEnumerator MoveToCell(Cell destination)
         {
+            if (destination == CurrentCell) yield break;
             List<Cell> path = Pathfinder.FindPath(CurrentCell, destination);
             if (path.Count == 0) yield break;
 
@@ -81,6 +82,7 @@ namespace Entities
             CurrentCell.Walkable = true;
             destination.Walkable = false;
             yield return FollowPath(path);
+            
         }
 
         protected virtual IEnumerator FollowPath(List<Cell> path)

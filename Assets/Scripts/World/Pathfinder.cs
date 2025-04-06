@@ -21,6 +21,8 @@ namespace World
                 Debug.LogWarning("WARNING: Tried to pathfind with a null end cell");
                 return new List<Cell>();
             }
+            if(start == end)
+                return new List<Cell>();
             
             var openSet = new List<Cell> { start };
             var closedSet = new HashSet<Cell>();
