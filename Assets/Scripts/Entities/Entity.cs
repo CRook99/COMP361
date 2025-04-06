@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Numerics;
 using Controller;
 using Managers;
 using UnityEngine;
 using Utility;
 using World;
-using Utility.Serialization;  // Contains IGameSerializable
+using Utility.Serialization;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3; // Contains IGameSerializable
 
 namespace Entities
 {
@@ -20,6 +23,7 @@ namespace Entities
         
         public UnitModifiers Modifiers;
         public Actions Actions;
+        public Transform GeometryTransform;
 
         public event Action<int> OnHealthChanged;
 
@@ -93,6 +97,14 @@ namespace Entities
                 Vector3 end = path[pathIndex + 1].Position.ToVector3XZ();
                 float travelTime = Vector3.Distance(start, end) / MovementSpeed;
                 float elapsed = 0f;
+
+                Vector3 direction = end - start;
+                direction.y = 0f;
+                if (direction != Vector3.zero)
+                {
+                    Quaternion lookRot = Quaternion.LookRotation(direction);
+                    GeometryTransform.rotation = lookRot;
+                }
 
                 while (elapsed < travelTime)
                 {
