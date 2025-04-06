@@ -31,24 +31,42 @@ namespace UI.BottomWidgets
             _playerReferences = FindObjectOfType<PlayerReferences>();
         }
 
+        private Coroutine _moveRoutine;
+
         public virtual void Open()
         {
-            Show();
+            StartMoveCoroutine(0f);
         }
 
         public virtual void Close()
         {
-            Hide();
+            StartMoveCoroutine(-_height);
         }
-    
-        private void Show()
+
+        private void StartMoveCoroutine(float targetY)
         {
-            _rect.DOAnchorPosY(0f, ChangeTime).SetEase(Ease.OutQuad);
+            if (_moveRoutine != null)
+                StopCoroutine(_moveRoutine);
+
+            _moveRoutine = StartCoroutine(DoAnchorMove(targetY));
         }
-    
-        private void Hide()
+
+        private IEnumerator DoAnchorMove(float targetY)
         {
-            _rect.DOAnchorPosY(-_height, ChangeTime).SetEase(Ease.OutQuad);
+            float elapsed = 0f;
+            Vector2 startPos = _rect.anchoredPosition;
+            Vector2 targetPos = new Vector2(startPos.x, targetY);
+
+            while (elapsed < ChangeTime)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / ChangeTime);
+                t = 1f - Mathf.Pow(1f - t, 2f); // quad out
+                _rect.anchoredPosition = Vector2.Lerp(startPos, targetPos, t);
+                yield return null;
+            }
+
+            _rect.anchoredPosition = targetPos;
         }
 
         public abstract bool CanOpen();
