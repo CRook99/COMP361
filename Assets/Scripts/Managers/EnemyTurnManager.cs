@@ -36,34 +36,42 @@ namespace Managers
             // TODO Introduce new event OnForceCameraMode and subscribe to this in CameraController?
             // EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, CameraMode.Standard);
             
-            _enemies = new List<Enemy>(GameManager.Enemies);
-            
-            // We subscribe to OnStartEnemyTurn so don't trigger it here
-            foreach (Enemy enemy in _enemies)
-            {
-                yield return RunEnemyAction(enemy);
-            }
+            _enemies ??= new List<Enemy>(GameManager.Enemies);
             
             foreach (Enemy enemy in _enemies)
             {
-                yield return RunEnemyShootingAction(enemy);
+                // If there is ally to shoot, it will always do that first
+                if(enemy.ThereIsAllyToShoot()) {
+                    yield return RunEnemyShootingAction(enemy);
+                    yield return RunEnemyMovingAction(enemy);
+                } else {
+                    yield return RunEnemyMovingAction(enemy);
+                    yield return RunEnemyShootingAction(enemy);
+                }
             }
 
             TurnManager.Instance.EndEnemyTurn();
+            _enemies = null;
         }
 
-        private IEnumerator RunEnemyAction(Enemy enemy)
+        private IEnumerator RunEnemyMovingAction(Enemy enemy)
         {
             // Movement
             Cell bestMove = enemy.GetBestMove();
-            yield return enemy.MoveToCell(bestMove);
+
+            // Means enemy wants to move 
+            if(bestMove != null && bestMove != enemy.CurrentCell) {
+                yield return enemy.MoveToCell(bestMove);
+            }
         }
 
         private IEnumerator RunEnemyShootingAction(Enemy enemy) {
             (Cell cell, Ally ally) = enemy.FindClosestVisibleAllyToShoot();
-            if (ally != null)
+
+            // If ally null, then enemy will not shoot  
+            if (ally != null && cell != null)
             {
-                yield return ShotManager.Instance.FireShotEnumerator(enemy, ally);
+                yield return ShotManager.Instance.FireShotEnumerator(enemy, ally, cell);
             }
         }
     }

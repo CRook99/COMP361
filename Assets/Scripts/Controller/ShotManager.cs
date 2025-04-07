@@ -31,24 +31,24 @@ public class ShotManager : PlayerComponent
     public void FireShot(Entity shooter, Entity target)
     {
         if (shooter == null || target == null) return;
-        ShotData shot = CreateShotData(shooter, target);
-
+        ShotData shot = CreateShotData(shooter, target, shooter.CurrentCell);
         StartCoroutine(FireSequence(shot));
     }
 
     // Useful for when we want until the shot as reached its destination
-    public IEnumerator FireShotEnumerator(Entity shooter, Entity target) {
-        ShotData shot = CreateShotData(shooter, target);
+    public IEnumerator FireShotEnumerator(Entity shooter, Entity target, Cell ShootingCell) {
+        ShotData shot = CreateShotData(shooter, target, ShootingCell);
         yield return FireSequence(shot, true);
     }
 
-    private ShotData CreateShotData(Entity shooter, Entity target) {
+    private ShotData CreateShotData(Entity shooter, Entity target, Cell shootingCell) {
         var cover = CoverUtilities.GetImmediateCoverLevel(shooter.CurrentCell, target.CurrentCell, out var coverObject);
         
         ShotData shot = new ShotData()
         {
             Shooter = shooter,
             Target = target,
+            ShootingCell = shootingCell,
             Cover = cover,
             CoverObject = coverObject,
             TotalDamage = shooter.Data.WeaponDamage,
@@ -67,9 +67,7 @@ public class ShotManager : PlayerComponent
         // Waits 0.1 sec before shooting
         yield return new WaitForSeconds(0.1f);
         Cell CurrentShooterCell = shot.Shooter.CurrentCell;
-        (Cell ShootingCell, float distance) = shot.Shooter.FindPeakableCellInLightOfSight(shot.Target);
-        if(CurrentShooterCell != ShootingCell) yield return shot.Shooter.MoveToCell(ShootingCell);
-
+        if(CurrentShooterCell != shot.ShootingCell) yield return shot.Shooter.MoveToCell(shot.ShootingCell);
 
         // Lock player controls
         InputManager.Instance.PlayerInput.Disable();
@@ -84,11 +82,10 @@ public class ShotManager : PlayerComponent
             FireProjectile(shot);
         else 
             yield return FireProjectileEnumerator(shot);
-        
 
         // Waits 0.4 sec after shooting
         yield return new WaitForSeconds(0.4f);
-        if(CurrentShooterCell != ShootingCell) yield return shot.Shooter.MoveToCell(CurrentShooterCell);
+        if(CurrentShooterCell != shot.ShootingCell) yield return shot.Shooter.MoveToCell(CurrentShooterCell);
 
     }
 
