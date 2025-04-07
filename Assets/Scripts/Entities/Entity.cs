@@ -5,6 +5,7 @@ using System.Net;
 using System.Numerics;
 using Controller;
 using Managers;
+using UI;
 using UnityEngine;
 using Utility;
 using World;
@@ -41,7 +42,7 @@ namespace Entities
         protected virtual void Awake()
         {
             CurrentHealth = Data.MaxHealth;
-            TakeDamage(0); // Force widget refresh
+            OnHealthChanged?.Invoke(CurrentHealth); // Force widget refresh
             
             Actions = new Actions(Data.AvailableActions);
         }
@@ -154,9 +155,13 @@ namespace Entities
 
         public void TakeDamage(int amount)
         {
+            if (amount == 0) return;
+            
             CurrentHealth -= amount;
             CurrentHealth = Mathf.Max(CurrentHealth, 0);
             OnHealthChanged?.Invoke(CurrentHealth);
+            
+            UIManager.Instance.DamageNumbers.Animate(transform.position, amount);
 
             EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
 
