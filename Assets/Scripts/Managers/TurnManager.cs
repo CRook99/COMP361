@@ -145,7 +145,6 @@ public class TurnManager : MonoBehaviour, IGameSerializable
     _isAllyTurn = dto.isAllyTurn;
     _turnNumber = dto.turnNumber;
   }
-  // --- End interface ---
 
   public void Autosave()
   {

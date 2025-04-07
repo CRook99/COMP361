@@ -22,10 +22,8 @@ namespace UI
         {
             Debug.Log("Load game");
             
-            // Indicate that we want to load the saved game state on the next scene load.
             GameState.Instance.PrepareForLoadGameState();
 
-            // Load the combat scene.
             SceneManager.LoadSceneAsync(COMBAT_SCENE);
         }
 

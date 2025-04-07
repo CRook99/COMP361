@@ -10,7 +10,7 @@ using Utility;
 using World;
 using Utility.Serialization;
 using Quaternion = UnityEngine.Quaternion;
-using Vector3 = UnityEngine.Vector3; // Contains IGameSerializable
+using Vector3 = UnityEngine.Vector3; 
 
 namespace Entities
 {
@@ -222,7 +222,7 @@ namespace Entities
 
         public virtual string Serialize() {
             EntityDTO data = new EntityDTO {
-                uniqueId = uniqueId, // include the unique ID
+                uniqueId = uniqueId, 
                 posX = transform.position.x,
                 posY = transform.position.y,
                 posZ = transform.position.z,
@@ -238,7 +238,6 @@ namespace Entities
             transform.position = new Vector3(data.posX, data.posY, data.posZ);
             CurrentHealth = data.health;
             Modifiers = data.modifiers;
-            // Restore other data here.
         }
     }
 }

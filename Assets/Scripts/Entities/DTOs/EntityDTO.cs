@@ -5,7 +5,7 @@ using Entities;
 
 [Serializable]
 public class EntityDTO {
-    public int uniqueId; // New field for the unique identifier
+    public int uniqueId; 
 
     public float posX;
     public float posY;

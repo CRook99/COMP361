@@ -24,10 +24,8 @@ public class GameState : MonoBehaviour
         }
     }
 
-    // Flag to control whether the save file should be loaded on scene load.
     private bool _loadGameStateOnSceneLoad = false;
 
-    // Call this method to request that the game state is loaded on the next combat scene load.
     public void PrepareForLoadGameState()
     {
         _loadGameStateOnSceneLoad = true;
@@ -47,12 +45,11 @@ public class GameState : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Only load the game state if we're in the target scene and the flag is set.
         if (scene.name == TARGET_SCENE && _loadGameStateOnSceneLoad)
         {
             Debug.Log("Scene '" + scene.name + "' loaded. Loading game state from save file...");
             LoadGameState("Save_File.json");
-            _loadGameStateOnSceneLoad = false; // Reset the flag after loading
+            _loadGameStateOnSceneLoad = false;
         }
     }
 
@@ -83,11 +80,9 @@ public class GameState : MonoBehaviour
             }
         }
 
-        // Wrap the dictionary into a serializable container for JsonUtility
         SerializationContainer container = new SerializationContainer(stateData);
         string json = JsonUtility.ToJson(container, true);
 
-        // Use Application.dataPath for saving files (original folder)
         string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
         if (!Directory.Exists(folderPath))
         {
@@ -102,10 +97,8 @@ public class GameState : MonoBehaviour
         Debug.Log("Game saved successfully to " + filePath);
     }
 
-    // For loading, pass in just the file name (e.g., "Save_File.json")
     public void LoadGameState(string fileName)
     {
-        // Use the original folder for loading
         string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
         string filePath = Path.Combine(folderPath, fileName);
         Debug.Log("Loading game state from: " + filePath);
