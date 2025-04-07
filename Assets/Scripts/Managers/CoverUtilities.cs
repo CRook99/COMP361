@@ -50,7 +50,6 @@ public static class CoverUtilities
             case OrthDir.W:
                 neighbour = target.W;
                 break;
-                //return target.W?.Cover ?? CoverTypes.NoCover;
             case OrthDir.S:
                 neighbour = target.S;
                 break;
@@ -63,6 +62,13 @@ public static class CoverUtilities
             default:
                 neighbour = target.N;
                 break;
+        }
+
+        // Empty tile in cover spot
+        if (neighbour == null)
+        {
+            coverObject = null;
+            return CoverTypes.NoCover;
         }
         
         RaycastHit hit;
