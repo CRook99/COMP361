@@ -5,6 +5,8 @@ using Entities;
 
 [Serializable]
 public class EntityDTO {
+    public int uniqueId; // New field for the unique identifier
+
     public float posX;
     public float posY;
     public float posZ;

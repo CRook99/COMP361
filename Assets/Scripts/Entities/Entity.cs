@@ -16,6 +16,13 @@ namespace Entities
 {
     public abstract class Entity : MonoBehaviour, IGameSerializable
     {
+        private static int nextAllyUniqueId = 0;
+        private static int nextEnemyUniqueId = 0;
+        private static int nextUniqueId = 0;
+
+        [SerializeField] private int uniqueId = -1; // default value
+        public int UniqueId => uniqueId;
+
         /** Speed that I move along my movement path. For movement range, Data.MovementRange */
         private const float MovementSpeed = 4f;
 
@@ -40,6 +47,26 @@ namespace Entities
 
         protected virtual void Awake()
         {
+            if (uniqueId < 0)
+            {
+                if (this is Ally)
+                {
+                    uniqueId = nextAllyUniqueId;
+                    nextAllyUniqueId++;
+                }
+                else if (this is Enemy)
+                {
+                    uniqueId = nextEnemyUniqueId;
+                    nextEnemyUniqueId++;
+                }
+                else
+                {
+                    // Fallback in case there are other types
+                    uniqueId = nextUniqueId;
+                    nextUniqueId++;
+                }
+            }
+
             CurrentHealth = Data.MaxHealth;
             TakeDamage(0); // Force widget refresh
             
@@ -195,6 +222,7 @@ namespace Entities
 
         public virtual string Serialize() {
             EntityDTO data = new EntityDTO {
+                uniqueId = uniqueId, // include the unique ID
                 posX = transform.position.x,
                 posY = transform.position.y,
                 posZ = transform.position.z,

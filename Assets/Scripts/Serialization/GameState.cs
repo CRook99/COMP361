@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utility.Serialization;
+
 [Serializable]
 public class GameState : MonoBehaviour
 {
@@ -22,41 +24,92 @@ public class GameState : MonoBehaviour
         }
     }
 
+    // Flag to control whether the save file should be loaded on scene load.
+    private bool _loadGameStateOnSceneLoad = false;
+
+    // Call this method to request that the game state is loaded on the next combat scene load.
+    public void PrepareForLoadGameState()
+    {
+        _loadGameStateOnSceneLoad = true;
+    }
+
+    private const string TARGET_SCENE = "Combat";
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Only load the game state if we're in the target scene and the flag is set.
+        if (scene.name == TARGET_SCENE && _loadGameStateOnSceneLoad)
+        {
+            Debug.Log("Scene '" + scene.name + "' loaded. Loading game state from save file...");
+            LoadGameState("Save_File.json");
+            _loadGameStateOnSceneLoad = false; // Reset the flag after loading
+        }
+    }
+
     public void SaveGameState(bool overwriteSave = true)
     {
-        IGameSerializable[] serializables = FindObjectsOfType<MonoBehaviour>().OfType<IGameSerializable>().ToArray();
+        IGameSerializable[] serializables = FindObjectsOfType<MonoBehaviour>()
+            .OfType<IGameSerializable>().ToArray();
 
         Dictionary<string, string> stateData = new Dictionary<string, string>();
         foreach (IGameSerializable serializable in serializables)
         {
-            string key = serializable.GetType().Name + "_" + serializable.GetHashCode();
+            string key;
+            if (serializable is Entities.Entity entity)
+            {
+                key = serializable.GetType().Name + "_" + entity.UniqueId;
+            }
+            else
+            {
+                key = serializable.GetType().Name;
+            }
             if (serializable.Validate())
             {
                 stateData[key] = serializable.Serialize();
-            }else{
+            }
+            else
+            {
                 Debug.LogWarning($"Failed to validate {key}");
             }
         }
 
-        // Wrap the dict into a serializable for JsonUtility
+        // Wrap the dictionary into a serializable container for JsonUtility
         SerializationContainer container = new SerializationContainer(stateData);
         string json = JsonUtility.ToJson(container, true);
 
-        string folderPath = System.IO.Path.Combine(Application.dataPath, "Scripts", "Serialization");
-        if (!System.IO.Directory.Exists(folderPath))
+        // Use Application.dataPath for saving files (original folder)
+        string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
+        if (!Directory.Exists(folderPath))
         {
-            System.IO.Directory.CreateDirectory(folderPath);
+            Directory.CreateDirectory(folderPath);
         }
+
         string filePath = overwriteSave ?
-            System.IO.Path.Combine(folderPath, "Save_File.json") :
-            System.IO.Path.Combine(folderPath, $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json");
-        
-        System.IO.File.WriteAllText(filePath, json);
+            Path.Combine(folderPath, "Save_File.json") :
+            Path.Combine(folderPath, $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json");
+
+        File.WriteAllText(filePath, json);
         Debug.Log("Game saved successfully to " + filePath);
     }
 
-    public void LoadGameState(string filePath)
+    // For loading, pass in just the file name (e.g., "Save_File.json")
+    public void LoadGameState(string fileName)
     {
+        // Use the original folder for loading
+        string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
+        string filePath = Path.Combine(folderPath, fileName);
+        Debug.Log("Loading game state from: " + filePath);
+
         if (!File.Exists(filePath))
         {
             Debug.LogError("Save file not found: " + filePath);
@@ -67,20 +120,21 @@ public class GameState : MonoBehaviour
         SerializationContainer container = JsonUtility.FromJson<SerializationContainer>(json);
         Dictionary<string, string> loadedData = container.stateData;
 
-        /*
-        foreach (var kvp in loadedData)
-        {
-            Debug.Log($"Loaded {kvp.Key}: {kvp.Value}");
-        }
-        */
-
         IGameSerializable[] serializables =
-            UnityEngine.Object.FindObjectsOfType<MonoBehaviour>().OfType<IGameSerializable>().ToArray();
+            UnityEngine.Object.FindObjectsOfType<MonoBehaviour>()
+            .OfType<IGameSerializable>().ToArray();
 
-        // deserialize
         foreach (IGameSerializable serializable in serializables)
         {
-            string key = serializable.GetType().Name + "_" + serializable.GetHashCode();
+            string key;
+            if (serializable is Entities.Entity entity)
+            {
+                key = serializable.GetType().Name + "_" + entity.UniqueId;
+            }
+            else
+            {
+                key = serializable.GetType().Name;
+            }
             if (loadedData.ContainsKey(key))
             {
                 serializable.Deserialize(loadedData[key]);
@@ -89,6 +143,5 @@ public class GameState : MonoBehaviour
 
         Debug.Log("Game state applied from loaded file.");
     }
-   
-}
 
+}
