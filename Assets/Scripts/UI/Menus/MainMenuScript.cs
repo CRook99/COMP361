@@ -7,6 +7,10 @@ namespace UI
 {
     public class MainMenuScript : MonoBehaviour
     {
+
+        private static readonly string COMBAT_SCENE = "Combat"; 
+
+
         public void OnClickNewGameButton()
         {
             Debug.Log("New game");
@@ -17,7 +21,10 @@ namespace UI
         public void OnClickLoadGameButton()
         {
             Debug.Log("Load game");
-            // Scene transition logic
+            
+            GameState.Instance.PrepareForLoadGameState();
+
+            SceneManager.LoadSceneAsync(COMBAT_SCENE);
         }
 
         public void OnClickExitButton()
