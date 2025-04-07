@@ -69,7 +69,8 @@ namespace Managers
             (Cell cell, Ally ally) = enemy.FindClosestVisibleAllyToShoot();
 
             // If ally null, then enemy will not shoot  
-            if (ally != null && cell != null)
+            if (enemy.IsDisarmed()) yield return null;
+            else if (ally != null && cell != null)
             {
                 yield return ShotManager.Instance.FireShotEnumerator(enemy, ally, cell);
             }

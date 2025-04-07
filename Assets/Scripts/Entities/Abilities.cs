@@ -35,7 +35,7 @@ namespace Entities{
         public void DisarmAbility(Entity entity)
         {
             if (entity is not Enemy enemy) return;
-            //TODO: Implementation
+            enemy.Disarm(EMP_DISARM);
         }
 
         public void DebugAbility(Entity entity)

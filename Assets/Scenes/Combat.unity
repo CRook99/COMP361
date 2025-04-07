@@ -27875,6 +27875,8 @@ MonoBehaviour:
   cursor: {fileID: 1437452045}
   Throwable: {fileID: 11400000, guid: 797adb0d08ba1d84fbd7449241e37786, type: 2}
   throwAOE: {fileID: 1061273385}
+  arcIndicator: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: -3963241562183589234, guid: 4cb9e7b421712124cb48a3b4d4194a8f, type: 3}
 --- !u!114 &696803300
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,8 +18,7 @@ namespace Entities
     private readonly int CoverWeight = 10;
     private readonly int LineOfSightInCoverWeight = 8;
     private readonly int isFlankedWeight = -10;
-
-    //public Transform CenterOfMass;
+    private int Disarmed = 0;
 
     // Get best cell the enemy should move based on current position
     public Cell GetBestMove()
@@ -88,7 +87,7 @@ namespace Entities
       return available;
     }
 
-    // Generates score for each cell depending on sime heuristics 
+    // Generates score for each cell depending on some heuristics 
     private float EvalCell(Cell cell, List<Cell> playerPositions)
     {
       if (cell == null)
@@ -222,6 +221,19 @@ namespace Entities
       EventManager.TriggerEvent(EventTypes.OnEnemyBeginMove, this);
       yield return base.FollowPath(path);
       EventManager.TriggerEvent(EventTypes.OnEnemyEndMove);
+    }
+
+    public void Disarm(int turns)
+    {
+      Disarmed = turns;
+    }
+
+    public bool IsDisarmed()
+    {
+      if (Disarmed == 0) return false;
+      Disarmed--;
+      Debug.Log("Enemy has " + Disarmed + " turns to go");
+      return true;
     }
 
     [ContextMenu("Kill Enemy Test")]

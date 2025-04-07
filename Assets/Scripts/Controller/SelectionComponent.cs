@@ -51,7 +51,7 @@ namespace Controller
 
         protected virtual void Update()
         {
-            if (_cursorLocked) return; //|| ModeSwitcher.CurrentMode != ControlMode.Selection
+            if (_cursorLocked) return;
             
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             _ray = _cam.ScreenPointToRay(mousePosition);

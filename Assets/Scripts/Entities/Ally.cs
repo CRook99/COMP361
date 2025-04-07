@@ -97,8 +97,6 @@ namespace Entities
             Actions.UseAction(ActionType.Ability);
             BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
             
-            //TODO: Probably going to want a parabolic throw arc here
-
             AbilityFunction ability;
             bool allies;
 
