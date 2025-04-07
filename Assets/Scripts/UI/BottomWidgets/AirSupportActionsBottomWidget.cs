@@ -22,6 +22,7 @@ namespace UI.BottomWidgets
         
         protected override void RefreshWidgets(object data)
         {
+            AirSupportManager.Instance.Actions.Refresh();
             foreach (ActionType action in _actionMap.Keys)
             {
                 if (AirSupportManager.Instance.Actions.CanUseAction(action))
