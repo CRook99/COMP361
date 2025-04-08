@@ -15,7 +15,7 @@ MonoBehaviour:
   title: Lightyear Boots
   type: 1
   description: Bonus 2 spaces movement range
-  image: {fileID: 21300000, guid: 6420891392ddec941a3b779bc46781ae, type: 3}
+  image: {fileID: 21300000, guid: 02097c2c03a4c46a1b3ec70584735d15, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 0

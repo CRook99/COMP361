@@ -15,7 +15,7 @@ MonoBehaviour:
   title: Hi-Guard Boots
   type: 1
   description: Reduce incoming damage by 15%
-  image: {fileID: 21300000, guid: c661314d0ebffd844ae93cf6586cc9df, type: 3}
+  image: {fileID: 21300000, guid: 183db6851790b4490ad4b38417c91dd4, type: 3}
   modifiers:
     PercentDamageReduction: 15
     PercentDamageReturnChance: 0
