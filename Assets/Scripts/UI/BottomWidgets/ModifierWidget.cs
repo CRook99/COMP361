@@ -43,10 +43,13 @@ public class ModifierWidget : MonoBehaviour
         if (modifiers.EvasionBonusPercent > 0)
             modifierText.text += $"Evasion Bonus: {modifiers.EvasionBonusPercent}%\n";
 
+        if (modifiers.PercentBonusWeaponDamage > 0)
+            modifierText.text += $"Damage Bonus: {modifiers.PercentBonusWeaponDamage}%\n";
+
         if (modifiers.BonusMovementRange > 0)
             modifierText.text += $"Bonus Movement: {modifiers.BonusMovementRange} tiles\n";
 
-        if (modifiers.AbilityCooldownTurnReduction > 0)
-            modifierText.text += $"Cooldown Reduction: {modifiers.AbilityCooldownTurnReduction} turns\n";
+        //if (modifiers.AbilityCooldownTurnReduction > 0)
+            //modifierText.text += $"Cooldown Reduction: {modifiers.AbilityCooldownTurnReduction} turns\n";
     }
 }

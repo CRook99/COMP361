@@ -7,8 +7,8 @@ namespace Entities
         public int PercentDamageReturnChance;
         public int PercentDamageReturnAmount;
         public int EvasionBonusPercent;
-
+        public int PercentBonusWeaponDamage;
         public int BonusMovementRange;
-        public int AbilityCooldownTurnReduction;
+        //public int AbilityCooldownTurnReduction;
     }
 }

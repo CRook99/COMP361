@@ -186,13 +186,14 @@ namespace Entities
         {
             if (amount == 0) return;
             
-            CurrentHealth -= amount;
+            int reducedAmount = Mathf.RoundToInt(amount * (1f - Modifiers.PercentDamageReduction / 100f));
+            CurrentHealth -= reducedAmount;
             CurrentHealth = Mathf.Max(CurrentHealth, 0);
             OnHealthChanged?.Invoke(CurrentHealth);
             
-            UIManager.Instance.DamageNumbers.Animate(transform.position, amount);
+            UIManager.Instance.DamageNumbers.Animate(transform.position, reducedAmount);
 
-            EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
+            EventManager.TriggerEvent(EventTypes.OnDamageTaken, reducedAmount); // stats manager
 
             if (CurrentHealth <= 0)
             {
@@ -212,6 +213,12 @@ namespace Entities
             Debug.Log($"{gameObject.name} died!");
 
             EventManager.TriggerEvent(EventTypes.OnAllyFallen); // stats manager
+        }
+
+        public int GetModifiedWeaponDamage()
+        {
+            float modifier = 1f + (Modifiers.PercentBonusWeaponDamage / 100f);
+            return Mathf.RoundToInt(Data.WeaponDamage * modifier);
         }
 
         // A public that function that checks if an obstacle exists between the current cell

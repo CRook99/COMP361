@@ -116,7 +116,7 @@ public class ShotManager : PlayerComponent
             {
                 if (hit)
                 {
-                    shot.Target.TakeDamage(shot.TotalDamage);
+                    shot.Target.TakeDamage(shot.Shooter.GetModifiedWeaponDamage());
                     shot.Shooter.TakeDamage(shot.ReturnDamage);
                 }
                 Destroy(projectile);
@@ -160,8 +160,8 @@ public class ShotManager : PlayerComponent
         // After the projectile reaches its target, handle hit logic
         if (hit)
         {
-            shot.Target.TakeDamage(shot.TotalDamage);
-            shot.Shooter.TakeDamage(shot.ReturnDamage);
+            shot.Target.TakeDamage(shot.Shooter.GetModifiedWeaponDamage());
+            shot.Shooter.TakeDamage(shot.ReturnDamage); 
         }
         Destroy(projectile);
         ReturnToNormalState(shot.Shooter);
