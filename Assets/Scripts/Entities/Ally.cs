@@ -148,7 +148,7 @@ namespace Entities
 
         private void OnEndEnemyTurn()
         {
-            Actions.Refresh();
+            Actions.Tick();
         }
 
         public void SetMoveMeshActive(bool toggle)

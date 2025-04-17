@@ -16,3 +16,4 @@ MonoBehaviour:
   Type: 4
   DisplayName: Airstrike
   WidgetType: 5
+  Cooldown: 2

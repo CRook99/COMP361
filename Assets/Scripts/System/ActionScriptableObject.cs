@@ -11,5 +11,6 @@ namespace System
         public ActionType Type;
         public string DisplayName;
         public EBottomWidget WidgetType;
+        public int Cooldown;
     }
 }

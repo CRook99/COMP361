@@ -6,6 +6,8 @@ namespace UI.BottomWidgets
 {
     public class EntityActionsBottomWidget : ActionsBottomWidget
     {
+        private Ally _currentAlly;
+        
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -24,16 +26,27 @@ namespace UI.BottomWidgets
         {
             if (data is not Ally activeAlly) return;
 
-            foreach (var item in _actionMap)
+            if (_currentAlly != null)
+                _currentAlly.Actions.OnCooldownChanged -= OnCooldownChanged;
+            activeAlly.Actions.OnCooldownChanged += OnCooldownChanged;
+            _currentAlly = activeAlly;
+
+            foreach (var kvp in _actionMap)
             {
-                if (activeAlly.Actions.CanUseAction(item.Key) && !item.Value.Active)
+                ActionType type = kvp.Key;
+                PrimaryActionWidget widget = kvp.Value;
+                
+                widget.UpdateCooldown(activeAlly.Actions.GetCooldown(type));
+                if (activeAlly.Actions.CanUseAction(type) && !widget.Active)
                 {
-                    item.Value.Activate();
+                    widget.Activate();
                 }
-                else if (!activeAlly.Actions.CanUseAction(item.Key) && item.Value.Active)
+                else if (!activeAlly.Actions.CanUseAction(type) && widget.Active)
                 {
-                    item.Value.Deactivate();
+                    widget.Deactivate();
                 }
+                
+                widget.UpdateCooldown(_currentAlly.Actions.GetCooldown(type));
             }
 
             _actionMap[ActionType.Ability].AbilityData = activeAlly.ChosenAbility;

@@ -16,3 +16,4 @@ MonoBehaviour:
   Type: 2
   DisplayName: Ability
   WidgetType: 2
+  Cooldown: 2

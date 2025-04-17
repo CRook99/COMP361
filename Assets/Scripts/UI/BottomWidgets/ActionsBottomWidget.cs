@@ -44,7 +44,15 @@ namespace UI.BottomWidgets
 
             if (_actionMap.TryGetValue(type, out PrimaryActionWidget widget))
             {
-                _actionMap[type].Deactivate();
+                widget.Deactivate();
+            }
+        }
+
+        protected void OnCooldownChanged(ActionType type, int cooldown)
+        {
+            if (_actionMap.TryGetValue(type, out var widget))
+            {
+                widget.UpdateCooldown(cooldown);
             }
         }
 
