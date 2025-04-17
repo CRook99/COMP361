@@ -13,16 +13,12 @@ namespace UI.BottomWidgets
             base.OnEnable();
             
             EventManager.Subscribe(EventTypes.OnEndEnemyTurn, RefreshWidgets);
-
-            
         }
 
         private void Start()
         {
             if (AirSupportManager.Instance != null)
             {
-                Debug.Log("hi");
-                //AirSupportManager.Instance.Actions.OnCooldownChanged += OnCooldownChanged;
                 AirSupportManager.Instance.Actions.OnUseAction += OnUseAction;
             }
         }

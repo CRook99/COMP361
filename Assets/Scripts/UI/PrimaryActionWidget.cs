@@ -73,8 +73,7 @@ namespace UI
         public void UpdateCooldown(int cooldown)
         {
             if (cooldownPanel == null || cooldownText == null) return;
-
-            Debug.Log("uc");
+            
             if (cooldown > 0)
             {
                 cooldownPanel.SetActive(true);
