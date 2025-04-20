@@ -52,5 +52,12 @@ namespace UI.BottomWidgets
             _actionMap[ActionType.Ability].AbilityData = activeAlly.ChosenAbility;
             _actionMap[ActionType.Ability].RefreshGraphics();
         }
+
+        public override void Open()
+        {
+            base.Open();
+            
+            EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, ControlMode.StandardMove);
+        }
     }
 }

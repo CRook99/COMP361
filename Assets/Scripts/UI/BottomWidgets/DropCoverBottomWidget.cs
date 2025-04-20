@@ -1,4 +1,5 @@
 using System;
+using Controller;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -59,7 +60,7 @@ namespace UI.BottomWidgets
                 Debug.LogWarning("Drop cover target cell was null");
                 return;
             }
-            
+
             dropCoverManager.HandleDropCover(target);
         }
     }

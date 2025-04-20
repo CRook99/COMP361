@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Controller;
 using Entities;
 using Managers;
 using UnityEngine;
@@ -57,6 +58,13 @@ namespace UI.BottomWidgets
                 
                 widget.UpdateCooldown(AirSupportManager.Instance.Actions.GetCooldown(type));
             }
+        }
+        
+        public override void Open()
+        {
+            base.Open();
+            
+            EventManager.TriggerEvent(EventTypes.OnPlayerChangeMode, ControlMode.AirSupportMove);
         }
     }
 }

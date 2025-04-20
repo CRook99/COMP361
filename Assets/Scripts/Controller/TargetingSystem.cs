@@ -77,7 +77,7 @@ namespace Controller
                 return;
             }
 
-            ModeSwitcher.SwitchMode(ControlMode.Selection);
+            //ModeSwitcher.SwitchMode(ControlMode.Selection);
             _aiming = true;
             _currentTargetIndex = 0;
 
@@ -86,7 +86,7 @@ namespace Controller
 
         private void ExitWeaponMode()
         {
-            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
+            //ModeSwitcher.SwitchMode(ControlMode.StandardMove);
             _aiming = false;
             reticle.Hide();
         }

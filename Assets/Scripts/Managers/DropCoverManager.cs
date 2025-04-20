@@ -24,9 +24,13 @@ namespace Managers
             _camera = Camera.main.transform;
         }
 
-        public void HandleDropCover(Cell target)
+        public bool HandleDropCover(Cell target)
         {
+            if (TacticsGrid.Instance.GetCell(target.Position).Walkable)
+                return false;
+            
             StartCoroutine(DropSequence(target));
+            return true;
         }
 
         private IEnumerator DropSequence(Cell target)

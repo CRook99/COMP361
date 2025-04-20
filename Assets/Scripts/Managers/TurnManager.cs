@@ -120,6 +120,7 @@ public class TurnManager : MonoBehaviour, IGameSerializable
 
     if (endTurnButton == null) return;
 
+    Debug.Log(mode);
     endTurnButton.interactable = mode != ControlMode.Selection;
   }
 
