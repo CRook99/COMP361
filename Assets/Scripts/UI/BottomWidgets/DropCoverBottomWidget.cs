@@ -56,8 +56,7 @@ namespace UI.BottomWidgets
             Cell target = AirSupportManager.Instance.GetHoveredCell();
             if (target == null)
             {
-                // TODO hint manager
-                Debug.LogWarning("Drop cover target cell was null");
+                HintManager.Instance.Hint("Can't drop cover here!", HintLevel.Error);
                 return;
             }
 

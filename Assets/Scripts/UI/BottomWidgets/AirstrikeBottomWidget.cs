@@ -57,8 +57,7 @@ namespace UI.BottomWidgets
             Cell target = AirSupportManager.Instance.GetHoveredCell();
             if (target == null)
             {
-                // TODO hint manager
-                Debug.LogWarning("Airstrike target cell was null");
+                HintManager.Instance.Hint("Can't airstrike here!", HintLevel.Error);
                 return;
             }
             

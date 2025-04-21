@@ -51,9 +51,15 @@ namespace Entities
 
         public override void TryMoveToCell(Cell destination)
         {
-            if (!Actions.CanUseAction(ActionType.Move) || !_reachableCells.Contains(destination))
+            if (!Actions.CanUseAction(ActionType.Move))
             {
-                // Handle unable
+                HintManager.Instance.Hint("Already moved with this soldier!", HintLevel.Error);
+                return;
+            }
+
+            if (!_reachableCells.Contains(destination))
+            {
+                HintManager.Instance.Hint("Cannot reach this tile!", HintLevel.Error);
                 return;
             }
             
@@ -86,9 +92,15 @@ namespace Entities
 
         public void TryThrow(ThrowableScriptableObject throwable, Cell destination, HashSet<Cell> area)
         {
-            if (!Actions.CanUseAction(ActionType.Ability) || !_reachableCells.Contains(destination))
+            if (!Actions.CanUseAction(ActionType.Ability))
             {
-                // Handle unable
+                HintManager.Instance.Hint("You can't use that right now.", HintLevel.Error);
+                return;
+            }
+
+            if (!_reachableCells.Contains(destination))
+            {
+                HintManager.Instance.Hint("Target cell is out of range", HintLevel.Error);
                 return;
             }
             
