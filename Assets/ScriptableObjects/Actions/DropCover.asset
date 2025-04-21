@@ -16,3 +16,4 @@ MonoBehaviour:
   Type: 3
   DisplayName: Drop Cover
   WidgetType: 4
+  Cooldown: 2

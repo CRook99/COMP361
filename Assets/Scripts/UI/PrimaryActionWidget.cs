@@ -19,6 +19,8 @@ namespace UI
         [SerializeField] private Image bar;
         [SerializeField] private Button button;
         [SerializeField] private Color inactiveColor;
+        [SerializeField] private GameObject cooldownPanel;
+        [SerializeField] private TextMeshProUGUI cooldownText;
         
         public ActionScriptableObject Data;
         public AbilityScriptableObject AbilityData; // Will be null for non-abilities
@@ -31,6 +33,11 @@ namespace UI
             icon.sprite = Data.Icon;
             text.text = Data.DisplayName;
             _active = true;
+
+            if (cooldownPanel != null)
+            {
+                cooldownPanel.SetActive(false);
+            }
 
             if (Data.Type == ActionType.Move)
             {
@@ -48,6 +55,11 @@ namespace UI
             icon.rectTransform.DOAnchorPosY(activePosition.anchoredPosition.y, SwitchTime).SetEase(Ease.Linear);
             icon.color = Color.white;
             _active = true;
+
+            if (cooldownPanel != null)
+            {
+                cooldownPanel.SetActive(false);
+            }
         }
         
         public void Deactivate()
@@ -56,6 +68,22 @@ namespace UI
             icon.rectTransform.DOAnchorPosY(inactivePosition.anchoredPosition.y, SwitchTime).SetEase(Ease.Linear);
             icon.color = inactiveColor;
             _active = false;
+        }
+
+        public void UpdateCooldown(int cooldown)
+        {
+            if (cooldownPanel == null || cooldownText == null) return;
+            
+            if (cooldown > 0)
+            {
+                cooldownPanel.SetActive(true);
+                cooldownText.text = cooldown.ToString();
+                Deactivate();
+            }
+            else
+            {
+                cooldownPanel.SetActive(false);
+            }
         }
 
         // Only to be called by ability widget

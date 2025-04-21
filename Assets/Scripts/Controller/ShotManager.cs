@@ -31,6 +31,7 @@ public class ShotManager : PlayerComponent
     public void FireShot(Entity shooter, Entity target)
     {
         if (shooter == null || target == null) return;
+        HintManager.Instance.FulfilTutorial(TutorialSteps.Shooting);
         ShotData shot = CreateShotData(shooter, target, shooter.CurrentCell);
         StartCoroutine(FireSequence(shot));
     }

@@ -29,17 +29,6 @@ namespace Controller
             {
                 HighlightTarget(_validTargets[_currentTargetIndex]);
             }
-
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
-                _aiming = true;
-            }
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming); // TODO: Handle last valid enemy killed
-                _aiming = false;
-            }
         }
 
         private void Start()

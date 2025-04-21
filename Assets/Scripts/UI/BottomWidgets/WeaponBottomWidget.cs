@@ -1,3 +1,4 @@
+using Controller;
 using Entities;
 using Managers;
 using TMPro;
@@ -31,6 +32,8 @@ namespace UI.BottomWidgets
             base.Open();
             
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
+            
+            HintManager.Instance.ActivateTutorial(TutorialSteps.Shooting);
         }
 
         private void OnClickBackButton()

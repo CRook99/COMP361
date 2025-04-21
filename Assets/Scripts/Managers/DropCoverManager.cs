@@ -26,7 +26,14 @@ namespace Managers
 
         public void HandleDropCover(Cell target)
         {
+            if (!TacticsGrid.Instance.GetCell(target.Position).Walkable)
+            {
+                HintManager.Instance.Hint("Can't drop cover on this cell", HintLevel.Normal);
+                return;
+            }
+
             StartCoroutine(DropSequence(target));
+            return;
         }
 
         private IEnumerator DropSequence(Cell target)

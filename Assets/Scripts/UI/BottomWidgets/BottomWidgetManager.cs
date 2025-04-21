@@ -59,28 +59,20 @@ namespace UI.BottomWidgets
             EventManager.Unsubscribe(EventTypes.OnCameraModeChanged, OnCameraModeChanged);
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F1))
-            {
-                Show(EBottomWidget.Weapon);
-            }
-            else if (Input.GetKeyDown(KeyCode.F2))
-            {
-                Show(EBottomWidget.Ability);
-            }
-            else if (Input.GetKeyDown(KeyCode.F3))
-            {
-                Show((EBottomWidget.Movement));
-            }
-        }
-
         public void Show(EBottomWidget type)
         {
-            if (!_widgets.ContainsKey(type)) return;
+            if (!_widgets.ContainsKey(type))
+            {
+                Debug.LogWarning($"BottomWidgetManager did not contain key {type}");
+                return;
+            }
 
             var newWidget = _widgets[type];
-            if (!newWidget.CanOpen()) return;
+            if (!newWidget.CanOpen())
+            {
+                HintManager.Instance.Hint("Can't use this right now!", HintLevel.Normal);
+                return;
+            }
             
             if (_activeWidget != null) _activeWidget.Close();
             _activeWidget = _widgets[type];

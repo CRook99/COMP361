@@ -69,7 +69,6 @@ namespace Controller
 
             _currentZoom = startingZoom;
             _mode = CameraMode.Standard;
-            Switch();
         }
 
         private void Start()
@@ -82,7 +81,8 @@ namespace Controller
             _playerInput.Combat.ZoomCamera.performed += ZoomCamera;
 
             _playerInput.Combat.Enable();
-
+            
+            StartCoroutine(Switch());
         }
 
         private void OnEnable()
@@ -129,12 +129,13 @@ namespace Controller
             if (_isRotating || brain.IsBlending || ModeSwitcher.CurrentMode != ControlMode.StandardMove) return;
 
             _mode = _mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard;
-            Switch();
+            StartCoroutine(Switch());
             EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, _mode);
         }
 
-        private void Switch()
+        private IEnumerator Switch()
         {
+            _playerInput.Disable();
             if (_mode == CameraMode.Standard)
             {
                 _activeConfig = standardConfig;
@@ -153,6 +154,9 @@ namespace Controller
             // Match zoom between modes
             _currentZoom = Mathf.Clamp(_currentZoom, _activeConfig.MinZoomDistance, _activeConfig.MaxZoomDistance);
             _activeTransposer.m_FollowOffset = _activeConfig.Offset.normalized * _currentZoom;
+
+            yield return new WaitForSeconds(0.5f);
+            _playerInput.Enable();
         }
 
         private void HandleMovement()

@@ -53,6 +53,7 @@ namespace Managers
                         if (enemy.CurrentCell == target)
                         {
                             enemy.TakeDamage(StrikeDamage);
+                            break;
                         }
                     }
 

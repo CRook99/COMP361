@@ -18,7 +18,6 @@ namespace Controller
     public class ModeSwitcher : PlayerComponent
     {
         public ControlMode CurrentMode;
-        //public ActionType CurrentMode;
 
         private void Awake()
         {

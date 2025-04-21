@@ -51,15 +51,22 @@ namespace Entities
 
         public override void TryMoveToCell(Cell destination)
         {
-            if (!Actions.CanUseAction(ActionType.Move) || !_reachableCells.Contains(destination))
+            if (!Actions.CanUseAction(ActionType.Move))
             {
-                // Handle unable
+                HintManager.Instance.Hint("Already moved with this soldier!", HintLevel.Error);
+                return;
+            }
+
+            if (!_reachableCells.Contains(destination))
+            {
+                HintManager.Instance.Hint("Cannot reach this tile!", HintLevel.Error);
                 return;
             }
             
             EventManager.TriggerEvent(EventTypes.OnPlayerUseAction, ActionType.Move);
             _moveArea.Hide();
             Actions.UseAction(ActionType.Move);
+            HintManager.Instance.FulfilTutorial(TutorialSteps.Movement);
             StartCoroutine(MoveToCell(destination));
         }
 
@@ -86,9 +93,15 @@ namespace Entities
 
         public void TryThrow(ThrowableScriptableObject throwable, Cell destination, HashSet<Cell> area)
         {
-            if (!Actions.CanUseAction(ActionType.Ability) || !_reachableCells.Contains(destination))
+            if (!Actions.CanUseAction(ActionType.Ability))
             {
-                // Handle unable
+                HintManager.Instance.Hint("You can't use that right now.", HintLevel.Error);
+                return;
+            }
+
+            if (!_reachableCells.Contains(destination))
+            {
+                HintManager.Instance.Hint("Target cell is out of range", HintLevel.Error);
                 return;
             }
             
@@ -148,13 +161,20 @@ namespace Entities
 
         private void OnEndEnemyTurn()
         {
-            Actions.Refresh();
+            Actions.Tick();
         }
 
         public void SetMoveMeshActive(bool toggle)
         {
-            if (toggle) _moveArea.Show();
+            if (toggle && Actions.CanUseAction(ActionType.Move)) _moveArea.Show();
             else _moveArea.Hide();
+        }
+        
+        public override void TakeDamage(int amount)
+        {
+            base.TakeDamage(amount);
+      
+            EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
         }
 
         private void LoadEquipment()

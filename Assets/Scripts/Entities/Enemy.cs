@@ -244,11 +244,13 @@ namespace Entities
         
         // Destroys Enemy Object
         Destroy(gameObject);
+    }
 
-        if(GameManager.Enemies.Count == 0) {
-            Debug.Log($"All Enemies are dead!!!");
-            SceneManager.LoadSceneAsync("Results");
-        }
+    public override void TakeDamage(int amount)
+    {
+      base.TakeDamage(amount);
+      
+      EventManager.TriggerEvent(EventTypes.OnDamageDealt, amount); // stats manager
     }
   }
 }
