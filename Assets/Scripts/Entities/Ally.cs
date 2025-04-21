@@ -153,8 +153,15 @@ namespace Entities
 
         public void SetMoveMeshActive(bool toggle)
         {
-            if (toggle) _moveArea.Show();
+            if (toggle && Actions.CanUseAction(ActionType.Move)) _moveArea.Show();
             else _moveArea.Hide();
+        }
+        
+        public override void TakeDamage(int amount)
+        {
+            base.TakeDamage(amount);
+      
+            EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
         }
 
         private void LoadEquipment()

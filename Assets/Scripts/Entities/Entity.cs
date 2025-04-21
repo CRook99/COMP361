@@ -182,7 +182,7 @@ namespace Entities
             return (null, -1);
         }
 
-        public void TakeDamage(int amount)
+        public virtual void TakeDamage(int amount)
         {
             if (amount == 0) return;
             
@@ -191,8 +191,6 @@ namespace Entities
             OnHealthChanged?.Invoke(CurrentHealth);
             
             UIManager.Instance.DamageNumbers.Animate(transform.position, amount);
-
-            EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
 
             if (CurrentHealth <= 0)
             {

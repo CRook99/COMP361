@@ -15,18 +15,24 @@ namespace Entities
 
     public class ActionState
     {
+        public bool CanUse;
         public int CurrentCooldown { get; set; }
         public int MaxCooldown { get; }
-        
+
         public ActionState(int maxCooldown)
         {
+            CanUse = true;
             CurrentCooldown = 0;
             MaxCooldown = maxCooldown;
         }
 
-        public bool CanUse => CurrentCooldown <= 0;
         public bool HasCooldown => MaxCooldown != 0;
-        public void Use() => CurrentCooldown = MaxCooldown;
+
+        public void Use()
+        {
+            if (HasCooldown) CurrentCooldown = MaxCooldown;
+            CanUse = false;
+        }
     }
     
     /**
@@ -83,10 +89,19 @@ namespace Entities
                 ActionType type = kvp.Key;
                 ActionState state = kvp.Value;
 
-                if (!state.CanUse)
+                if (state.HasCooldown)
                 {
-                    state.CurrentCooldown--;
-                    OnCooldownChanged?.Invoke(type, state.CurrentCooldown);
+                    if (!state.CanUse)
+                    {
+                        state.CurrentCooldown--;
+                        OnCooldownChanged?.Invoke(type, state.CurrentCooldown);
+                    }
+                    
+                    state.CanUse = state.CurrentCooldown <= 0;
+                }
+                else
+                {
+                    state.CanUse = true;
                 }
                 
                 if (state.CanUse)

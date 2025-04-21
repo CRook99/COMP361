@@ -108,7 +108,7 @@ namespace Controller
             if (ability is ThrowableScriptableObject)
                 Throwable = (ThrowableScriptableObject) ability;
             
-            //ModeSwitcher.SwitchMode(ControlMode.Selection);
+            ModeSwitcher.SwitchMode(ControlMode.Selection);
             ActiveAllyController.ActiveAlly.EnableThrow(Throwable.ThrowRadius, out _throwableCells); // Placeholder value
             throwAOE.Show();
         }
@@ -117,7 +117,7 @@ namespace Controller
         {
             _active = false;
             
-            //ModeSwitcher.SwitchMode(ControlMode.StandardMove);
+            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
             ActiveAllyController.ActiveAlly.DisableThrow();
             throwAOE.Hide();
         }

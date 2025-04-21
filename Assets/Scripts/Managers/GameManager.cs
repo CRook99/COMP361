@@ -7,6 +7,7 @@ using Managers;
 using UnityEngine;
 using World;
 using System.IO;
+using UnityEngine.SceneManagement;
 using Utility.Serialization;
 
 public class GameManager : MonoBehaviour
@@ -66,6 +67,22 @@ public class GameManager : MonoBehaviour
     public void RemoveEnemy(object data) {
         if (data is not Enemy enemy) return;
         Enemies.Remove(enemy);
+
+        if (Enemies.Count == 0)
+        {
+            StartCoroutine(VictorySequence());
+        }
+    }
+
+    private IEnumerator VictorySequence()
+    {
+        Debug.Log($"All Enemies are dead!!!");
+        InputManager.Instance.PlayerInput.Disable();
+        yield return new WaitForSeconds(1f);
+        
+        // Show victory message
+        
+        SceneManager.LoadSceneAsync("Results");
     }
 
     // Temporary method to demonstrate json serialization
@@ -84,6 +101,14 @@ public class GameManager : MonoBehaviour
                 TurnManager.Instance.StartEnemyTurn();
             }else{
                 TurnManager.Instance.StartAllyTurn();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            foreach (Enemy enemy in Enemies)
+            {
+                enemy.TakeDamage(90);
             }
         }
     }

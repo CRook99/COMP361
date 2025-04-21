@@ -29,17 +29,6 @@ namespace Controller
             {
                 HighlightTarget(_validTargets[_currentTargetIndex]);
             }
-
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
-                _aiming = true;
-            }
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                EventManager.TriggerEvent(EventTypes.OnPlayerEndAiming); // TODO: Handle last valid enemy killed
-                _aiming = false;
-            }
         }
 
         private void Start()
@@ -77,7 +66,7 @@ namespace Controller
                 return;
             }
 
-            //ModeSwitcher.SwitchMode(ControlMode.Selection);
+            ModeSwitcher.SwitchMode(ControlMode.Selection);
             _aiming = true;
             _currentTargetIndex = 0;
 
@@ -86,7 +75,7 @@ namespace Controller
 
         private void ExitWeaponMode()
         {
-            //ModeSwitcher.SwitchMode(ControlMode.StandardMove);
+            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
             _aiming = false;
             reticle.Hide();
         }

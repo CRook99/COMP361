@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,17 @@ public class StatisticsManager : MonoBehaviour, IGameSerializable
     private int damageReceived = 0;
     private int shotsTaken = 0;
     private int chanceShotsDodged = 0;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     // Subscribe
     private void OnEnable()
