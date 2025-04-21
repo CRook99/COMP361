@@ -12,6 +12,27 @@ namespace Managers
         Normal,
         Error,
     }
+
+    public enum TutorialSteps
+    {
+        Movement,
+        Allies,
+        Shooting,
+        Ability,
+        DropCover,
+        Airstrike,
+        Enemies,
+        None
+    }
+
+    [System.Serializable]
+    public class TutorialItem
+    {
+        public TutorialSteps Step;
+        public TutorialSteps NextStep;
+        [TextArea] public string Message;
+        [HideInInspector] public bool Fulfilled;
+    }
     
     public class HintManager : MonoBehaviour
     {
@@ -27,6 +48,8 @@ namespace Managers
             { HintLevel.Normal, Color.white },
             { HintLevel.Error, Color.yellow }
         };
+
+        [SerializeField] private List<TutorialItem> _tutorial;
         
         private void Awake()
         {
@@ -35,7 +58,7 @@ namespace Managers
             else
                 Instance = this;
             
-            Hint("Move by Right Clicking a cell\nTry to stay in cover!", HintLevel.Normal, persistent:true);
+            ActivateTutorial(TutorialSteps.Movement);
         }
 
         public void Hint(string message, HintLevel level, float duration = DefaultDuration, bool persistent = false)
@@ -54,6 +77,37 @@ namespace Managers
                 .AppendInterval(duration)
                 .Append(CanvasGroup.DOFade(0f, FadeDuration).SetEase(Ease.OutQuad))
                 .OnComplete(() => CanvasGroup.alpha = 0f);
+        }
+
+        public void ActivateTutorial(TutorialSteps step)
+        {
+            TutorialItem item = _tutorial.Find(i => i.Step == step);
+            if (item == null) return;
+            if (item.Fulfilled)
+            {
+                ClearHint();
+                return;
+            }
+            Hint(item.Message, HintLevel.Normal, persistent:true);
+        }
+
+        public void FulfilTutorial(TutorialSteps step)
+        {
+            TutorialItem item = _tutorial.Find(i => i.Step == step);
+            if (item == null) return;
+            
+            item.Fulfilled = true;
+            ClearHint();
+
+            if (item.NextStep != TutorialSteps.None)
+            {
+                ActivateTutorial(item.NextStep);
+            }
+        }
+
+        public void ClearHint()
+        {
+            CanvasGroup.alpha = 0f;
         }
     }
 }

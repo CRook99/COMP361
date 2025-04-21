@@ -21,6 +21,13 @@ namespace UI.BottomWidgets
             
             EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, RefreshWidgets);
         }
+
+        public override void Open()
+        {
+            base.Open();
+            
+            HintManager.Instance.ActivateTutorial(TutorialSteps.Movement);
+        }
         
         protected override void RefreshWidgets(object data)
         {

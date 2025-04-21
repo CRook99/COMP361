@@ -32,6 +32,8 @@ namespace UI.BottomWidgets
             base.Open();
             
             EventManager.TriggerEvent(EventTypes.OnPlayerBeginAiming);
+            
+            HintManager.Instance.ActivateTutorial(TutorialSteps.Shooting);
         }
 
         private void OnClickBackButton()

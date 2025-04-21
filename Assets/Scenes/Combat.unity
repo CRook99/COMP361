@@ -35882,11 +35882,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1726827955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 100}
-  m_Pivot: {x: 1, y: 1}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &890160032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70116,7 +70116,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -20, y: -20}
-  m_SizeDelta: {x: 500, y: 100}
+  m_SizeDelta: {x: 600, y: 150}
   m_Pivot: {x: 1, y: 1}
 --- !u!225 &1726827956
 CanvasGroup:
@@ -70144,6 +70144,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CanvasGroup: {fileID: 1726827956}
   Text: {fileID: 890160032}
+  _tutorial:
+  - Step: 0
+    NextStep: 1
+    Message: 'Move by Right Clicking a cell
+
+      Try to stay in cover!'
+    Fulfilled: 0
+  - Step: 1
+    NextStep: 7
+    Message: 'Change soldier with TAB/SHIFT
+
+      Check their status on the left!'
+    Fulfilled: 0
+  - Step: 2
+    NextStep: 7
+    Message: Cycle targets with TAB/SHIFT
+    Fulfilled: 0
 --- !u!1001 &1727142032
 PrefabInstance:
   m_ObjectHideFlags: 0
