@@ -104,9 +104,16 @@ public class ShotManager : PlayerComponent
         else
         {
             targetPos = shot.CoverObject.transform.Find("CenterOfMass").position;
+            
+            // stats manager
+            if (shot.Cover == CoverTypes.HalfCover)
+             {
+                EventManager.TriggerEvent(EventTypes.OnChanceShotDodged, 1);
+            }
         }
 
         shot.Shooter.Actions.UseAction(ActionType.Weapon);
+        EventManager.TriggerEvent(EventTypes.OnShotTaken, 1);   // stats manager
         
         GameObject projectile = Instantiate(projectilePrefab, shooterPos, Quaternion.identity);
         float duration = Vector3.Distance(shot.Shooter.transform.position, shot.Target.transform.position) /
@@ -117,6 +124,7 @@ public class ShotManager : PlayerComponent
             {
                 if (hit)
                 {
+                    EventManager.TriggerEvent(EventTypes.OnShotLanded, 1);  // stats manager
                     shot.Target.TakeDamage(shot.TotalDamage);
                     shot.Shooter.TakeDamage(shot.ReturnDamage);
                 }
@@ -144,9 +152,16 @@ public class ShotManager : PlayerComponent
         else
         {
             targetPos = shot.CoverObject.transform.Find("CenterOfMass").position;
+
+            // stats manager
+            if (shot.Cover == CoverTypes.HalfCover)
+             {
+                EventManager.TriggerEvent(EventTypes.OnChanceShotDodged, 1);
+            }
         }
 
         shot.Shooter.Actions.UseAction(ActionType.Weapon);
+        EventManager.TriggerEvent(EventTypes.OnShotTaken, 1);   // stats manager
         
         GameObject projectile = Instantiate(projectilePrefab, shooterPos, Quaternion.identity);
         float duration = Vector3.Distance(shot.Shooter.transform.position, shot.Target.transform.position) / projectileSpeed;
@@ -161,6 +176,7 @@ public class ShotManager : PlayerComponent
         // After the projectile reaches its target, handle hit logic
         if (hit)
         {
+            EventManager.TriggerEvent(EventTypes.OnShotLanded, 1);   // stats manager
             shot.Target.TakeDamage(shot.TotalDamage);
             shot.Shooter.TakeDamage(shot.ReturnDamage);
         }
