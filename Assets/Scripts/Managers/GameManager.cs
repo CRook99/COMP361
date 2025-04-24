@@ -62,16 +62,22 @@ public class GameManager : MonoBehaviour
     {
         if (data is not Enemy enemy) return;
         Enemies.Add(enemy);
+        UpdateEnemiesAliveCounter();
     }
 
     public void RemoveEnemy(object data) {
         if (data is not Enemy enemy) return;
         Enemies.Remove(enemy);
 
+        UpdateEnemiesAliveCounter();
         if (Enemies.Count == 0)
         {
             StartCoroutine(VictorySequence());
         }
+    }
+
+    private void UpdateEnemiesAliveCounter() {
+        EventManager.TriggerEvent(EventTypes.OnUpdateEnemyCount, Enemies.Count);
     }
 
     private IEnumerator VictorySequence()

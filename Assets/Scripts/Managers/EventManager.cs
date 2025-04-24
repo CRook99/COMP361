@@ -32,6 +32,7 @@ namespace Managers
         OnPlayerEndAbility,
         // Begin stats
         OnEnemyKilled,
+        OnUpdateEnemyCount,
         OnDamageDealt,
         OnShotLanded,
         OnSpaceMoved,
