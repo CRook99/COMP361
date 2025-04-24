@@ -5,6 +5,7 @@ using Controller;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -43,12 +44,8 @@ namespace UI
 
         public void OnSaveAndQuitButtonClicked()
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else          
-            // TODO Serialize here
-            Application.Quit();
-#endif
+            GameState.Instance.SaveGameState(overwriteSave:false);
+            SceneManager.LoadSceneAsync("MainMenu");
         }
     }
 }

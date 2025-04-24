@@ -25,10 +25,12 @@ public class GameState : MonoBehaviour
     }
 
     private bool _loadGameStateOnSceneLoad = false;
+    private string _fileToLoad;
 
-    public void PrepareForLoadGameState()
+    public void PrepareForLoadGameState(string filename)
     {
         _loadGameStateOnSceneLoad = true;
+        _fileToLoad = filename;
     }
 
     private const string TARGET_SCENE = "Combat";
@@ -45,10 +47,10 @@ public class GameState : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == TARGET_SCENE && _loadGameStateOnSceneLoad)
+        if (scene.name == TARGET_SCENE && _loadGameStateOnSceneLoad && _fileToLoad.Length != 0)
         {
             Debug.Log("Scene '" + scene.name + "' loaded. Loading game state from save file...");
-            LoadGameState("Save_File.json");
+            LoadGameState(_fileToLoad);
             _loadGameStateOnSceneLoad = false;
         }
     }
@@ -83,15 +85,15 @@ public class GameState : MonoBehaviour
         SerializationContainer container = new SerializationContainer(stateData);
         string json = JsonUtility.ToJson(container, true);
 
-        string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
-        if (!Directory.Exists(folderPath))
-        {
-            Directory.CreateDirectory(folderPath);
-        }
+        // string folderPath = Path.Combine(Application.persistentDataPath, "Scripts", "Serialization");
+        // if (!Directory.Exists(folderPath))
+        // {
+        //     Directory.CreateDirectory(folderPath);
+        // }
 
         string filePath = overwriteSave ?
-            Path.Combine(folderPath, "Save_File.json") :
-            Path.Combine(folderPath, $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json");
+            Path.Combine(Application.persistentDataPath, "Autosave.json") :
+            Path.Combine(Application.persistentDataPath, $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json");
 
         File.WriteAllText(filePath, json);
         Debug.Log("Game saved successfully to " + filePath);
@@ -99,8 +101,8 @@ public class GameState : MonoBehaviour
 
     public void LoadGameState(string fileName)
     {
-        string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
-        string filePath = Path.Combine(folderPath, fileName);
+        //string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
+        string filePath = Path.Combine(Application.persistentDataPath, fileName);
         Debug.Log("Loading game state from: " + filePath);
 
         if (!File.Exists(filePath))
