@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9d3b9987e5452e9a3de55ff0fc22b6, type: 3}
   m_Name: Move
   m_EditorClassIdentifier: 
-  Icon: {fileID: 21300000, guid: c8b9c9cda5a98d840bf069ad820e62f5, type: 3}
+  Icon: {fileID: 21300000, guid: b31549829d09ef7499d37c108afda009, type: 3}
   Type: 0
   DisplayName: Movement
   WidgetType: 0
+  Cooldown: 0
