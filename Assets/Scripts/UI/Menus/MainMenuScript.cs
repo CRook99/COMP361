@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Transform = UnityEngine.Transform;
 
 namespace UI
 {
@@ -63,6 +64,23 @@ namespace UI
         public void CloseSavePopup()
         {
             SavePopup.SetActive(false);
+        }
+
+        public void ClearSaves()
+        {
+            string[] files = Directory.GetFiles(Application.persistentDataPath, "*.json");
+
+            foreach (string file in files)
+            {
+                File.Delete(file);
+            }
+
+            foreach (Transform t in SavePopupContent.transform)
+            {
+                if (t == SavePopupContent.transform) continue;
+                
+                Destroy(t.gameObject);
+            }
         }
 
         public void OnClickSaveItem(string saveName)
