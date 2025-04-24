@@ -153,6 +153,16 @@ namespace Entities
             base.TakeDamage(amount);
       
             EventManager.TriggerEvent(EventTypes.OnDamageTaken, amount); // stats manager
+            
+            if (CurrentHealth <= 0)
+                Die();
+        }
+
+        protected override void Die()
+        {
+            EventManager.TriggerEvent(EventTypes.OnAllyFallen, this); // stats manager
+            
+            base.Die();
         }
 
         private void LoadEquipment()

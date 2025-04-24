@@ -243,7 +243,7 @@ namespace Entities
         EventManager.TriggerEvent(EventTypes.OnEnemyKilled, this);
         
         // Destroys Enemy Object
-        Destroy(gameObject);
+        base.Die();
     }
 
     public override void TakeDamage(int amount)

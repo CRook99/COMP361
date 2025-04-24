@@ -7,6 +7,7 @@ using Managers;
 using UnityEngine;
 using World;
 using System.IO;
+using UI;
 using UnityEngine.SceneManagement;
 using Utility.Serialization;
 
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Subscribe(EventTypes.OnSpawnAlly, AddAlly);
+        EventManager.Subscribe(EventTypes.OnAllyFallen, RemoveAlly);
         EventManager.Subscribe(EventTypes.OnSpawnEnemyStartGame, AddEnemy);
         EventManager.Subscribe(EventTypes.OnEnemyKilled, RemoveEnemy);
     }
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.Unsubscribe(EventTypes.OnSpawnAlly, AddAlly);
+        EventManager.Unsubscribe(EventTypes.OnAllyFallen, RemoveAlly);
         EventManager.Unsubscribe(EventTypes.OnSpawnEnemyStartGame, AddEnemy);
         EventManager.Unsubscribe(EventTypes.OnEnemyKilled, RemoveEnemy);
     }
@@ -64,24 +67,33 @@ public class GameManager : MonoBehaviour
         Enemies.Add(enemy);
     }
 
+    public void RemoveAlly(object data)
+    {
+        if (data is not Ally ally) return;
+        Allies.Remove(ally);
+
+        if (Allies.Count == 0)
+        {
+            StartCoroutine(EndSequence("You lost..."));
+        }
+    }
+
     public void RemoveEnemy(object data) {
         if (data is not Enemy enemy) return;
         Enemies.Remove(enemy);
 
         if (Enemies.Count == 0)
         {
-            StartCoroutine(VictorySequence());
+            StartCoroutine(EndSequence("You won!"));
         }
     }
 
-    private IEnumerator VictorySequence()
+    private IEnumerator EndSequence(string message)
     {
-        Debug.Log($"All Enemies are dead!!!");
         InputManager.Instance.PlayerInput.Disable();
         yield return new WaitForSeconds(1f);
-        
-        // Show victory message
-        
+
+        SceneParams.ResultsMessage = message;
         SceneManager.LoadSceneAsync("Results");
     }
 

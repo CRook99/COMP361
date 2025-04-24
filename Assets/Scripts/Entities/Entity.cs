@@ -207,9 +207,7 @@ namespace Entities
 
         protected virtual void Die()
         {
-            Debug.Log($"{gameObject.name} died!");
-
-            EventManager.TriggerEvent(EventTypes.OnAllyFallen); // stats manager
+            Destroy(this.gameObject);
         }
 
         // A public that function that checks if an obstacle exists between the current cell

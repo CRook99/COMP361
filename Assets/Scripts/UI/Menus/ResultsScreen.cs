@@ -8,9 +8,16 @@ using UnityEngine.SceneManagement;
 
 namespace UI
 {
+    public static class SceneParams
+    {
+        public static string ResultsMessage;
+    }
+    
     public class ResultsScreen : MonoBehaviour
     {
         public Button MenuButton;
+
+        public TMP_Text resultsText;
         
         public TMP_Text enemiesKilledText;
         public TMP_Text damageDealtText;
@@ -30,6 +37,8 @@ namespace UI
 
         private void UpdateResultsScreen()
         {
+            resultsText.text = SceneParams.ResultsMessage;
+            
             enemiesKilledText.text = "Enemies Killed: " + StatisticsManager.Instance.GetEnemiesVanquished();
             damageDealtText.text = "Damage Dealt: " + StatisticsManager.Instance.GetDamageDealt();
             shotsLandedText.text = "Shots Landed: " + StatisticsManager.Instance.GetShotsLanded();
