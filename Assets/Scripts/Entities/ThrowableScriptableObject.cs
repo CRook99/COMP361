@@ -7,5 +7,8 @@ namespace Entities
     {
         public int ThrowRadius;
         public int EffectRadius;
+
+        public GameObject ProjectileModel;
+        public ParticleSystem ParticleSystem;
     }
 }

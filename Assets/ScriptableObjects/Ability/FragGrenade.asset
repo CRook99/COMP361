@@ -27,3 +27,5 @@ MonoBehaviour:
   ability: 0
   ThrowRadius: 8
   EffectRadius: 3
+  ProjectileModel: {fileID: 2878922665190065660, guid: d38cd614095a6d14589e790d1f243027, type: 3}
+  ParticleSystem: {fileID: 3563132838785656166, guid: cbe1a40d3c7736248b1818d53c285892, type: 3}

@@ -1,4 +1,5 @@
 using System;
+using Managers;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace Controller
         [SerializeField] private ShotManager shotManager;
         [SerializeField] private TargetingSystem targetingSystem;
         [SerializeField] private ThrowableSelection throwableSelection;
+        [SerializeField] private ThrowManager throwManager;
 
         public ActiveAllyController ActiveAllyController => activeAllyController;
         public AllySwitcher AllySwitcher => allySwitcher;
@@ -25,6 +27,7 @@ namespace Controller
         public ShotManager ShotManager => shotManager;
         public TargetingSystem TargetingSystem => targetingSystem;
         public ThrowableSelection ThrowableSelection => throwableSelection;
+        public ThrowManager ThrowManager => throwManager;
 
         public void BuildReferences()
         {
@@ -37,6 +40,7 @@ namespace Controller
             shotManager = GetComponent<ShotManager>();
             targetingSystem= GetComponent<TargetingSystem>();
             throwableSelection = GetComponent<ThrowableSelection>();
+            throwManager = GetComponent<ThrowManager>();
         }
     }
 
@@ -67,5 +71,6 @@ namespace Controller
         public ShotManager ShotManager => References.ShotManager;
         public TargetingSystem TargetingSystem => References.TargetingSystem;
         public ThrowableSelection ThrowableSelection => References.ThrowableSelection;
+        public ThrowManager ThrowManager => References.ThrowManager;
     }
 }

@@ -13,7 +13,7 @@ namespace Entities
         private MoveArea _moveArea;
         private HashSet<Cell> _reachableCells;
         [SerializeField] private string _name;
-        private Abilities abilities;
+        //private Abilities abilities;
         public AbilityScriptableObject ChosenAbility;
         public AbilityScriptableObject DELETEME;
 
@@ -24,7 +24,7 @@ namespace Entities
             base.Awake();
 
             _moveArea= GetComponentInChildren<MoveArea>();
-            abilities = new Abilities();
+            //abilities = new Abilities();
         }
 
         protected override void Start()
@@ -109,35 +109,13 @@ namespace Entities
             _moveArea.Hide();
             Actions.UseAction(ActionType.Ability);
             BottomWidgetManager.Instance.Show(EBottomWidget.Movement);
-            
-            AbilityFunction ability;
-            bool allies;
 
-            switch (throwable.ability)
-            {
-                //Enemy-focused abilities
-                case AbilityType.Frag:
-                    ability = abilities.DamageAbility;
-                    allies = false;
-                    break;
-                case AbilityType.EMP:
-                    ability = abilities.DisarmAbility;
-                    allies = false;
-                    break;
-                //Ally-focused abilities
-                case AbilityType.Care: 
-                    ability = abilities.HealAbility; 
-                    allies = true;
-                    break;
-
-                default:
-                    ability = abilities.DebugAbility;
-                    allies = false;
-                    break;
-            }
-
-            abilities.DoForAllInArea(ability, allies, area);
-            EventManager.TriggerEvent(EventTypes.OnPlayerEndAbility);
+            ThrowManager.Instance.HandleThrow(new ThrowInfo(
+                throwable,
+                CurrentCell,
+                destination,
+                area
+            ));
         }
 
         private void OnActiveAllyChanged(object data)
