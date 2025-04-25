@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd734735021bd594e9ac7de5e4d744f5, type: 3}
-  m_Name: MomentumBoots
+  m_Name: ReflexBoots
   m_EditorClassIdentifier: 
-  title: Momentum Boots
+  title: Reflex Boots
   type: 1
-  description: Ability cools down 1 turn faster
+  description: Bonus 20% evasion under uncovered and half-covered fire
   image: {fileID: 21300000, guid: 85f48918720a142f1b86560230a4eee1, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 0
     PercentDamageReturnAmount: 0
-    EvasionBonusPercent: 0
+    EvasionBonusPercent: 20
+    PercentBonusWeaponDamage: 0
     BonusMovementRange: 0
-    AbilityCooldownTurnReduction: 1

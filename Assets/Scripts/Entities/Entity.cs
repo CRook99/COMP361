@@ -221,6 +221,11 @@ namespace Entities
             return Mathf.RoundToInt(Data.WeaponDamage * modifier);
         }
 
+        public int GetMovementRange()
+        {
+            return Data.MovementRange + Modifiers.BonusMovementRange;
+        }
+
         // A public that function that checks if an obstacle exists between the current cell
         // of the enemy and the input cell
         public bool HasObstacleBetween(Cell end) {

@@ -9,6 +9,5 @@ namespace Entities
         public int EvasionBonusPercent;
         public int PercentBonusWeaponDamage;
         public int BonusMovementRange;
-        //public int AbilityCooldownTurnReduction;
     }
 }

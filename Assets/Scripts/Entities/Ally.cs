@@ -87,7 +87,7 @@ namespace Entities
 
         public void DisableThrow()
         {
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, GetMovementRange(), true);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }
 
@@ -155,7 +155,7 @@ namespace Entities
                 _moveArea.Hide();
             }
             
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, GetMovementRange(), true);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }
 
