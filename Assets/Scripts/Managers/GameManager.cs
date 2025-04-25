@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     {
         if (data is not Enemy enemy) return;
         Enemies.Add(enemy);
+        UpdateEnemiesAliveCounter();
     }
 
     public void RemoveAlly(object data)
@@ -82,10 +83,15 @@ public class GameManager : MonoBehaviour
         if (data is not Enemy enemy) return;
         Enemies.Remove(enemy);
 
+        UpdateEnemiesAliveCounter();
         if (Enemies.Count == 0)
         {
             StartCoroutine(EndSequence("You won!"));
         }
+    }
+
+    private void UpdateEnemiesAliveCounter() {
+        EventManager.TriggerEvent(EventTypes.OnUpdateEnemyCount, Enemies.Count);
     }
 
     private IEnumerator EndSequence(string message)
