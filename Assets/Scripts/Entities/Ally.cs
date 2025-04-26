@@ -85,7 +85,7 @@ namespace Entities
 
         public void DisableThrow()
         {
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, GetMovementRange(), true);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }
 
@@ -131,7 +131,7 @@ namespace Entities
                 _moveArea.Hide();
             }
             
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, Data.MovementRange, true);
+            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, GetMovementRange(), true);
             _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
         }
 
@@ -180,7 +180,7 @@ namespace Entities
             int percentDamageReturnAmount = armor.modifiers.PercentDamageReturnAmount + boots.modifiers.PercentDamageReturnAmount;
             int evasionBonusPercent = armor.modifiers.EvasionBonusPercent + boots.modifiers.EvasionBonusPercent;
             int bonusMovementRange = armor.modifiers.BonusMovementRange + boots.modifiers.BonusMovementRange;
-            int abilityCooldownTurnReduction = armor.modifiers.AbilityCooldownTurnReduction + boots.modifiers.AbilityCooldownTurnReduction;
+            //int abilityCooldownTurnReduction = armor.modifiers.AbilityCooldownTurnReduction + boots.modifiers.AbilityCooldownTurnReduction;
             
             Modifiers = new UnitModifiers
             {
@@ -189,7 +189,7 @@ namespace Entities
                 PercentDamageReturnAmount = percentDamageReturnAmount,
                 EvasionBonusPercent = evasionBonusPercent,
                 BonusMovementRange = bonusMovementRange,
-                AbilityCooldownTurnReduction = abilityCooldownTurnReduction
+                //AbilityCooldownTurnReduction = abilityCooldownTurnReduction
             };
 
             AbilityScriptableObject ability = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Ability) as AbilityScriptableObject;
