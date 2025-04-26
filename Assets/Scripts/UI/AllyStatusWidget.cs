@@ -63,6 +63,8 @@ namespace UI
 
                 _actionMap.Add(action.Type, widget);
             }
+            
+            UpdateHealth(_ally.CurrentHealth);
         }
 
         private void OnDisable()

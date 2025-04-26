@@ -13,7 +13,6 @@ namespace Entities
         private MoveArea _moveArea;
         private HashSet<Cell> _reachableCells;
         [SerializeField] private string _name;
-        //private Abilities abilities;
         public AbilityScriptableObject ChosenAbility;
         public AbilityScriptableObject DELETEME;
 
@@ -22,9 +21,8 @@ namespace Entities
         protected override void Awake()
         {
             base.Awake();
-
+            
             _moveArea= GetComponentInChildren<MoveArea>();
-            //abilities = new Abilities();
         }
 
         protected override void Start()
@@ -53,13 +51,13 @@ namespace Entities
         {
             if (!Actions.CanUseAction(ActionType.Move))
             {
-                HintManager.Instance.Hint("Already moved with this soldier!", HintLevel.Error);
+                HintManager.Instance.Hint("Already moved with this soldier!", HintLevel.Warning);
                 return;
             }
 
             if (!_reachableCells.Contains(destination))
             {
-                HintManager.Instance.Hint("Cannot reach this tile!", HintLevel.Error);
+                HintManager.Instance.Hint("Cannot reach this tile!", HintLevel.Warning);
                 return;
             }
             
@@ -95,13 +93,13 @@ namespace Entities
         {
             if (!Actions.CanUseAction(ActionType.Ability))
             {
-                HintManager.Instance.Hint("You can't use that right now.", HintLevel.Error);
+                HintManager.Instance.Hint("You can't use that right now.", HintLevel.Warning);
                 return;
             }
 
             if (!_reachableCells.Contains(destination))
             {
-                HintManager.Instance.Hint("Target cell is out of range", HintLevel.Error);
+                HintManager.Instance.Hint("Target cell is out of range", HintLevel.Warning);
                 return;
             }
             
@@ -199,6 +197,13 @@ namespace Entities
             {
                 ChosenAbility = ability;
             }
+        }
+
+        public override void Deserialize(string json)
+        {
+            base.Deserialize(json);
+            
+            
         }
     }
 }

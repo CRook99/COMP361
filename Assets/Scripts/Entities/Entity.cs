@@ -78,7 +78,8 @@ namespace Entities
         {
             CurrentCell.Walkable = false;
         }
-
+        
+        // TODO Clean
         [ContextMenu("Test Range")]
         private void TestRange()
         {
@@ -89,6 +90,7 @@ namespace Entities
             }
         }
 
+        // TODO Clean
         protected void Initialize(EntityScriptableObject inData)
         {
             if (inData == null)

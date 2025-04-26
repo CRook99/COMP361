@@ -57,7 +57,7 @@ namespace UI.BottomWidgets
             Cell target = AirSupportManager.Instance.GetHoveredCell();
             if (target == null)
             {
-                HintManager.Instance.Hint("Can't airstrike here!", HintLevel.Error);
+                HintManager.Instance.Hint("Can't airstrike here!", HintLevel.Warning);
                 return;
             }
             

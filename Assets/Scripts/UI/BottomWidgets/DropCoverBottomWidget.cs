@@ -56,7 +56,7 @@ namespace UI.BottomWidgets
             Cell target = AirSupportManager.Instance.GetHoveredCell();
             if (target == null)
             {
-                HintManager.Instance.Hint("Can't drop cover here!", HintLevel.Error);
+                HintManager.Instance.Hint("Can't drop cover here!", HintLevel.Warning);
                 return;
             }
 

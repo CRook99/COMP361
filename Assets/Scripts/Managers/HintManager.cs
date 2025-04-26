@@ -10,7 +10,8 @@ namespace Managers
     public enum HintLevel
     {
         Normal,
-        Error,
+        Warning,
+        Error
     }
 
     public enum TutorialSteps
@@ -46,7 +47,8 @@ namespace Managers
         private readonly Dictionary<HintLevel, Color> _levelMap = new()
         {
             { HintLevel.Normal, Color.white },
-            { HintLevel.Error, Color.yellow }
+            { HintLevel.Warning, Color.yellow},
+            { HintLevel.Error, Color.red }
         };
 
         [SerializeField] private List<TutorialItem> _tutorial;
