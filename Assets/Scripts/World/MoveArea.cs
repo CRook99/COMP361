@@ -69,11 +69,13 @@ namespace World
 
         public void Show()
         {
+            if (_meshRenderer == null) return;
             _meshRenderer.enabled = true;
         }
 
         public void Hide()
         {
+            if (_meshRenderer == null) return;
             _meshRenderer.enabled = false;
         }
     }

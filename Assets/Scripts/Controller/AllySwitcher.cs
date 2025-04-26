@@ -56,6 +56,8 @@ namespace Controller
             float inputValue = context.ReadValue<float>();
             _currentIndex = MathUtils.Mod(_currentIndex + (int)inputValue, GameManager.Allies.Count);
             ActiveAllyController.ActiveAlly = GameManager.Allies[_currentIndex];
+            
+            HintManager.Instance.FulfilTutorial(TutorialSteps.Allies);
         }
 
         public void Lock()

@@ -1,11 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Entities;
 using Managers;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 namespace Controller
 {
@@ -70,8 +66,23 @@ namespace Controller
 
         private void OnEndEnemyTurn()
         {
-            // TODO Make this the first alive ally
-            ActiveAlly = GameManager.Allies[0];
+            if (GameManager.Allies.Count > 0)
+            {
+                Ally nextAlly = null;
+                foreach (Ally ally in GameManager.Allies)
+                {
+                    if (ally != null)
+                    {
+                        nextAlly = ally;
+                        break;
+                    }
+                }
+
+                if (nextAlly != null)
+                {
+                    ActiveAlly = nextAlly;
+                }
+            }
         }
     }
 }

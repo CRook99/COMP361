@@ -54,7 +54,7 @@ public class ShotManager : PlayerComponent
             ShootingCell = shootingCell,
             Cover = cover,
             CoverObject = coverObject,
-            TotalDamage = shooter.Data.WeaponDamage,
+            TotalDamage = shooter.GetModifiedWeaponDamage(),
         };
         shot.ReturnDamage = (Random.value < target.Modifiers.PercentDamageReturnChance)
             ? (int)(target.Modifiers.PercentDamageReturnAmount * shot.TotalDamage) // Change to total damage
@@ -127,7 +127,7 @@ public class ShotManager : PlayerComponent
                 if (hit)
                 {
                     EventManager.TriggerEvent(EventTypes.OnShotLanded, 1);  // stats manager
-                    shot.Target.TakeDamage(shot.Shooter.GetModifiedWeaponDamage());
+                    shot.Target.TakeDamage(shot.TotalDamage);
                     shot.Shooter.TakeDamage(shot.ReturnDamage);
                 }
                 Destroy(projectile);

@@ -225,7 +225,7 @@ namespace Controller
             if (Locked) return;
 
             Vector3 position;
-
+            
             // Adapter
             if (data is Vector3 vec)
                 position = vec;

@@ -60,6 +60,8 @@ namespace UI
 
         private void Update()
         {
+            if (_allyTransform == null) return;
+            
             _margin = (int)(Screen.width * marginFraction);
             
             Vector3 pos = _camera.WorldToScreenPoint(_allyTransform.position + allyOffset) + _offset;

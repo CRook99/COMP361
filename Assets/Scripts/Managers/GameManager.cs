@@ -106,27 +106,18 @@ public class GameManager : MonoBehaviour
     // Temporary method to demonstrate json serialization
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L)){
-            //GameObject gameStateGO = new GameObject("GameState");
-            //GameState gameState = gameStateGO.AddComponent<GameState>();
-            //GameState.Instance.SaveGameState();
-            GameState.Instance.LoadGameState(@"Assets\Scripts\Serialization\Save_File.json");
-        }
-
-        if (Input.GetKeyDown(KeyCode.T)){
-            Debug.Log("Turn++");
-            if (TurnManager.Instance.IsAllyTurn() == true){
-                TurnManager.Instance.StartEnemyTurn();
-            }else{
-                TurnManager.Instance.StartAllyTurn();
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.M))
         {
             foreach (Enemy enemy in Enemies)
             {
                 enemy.TakeDamage(90);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            foreach (Ally ally in Allies)
+            {
+                ally.TakeDamage(140);
             }
         }
     }

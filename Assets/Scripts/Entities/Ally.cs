@@ -42,9 +42,7 @@ namespace Entities
         
         protected void OnDisable()
         {
-            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, OnActiveAllyChanged);
-            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
-
+            Unsubscribe();
         }
 
         public override void TryMoveToCell(Cell destination)
@@ -121,6 +119,7 @@ namespace Entities
             if (data is not Ally ally) return;
             if (ally == this)
             {
+                if (this == null) return;
                 if (Actions.CanUseAction(ActionType.Move))
                 {
                     _moveArea.Show();
@@ -128,11 +127,15 @@ namespace Entities
             }
             else
             {
-                _moveArea.Hide();
+                if (_moveArea != null)
+                    _moveArea.Hide();
             }
-            
-            _reachableCells = Pathfinder.FindReachableCells(CurrentCell, GetMovementRange(), true);
-            _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
+
+            if (this != null && CurrentCell != null)
+            {
+                _reachableCells = Pathfinder.FindReachableCells(CurrentCell, GetMovementRange(), true);
+                _moveArea.GenerateMesh(_reachableCells, CurrentCell.Position);
+            }
         }
 
         private void OnEndEnemyTurn()
@@ -159,7 +162,7 @@ namespace Entities
         protected override void Die()
         {
             EventManager.TriggerEvent(EventTypes.OnAllyFallen, this); // stats manager
-            
+            Unsubscribe();
             base.Die();
         }
 
@@ -178,18 +181,18 @@ namespace Entities
             int percentDamageReduction = armor.modifiers.PercentDamageReduction + boots.modifiers.PercentDamageReduction;
             int percentDamageReturnChance = armor.modifiers.PercentDamageReturnChance + boots.modifiers.PercentDamageReturnChance;
             int percentDamageReturnAmount = armor.modifiers.PercentDamageReturnAmount + boots.modifiers.PercentDamageReturnAmount;
+            int percentBonusWeaponDamage = armor.modifiers.PercentBonusWeaponDamage + boots.modifiers.PercentBonusWeaponDamage;
             int evasionBonusPercent = armor.modifiers.EvasionBonusPercent + boots.modifiers.EvasionBonusPercent;
             int bonusMovementRange = armor.modifiers.BonusMovementRange + boots.modifiers.BonusMovementRange;
-            //int abilityCooldownTurnReduction = armor.modifiers.AbilityCooldownTurnReduction + boots.modifiers.AbilityCooldownTurnReduction;
             
             Modifiers = new UnitModifiers
             {
                 PercentDamageReduction = percentDamageReduction,
                 PercentDamageReturnChance = percentDamageReturnChance,
                 PercentDamageReturnAmount = percentDamageReturnAmount,
+                PercentBonusWeaponDamage =  percentBonusWeaponDamage,
                 EvasionBonusPercent = evasionBonusPercent,
-                BonusMovementRange = bonusMovementRange,
-                //AbilityCooldownTurnReduction = abilityCooldownTurnReduction
+                BonusMovementRange = bonusMovementRange
             };
 
             AbilityScriptableObject ability = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Ability) as AbilityScriptableObject;
@@ -204,6 +207,12 @@ namespace Entities
             base.Deserialize(json);
             
             
+        }
+
+        private void Unsubscribe()
+        {
+            EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, OnActiveAllyChanged);
+            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
         }
     }
 }
