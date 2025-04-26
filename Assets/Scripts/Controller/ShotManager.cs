@@ -172,8 +172,8 @@ public class ShotManager : PlayerComponent
     private bool DetermineHit(ShotData shot)
     {
         if (shot.Cover == CoverTypes.FullCover) return false; // Shot blocked
-        if (shot.Cover == CoverTypes.HalfCover) return UnityEngine.Random.value > 0.5f; // 50% chance to hit
-        return true; // Always hit if no cover
+        if (shot.Cover == CoverTypes.HalfCover) return Random.value > 0.5f + (shot.Target.Modifiers.EvasionBonusPercent / 100f); // 50 + evasion% chance to hit
+        return Random.value > (shot.Target.Modifiers.EvasionBonusPercent / 100f); // Only consider evasion
     }
 
     private void ReturnToNormalState(Entity shooter)
