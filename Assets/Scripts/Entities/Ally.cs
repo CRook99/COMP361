@@ -5,6 +5,7 @@ using Managers;
 using UI.BottomWidgets;
 using UnityEngine;
 using World;
+using System.Linq;
 
 namespace Entities
 {
@@ -209,5 +210,37 @@ namespace Entities
             EventManager.Unsubscribe(EventTypes.OnActiveAllyChanged, OnActiveAllyChanged);
             EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
         }
+
+        public override string Serialize()
+        {
+            EntityDTO dto = JsonUtility.FromJson<EntityDTO>(base.Serialize());
+
+            var cds = this.Actions.GetAllCooldowns()
+                .Select(kv => new EntityDTO.ActionCooldownEntry {
+                    actionType      = kv.Key,
+                    currentCooldown = kv.Value
+                })
+                .ToArray();
+
+            dto.actionCooldowns = cds;
+
+            return JsonUtility.ToJson(dto, true);
+        }
+
+        public override void Deserialize(string json)
+        {
+            base.Deserialize(json);
+
+            var dto = JsonUtility.FromJson<EntityDTO>(json);
+
+            if (dto.actionCooldowns != null)
+            {
+                foreach (var entry in dto.actionCooldowns)
+                {
+                    this.Actions.SetCooldown(entry.actionType, entry.currentCooldown);
+                }
+            }
+        }
+
     }
 }

@@ -10,4 +10,12 @@ public class EntityDTO {
     public int    health;
     public string entityDataName;
     public UnitModifiers modifiers;
+
+    [Serializable]
+    public struct ActionCooldownEntry {
+        public ActionType actionType;
+        public int        currentCooldown;
+    }
+
+    public ActionCooldownEntry[] actionCooldowns;
 }
