@@ -13,6 +13,8 @@ namespace Entities
         private MoveArea _moveArea;
         private HashSet<Cell> _reachableCells;
         [SerializeField] private string _name;
+        public string SoldierName => _name;
+
         public AbilityScriptableObject ChosenAbility;
         public AbilityScriptableObject DELETEME;
 
@@ -166,7 +168,7 @@ namespace Entities
             base.Die();
         }
 
-        private void LoadEquipment()
+        public void LoadEquipment()
         {
             EquipmentScriptableObject armor = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Armor);
             EquipmentScriptableObject boots = EquipmentCarrier.Instance.GetSoldierEquipment(_name, EquipmentType.Boots);
@@ -200,13 +202,6 @@ namespace Entities
             {
                 ChosenAbility = ability;
             }
-        }
-
-        public override void Deserialize(string json)
-        {
-            base.Deserialize(json);
-            
-            
         }
 
         private void Unsubscribe()
