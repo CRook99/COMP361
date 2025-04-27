@@ -6,6 +6,8 @@ namespace Entities.DTOs
     public class DropCoverDTO
     {
         public SerializableVector2Int[] positions;
+        public int dropCoverCooldown;
+
     }
 
 }

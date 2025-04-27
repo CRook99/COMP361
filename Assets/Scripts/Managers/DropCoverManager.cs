@@ -80,7 +80,12 @@ public class DropCoverManager : MonoBehaviour, IGameSerializable
         var wrapper = new DropCoverDTO {
         positions = _droppedCoverPositions
             .ConvertAll(v => new SerializableVector2Int(v))
-            .ToArray()
+            .ToArray(),
+
+        dropCoverCooldown = AirSupportManager
+                    .Instance
+                    .Actions
+                    .GetCooldown(ActionType.DropCover)
         };
         return JsonUtility.ToJson(wrapper, true);
     }
@@ -109,6 +114,11 @@ public class DropCoverManager : MonoBehaviour, IGameSerializable
                 Debug.LogWarning($"[DropCoverManager.Deserialize] Missing cell at {pos}");
             }
         }
+
+        AirSupportManager
+                .Instance
+                .Actions
+                .SetCooldown(ActionType.DropCover, wrapper.dropCoverCooldown);
     }
 
 }

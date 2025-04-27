@@ -129,6 +129,19 @@ namespace Entities
             }
         }
 
+        public void RefreshAll()
+        {
+            foreach (var kvp in _actionMap)
+            {
+                var type  = kvp.Key;
+                var state = kvp.Value;
 
+                if (state.HasCooldown && state.CurrentCooldown > 0)
+                    OnCooldownChanged?.Invoke(type, state.CurrentCooldown);
+
+                if (state.CanUse)
+                    OnRefreshAction?.Invoke(type);
+            }
+        }
     }
 }
