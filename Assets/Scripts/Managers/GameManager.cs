@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using Controller;
 using Entities;
 using Managers;
@@ -15,28 +16,22 @@ public class GameManager : MonoBehaviour
 {
     public static List<Ally> Allies;
     public static List<Enemy> Enemies;
-    
-    private static GameManager _instance;
 
-    public static GameManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                GameObject go = new GameObject("GameManager");
-                _instance = go.AddComponent<GameManager>();
-                DontDestroyOnLoad(go);
-            }
-
-            return _instance;
-        }
-    }
+    public static GameManager Instance;
 
     private void Awake()
     {
-        Allies = new();
-        Enemies = new();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    
+        Allies = new List<Ally>();
+        Enemies = new List<Enemy>();
     }
 
     private void OnEnable()
@@ -45,6 +40,8 @@ public class GameManager : MonoBehaviour
         EventManager.Subscribe(EventTypes.OnAllyFallen, RemoveAlly);
         EventManager.Subscribe(EventTypes.OnSpawnEnemyStartGame, AddEnemy);
         EventManager.Subscribe(EventTypes.OnEnemyKilled, RemoveEnemy);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     
     private void OnDisable()
@@ -117,9 +114,16 @@ public class GameManager : MonoBehaviour
         {
             foreach (Ally ally in Allies)
             {
-                ally.TakeDamage(140);
+                Debug.Log(ally);
             }
         }
+    }
+
+    private void OnSceneLoaded(Scene _, LoadSceneMode __)
+    {
+        Debug.Log("sl");
+        Allies?.Clear();
+        Enemies?.Clear();
     }
 
 }

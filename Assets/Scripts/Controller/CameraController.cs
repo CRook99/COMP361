@@ -111,7 +111,7 @@ namespace Controller
         private void Update()
         {
             if (brain.IsBlending) return;
-
+            
             if (_attached)
             {
                 cameraSystem.transform.position =
