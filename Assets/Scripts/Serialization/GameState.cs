@@ -92,12 +92,6 @@ public class GameState : MonoBehaviour
         SerializationContainer container = new SerializationContainer(stateData);
         string json = JsonUtility.ToJson(container, true);
 
-        // string folderPath = Path.Combine(Application.persistentDataPath, "Scripts", "Serialization");
-        // if (!Directory.Exists(folderPath))
-        // {
-        //     Directory.CreateDirectory(folderPath);
-        // }
-
         string filePath = overwriteSave ?
             Path.Combine(Application.persistentDataPath, "Autosave.json") :
             Path.Combine(Application.persistentDataPath, $"Save_{DateTime.Now:yyyyMMdd_HHmmss}.json");
