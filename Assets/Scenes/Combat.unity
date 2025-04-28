@@ -27783,6 +27783,7 @@ GameObject:
   - component: {fileID: 696803299}
   - component: {fileID: 696803301}
   - component: {fileID: 696803293}
+  - component: {fileID: 696803302}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -27846,7 +27847,7 @@ MonoBehaviour:
   allySwitcher: {fileID: 696803290}
   cameraController: {fileID: 696803295}
   coverIndicator: {fileID: 696803298}
-  modeSwitcher: {fileID: 0}
+  modeSwitcher: {fileID: 696803302}
   movementSelection: {fileID: 696803291}
   shotManager: {fileID: 696803300}
   targetingSystem: {fileID: 696803296}
@@ -27986,6 +27987,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ThrowTime: 1
   ThrowHeight: 3
+--- !u!114 &696803302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696803289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 800ffc4e830a0f041823fc277754b49d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentMode: 0
 --- !u!1 &700182223
 GameObject:
   m_ObjectHideFlags: 0
