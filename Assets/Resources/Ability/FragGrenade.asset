@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Frag Grenade
   type: 2
-  description: Deals 10% damange to enemies in radius
+  description: Deals 20 damange to enemies in radius
   image: {fileID: 21300000, guid: e868c614e0bed6e4a81a720803bdae5b, type: 3}
   modifiers:
     PercentDamageReduction: 0
     PercentDamageReturnChance: 0
     PercentDamageReturnAmount: 0
     EvasionBonusPercent: 0
+    PercentBonusWeaponDamage: 0
     BonusMovementRange: 0
-    AbilityCooldownTurnReduction: 0
   Cooldown: 3
   ability: 0
   ThrowRadius: 8

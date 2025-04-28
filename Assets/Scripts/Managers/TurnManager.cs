@@ -69,7 +69,6 @@ public class TurnManager : MonoBehaviour, IGameSerializable
     // Make UI element indicating whose turn it is subscribe to this
 
     _isAllyTurn = false;
-    Debug.Log("Enemy's Turn");
 
   }
 

@@ -105,8 +105,6 @@ namespace Entities
             if (path.Count == 0) yield break;
 
             EventManager.TriggerEvent(EventTypes.OnSpaceMoved, path.Count); // stats manager
-            
-            Debug.Log($"Moving to {destination.Position}");
 
             Actions.UseAction(ActionType.Move);
             

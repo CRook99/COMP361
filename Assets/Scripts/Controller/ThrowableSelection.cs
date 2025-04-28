@@ -17,7 +17,7 @@ namespace Controller
         public Material material;
         private HashSet<Cell> _throwableCells;
         private Cell cachedCell;
-        private const int NUM_TRAGEC_BALLS = 3;
+        private const int NUM_TRAGEC_BALLS = 5;
         private const float PARAB_TIME = 3.0f;
         private float _parabBFactor = 0f;
         private float[] _timers;
@@ -81,7 +81,11 @@ namespace Controller
                 //The x-intercepts of the parabola are 0 and b
                 float yFactor = t * _parabBFactor;
                 v.y = _parabBFactor * yFactor - Mathf.Pow(yFactor, 2f) + p.y;
-                Graphics.RenderMesh(rp, arcIndicator, 0, Matrix4x4.Translate(v));
+                Matrix4x4 M = Matrix4x4.TRS(
+                    v,
+                    Quaternion.identity,
+                    Vector3.one * 0.3f);
+                Graphics.RenderMesh(rp, arcIndicator, 0, M);
 
                 _timers[i] += Time.deltaTime;
                 _timers[i] %= PARAB_TIME;
