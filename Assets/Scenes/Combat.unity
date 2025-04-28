@@ -5812,7 +5812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 696bafcdbace179498c2d8aa37224794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 1.5
+  time: 0.5
   initialOffset: {x: 40, y: 40}
   verticalMovement: 60
   numberText: {fileID: 1401766254}

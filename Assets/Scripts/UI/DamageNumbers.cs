@@ -26,6 +26,8 @@ namespace UI
 
         public void Animate(Vector3 position, int amount)
         {
+            StartCoroutine(Cleanup());
+            
             transform.SetAsLastSibling();
             
             Vector2 screenPos = Camera.main.WorldToScreenPoint(position);
@@ -37,11 +39,15 @@ namespace UI
             
             DOTween.Kill(_rect);
             DOTween.Kill(_canvasGroup);
-            
-            DOTween.Sequence()
-                .Join(_rect.DOMove(screenPos + Vector2.up * verticalMovement, time).SetEase(Ease.Linear))
-                .Join(_canvasGroup.DOFade(0f, time).SetEase(Ease.InExpo))
-                .Play();
+
+            _rect.DOMove(screenPos + Vector2.up * verticalMovement, time).SetEase(Ease.Linear);
+            _canvasGroup.DOFade(0f, time).SetEase(Ease.InExpo);
+        }
+
+        private IEnumerator Cleanup()
+        {
+            yield return new WaitForSeconds(time);
+            _canvasGroup.alpha = 0f;
         }
     }
 }
