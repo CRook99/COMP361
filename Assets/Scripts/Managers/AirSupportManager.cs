@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Config;
 using Entities;
 using UnityEngine;
 using World;

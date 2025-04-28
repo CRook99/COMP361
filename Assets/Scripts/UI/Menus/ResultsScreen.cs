@@ -49,9 +49,11 @@ namespace UI
 
         public void OnMainMenuButtonClicked()
         {
-            StatisticsManager.Instance.ResetStats();
-            // Scene transition logic
-            SceneManager.LoadSceneAsync("MainMenu");
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
     }
 }

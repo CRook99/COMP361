@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Config;
 using DG.Tweening;
 using Entities;
 using Managers;

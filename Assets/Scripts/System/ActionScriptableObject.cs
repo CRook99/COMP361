@@ -2,7 +2,7 @@ using Entities;
 using UI.BottomWidgets;
 using UnityEngine;
 
-namespace System
+namespace Config
 {
     [CreateAssetMenu(fileName = "Action", menuName = "ScriptableObjects/Action")]
     public class ActionScriptableObject : ScriptableObject

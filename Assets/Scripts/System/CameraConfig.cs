@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-namespace System
+namespace Config
 {
     [Serializable]
     public class CameraConfig

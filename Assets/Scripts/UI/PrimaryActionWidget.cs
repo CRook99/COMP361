@@ -1,4 +1,5 @@
 using System;
+using Config;
 using DG.Tweening;
 using Entities;
 using TMPro;
