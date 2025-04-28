@@ -76,7 +76,7 @@ namespace Entities
             CurrentCell.Walkable = false;
         }
         
-        // TODO Clean
+        // For Testing purposes
         [ContextMenu("Test Range")]
         private void TestRange()
         {

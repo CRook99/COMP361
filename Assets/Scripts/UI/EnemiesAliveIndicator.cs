@@ -1,15 +1,12 @@
 using UnityEngine;
 using Managers;
 using TMPro;
-using System.Collections;
-using System;
 
 namespace UI
 {
     [RequireComponent(typeof(TMP_Text))]
     public class EnemiesAliveIndicator : MonoBehaviour
     {
-        /* -------- internals -------- */
         private TMP_Text counter;
 
         private void Awake()

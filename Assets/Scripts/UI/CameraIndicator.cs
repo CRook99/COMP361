@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Managers;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CameraIndicator : MonoBehaviour
 {

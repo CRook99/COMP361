@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Helper function to update enemies alive counter
     private void UpdateEnemiesAliveCounter() {
         EventManager.TriggerEvent(EventTypes.OnUpdateEnemyCount, Enemies.Count);
     }

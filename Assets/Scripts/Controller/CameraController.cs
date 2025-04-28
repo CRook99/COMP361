@@ -1,7 +1,6 @@
 using System.Collections;
 using Cinemachine;
 using DG.Tweening;
-using System;
 using Config;
 using Managers;
 using UnityEngine;

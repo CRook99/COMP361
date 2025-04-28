@@ -1,16 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Entities;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 namespace World
 {
-    // represents the game map
-    //
+    // Represents the game map
     public class TacticsGrid : MonoBehaviour
     {
         public static TacticsGrid Instance { get; private set; }

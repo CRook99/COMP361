@@ -3,7 +3,6 @@ using System.Collections;
 using Controller;
 using DG.Tweening;
 using Entities;
-using Managers;
 using UI.BottomWidgets;
 using UnityEngine;
 using Utility;

@@ -1,6 +1,5 @@
 // EntityDTO.cs
 using System;
-using UnityEngine;
 using Entities;
 
 [Serializable]

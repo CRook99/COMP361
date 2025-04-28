@@ -195,6 +195,7 @@ namespace Entities
       return (shootingCell, closestAlly);
     }
 
+    // Helper function to check if there is an ally in (peakable) view of the enemy
     public bool ThereIsAllyToShoot() {
         List<Cell> playerPositions = GameManager.Allies.Select(a => a.CurrentCell).ToList();
         foreach (Ally ally in GameManager.Allies)

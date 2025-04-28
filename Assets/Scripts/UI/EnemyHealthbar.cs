@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Entities;
-using Managers;
 using TMPro;
 
 public class EnemyHealthbar : MonoBehaviour

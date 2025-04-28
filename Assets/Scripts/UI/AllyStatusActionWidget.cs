@@ -1,4 +1,3 @@
-using System;
 using Config;
 using UnityEngine;
 using UnityEngine.UI;
