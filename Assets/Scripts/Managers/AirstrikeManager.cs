@@ -7,10 +7,12 @@ using Managers;
 using UI.BottomWidgets;
 using UnityEngine;
 using Utility;
+using Utility.Serialization;
+using Entities.DTOs;
 
 namespace Managers
 {
-    public class AirstrikeManager : MonoBehaviour
+    public class AirstrikeManager : MonoBehaviour, IGameSerializable
     {
         public float StrikeDelay;
         public float StrikeTime;
@@ -67,5 +69,42 @@ namespace Managers
                     InputManager.Instance.PlayerInput.Enable();
                 });
         }
+
+        [Serializable]
+        private struct CooldownEntry
+        {
+            public ActionType actionType;
+            public int        currentCooldown;
+        }
+
+        [Serializable]
+        private class CooldownWrapper
+        {
+            public CooldownEntry[] entries;
+        }
+
+        public string Serialize()
+        {
+            var dto = new AirstrikeDTO {
+                airstrikeCooldown = AirSupportManager
+                    .Instance
+                    .Actions
+                    .GetCooldown(ActionType.Airstrike)
+            };
+            return JsonUtility.ToJson(dto, true);
+        }
+
+        public void Deserialize(string json)
+        {
+            var dto = JsonUtility.FromJson<AirstrikeDTO>(json);
+            AirSupportManager
+                .Instance
+                .Actions
+                .SetCooldown(ActionType.Airstrike, dto.airstrikeCooldown);
+
+        }
+
+        public bool Validate() => true;
+
     }
 }

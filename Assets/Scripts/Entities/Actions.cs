@@ -46,6 +46,12 @@ namespace Entities
         public event Action<ActionType> OnRefreshAction;
         public event Action<ActionType, int> OnCooldownChanged;
 
+        public Dictionary<ActionType,int> GetAllCooldowns() =>
+            _actionMap.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.CurrentCooldown
+            );
+
         public Actions(List<ActionScriptableObject> availableActions)
         {
             _actionMap = availableActions
@@ -108,6 +114,33 @@ namespace Entities
                 {
                     OnRefreshAction?.Invoke(type);
                 }
+            }
+        }
+
+         public void SetCooldown(ActionType type, int cooldown)
+        {
+            if (_actionMap.TryGetValue(type, out var state))
+            {
+                state.CurrentCooldown = cooldown;
+                state.CanUse = (cooldown <= 0);
+                OnCooldownChanged?.Invoke(type, cooldown);
+                if (state.CanUse)
+                    OnRefreshAction?.Invoke(type);
+            }
+        }
+
+        public void RefreshAll()
+        {
+            foreach (var kvp in _actionMap)
+            {
+                var type  = kvp.Key;
+                var state = kvp.Value;
+
+                if (state.HasCooldown && state.CurrentCooldown > 0)
+                    OnCooldownChanged?.Invoke(type, state.CurrentCooldown);
+
+                if (state.CanUse)
+                    OnRefreshAction?.Invoke(type);
             }
         }
     }

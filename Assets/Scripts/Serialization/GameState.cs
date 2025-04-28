@@ -51,6 +51,7 @@ public class GameState : MonoBehaviour
         {
             Debug.Log("Scene '" + scene.name + "' loaded. Loading game state from save file...");
             LoadGameState(_fileToLoad);
+            
             _loadGameStateOnSceneLoad = false;
         }
     }
@@ -64,14 +65,20 @@ public class GameState : MonoBehaviour
         foreach (IGameSerializable serializable in serializables)
         {
             string key;
-            if (serializable is Entities.Entity entity)
+            if (serializable is Entities.Ally ally)
             {
-                key = serializable.GetType().Name + "_" + entity.UniqueId;
+                // use the name in the equipment screen
+                key = ally.SoldierName;
+            }
+            else if (serializable is Entities.Entity e)
+            {
+                key = $"{serializable.GetType().Name}_{e.UniqueId}";
             }
             else
             {
                 key = serializable.GetType().Name;
             }
+            
             if (serializable.Validate())
             {
                 stateData[key] = serializable.Serialize();
@@ -100,43 +107,51 @@ public class GameState : MonoBehaviour
     }
 
     public void LoadGameState(string fileName)
+{
+    string filePath = Path.Combine(Application.persistentDataPath, fileName);
+    if (!File.Exists(filePath))
     {
-        //string folderPath = Path.Combine(Application.dataPath, "Scripts", "Serialization");
-        string filePath = Path.Combine(Application.persistentDataPath, fileName);
-        Debug.Log("Loading game state from: " + filePath);
-
-        if (!File.Exists(filePath))
-        {
-            Debug.LogError("Save file not found: " + filePath);
-            return;
-        }
-
-        string json = File.ReadAllText(filePath);
-        SerializationContainer container = JsonUtility.FromJson<SerializationContainer>(json);
-        Dictionary<string, string> loadedData = container.stateData;
-
-        IGameSerializable[] serializables =
-            UnityEngine.Object.FindObjectsOfType<MonoBehaviour>()
-            .OfType<IGameSerializable>().ToArray();
-
-        foreach (IGameSerializable serializable in serializables)
-        {
-            string key;
-            if (serializable is Entities.Entity entity)
-            {
-                key = serializable.GetType().Name + "_" + entity.UniqueId;
-            }
-            else
-            {
-                key = serializable.GetType().Name;
-            }
-            if (loadedData.ContainsKey(key))
-            {
-                serializable.Deserialize(loadedData[key]);
-            }
-        }
-
-        Debug.Log("Game state applied from loaded file.");
+        Debug.LogError("Save file not found: " + filePath);
+        return;
     }
+
+    string json = File.ReadAllText(filePath);
+    var container  = JsonUtility.FromJson<SerializationContainer>(json);
+    var loadedData = container.stateData;
+
+    if (loadedData.TryGetValue(nameof(EquipmentCarrier), out var carrierJson))
+    {
+        EquipmentCarrier.Instance.Deserialize(carrierJson);
+    }
+    else
+    {
+        Debug.LogWarning("No EquipmentCarrier data found in save.");
+    }
+
+    foreach (var s in FindObjectsOfType<MonoBehaviour>().OfType<IGameSerializable>())
+    {
+        if (s is EquipmentCarrier) 
+            continue;
+
+        string key;
+        if (s is Entities.Ally ally)
+            key = ally.SoldierName;
+        else if (s is Entities.Entity e)
+            key = $"{s.GetType().Name}_{e.UniqueId}";
+        else
+            key = s.GetType().Name;
+
+        if (loadedData.TryGetValue(key, out var payload))
+            s.Deserialize(payload);
+    }
+
+    foreach (var ally in FindObjectsOfType<Entities.Ally>())
+    {
+        ally.LoadEquipment(); 
+    }
+
+    Debug.Log("Game state applied from loaded file.");
+}
+
 
 }
