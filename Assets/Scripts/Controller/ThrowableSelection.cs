@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading;
-using Controller;
 using Entities;
 using Managers;
 using UnityEngine;
@@ -117,7 +114,7 @@ namespace Controller
         {
             _active = false;
             
-            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
+            ModeSwitcher.SwitchMode(ControlMode.Move);
             ActiveAllyController.ActiveAlly.DisableThrow();
             throwAOE.Hide();
         }

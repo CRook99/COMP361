@@ -1,6 +1,4 @@
-using System;
 using Managers;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Controller

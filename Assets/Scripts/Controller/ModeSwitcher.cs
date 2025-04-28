@@ -1,18 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Controller;
-using Entities;
 using Managers;
-using UnityEngine;
 
 namespace Controller 
 {
     public enum ControlMode
     {
-        StandardMove,
-        AirSupportMove,
-        Selection,
+        Move,
+        Selection
     }
     
     public class ModeSwitcher : PlayerComponent
@@ -21,7 +14,7 @@ namespace Controller
 
         private void Awake()
         {
-            SwitchMode(ControlMode.StandardMove);
+            SwitchMode(ControlMode.Move);
         }
 
         public void SwitchMode(ControlMode newMode)

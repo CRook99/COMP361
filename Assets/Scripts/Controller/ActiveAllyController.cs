@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Controller
 {
-    public class ActiveAllyController : PlayerComponent // Locking? Event Subscription
+    public class ActiveAllyController : PlayerComponent
     {
         private Ally _activeAlly;
 
@@ -16,7 +16,7 @@ namespace Controller
             {
                 if (_activeAlly == value)
                 {
-                    Debug.LogWarning("Changed to same ally. Was this intentional?");
+                    Debug.LogWarning("ActiveAllyController::ActiveAlly - Changed to same ally. Was this intentional?");
                 }
 
                 _activeAlly = value;
@@ -26,6 +26,7 @@ namespace Controller
 
         private IEnumerator Start()
         {
+            // Wait for ally instantiation
             while (GameManager.Allies.Count == 0)
             {
                 yield return null;
@@ -52,11 +53,11 @@ namespace Controller
         {
             if (data is not ControlMode mode)
             {
-                Debug.LogWarning("Passed incorrect type to ActiveAllyController::OnPlayerChangeMode");
+                Debug.LogWarning("ActiveAllyController::OnPlayerChangeMode - Passed incorrect type");
                 return;
             }
 
-            _activeAlly.SetMoveMeshActive(mode == ControlMode.StandardMove && _activeAlly.Actions.CanUseAction(ActionType.Move));
+            _activeAlly.SetMoveMeshActive(mode == ControlMode.Move && _activeAlly.Actions.CanUseAction(ActionType.Move));
         }
 
         private void OnStartEnemyTurn()

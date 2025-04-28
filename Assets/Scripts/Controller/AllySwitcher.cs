@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using Entities;
 using Managers;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using Utility;
 
@@ -11,7 +7,7 @@ namespace Controller
     public class AllySwitcher : PlayerComponent
     {
         private PlayerInput _playerInput;
-        public int _currentIndex;
+        private int _currentIndex;
 
         private bool _locked;
 
@@ -45,13 +41,7 @@ namespace Controller
         /** Activated by TAB/LSHIFT, switches the active/focused ally */
         private void CycleAlly(InputAction.CallbackContext context)
         {
-            if (_locked || CameraController.Locked)
-            {
-                // Cannot cycle
-                // SFX
-                // UI
-                return;
-            }
+            if (_locked || CameraController.Locked) return;
             
             float inputValue = context.ReadValue<float>();
             _currentIndex = MathUtils.Mod(_currentIndex + (int)inputValue, GameManager.Allies.Count);
@@ -60,12 +50,12 @@ namespace Controller
             HintManager.Instance.FulfilTutorial(TutorialSteps.Allies);
         }
 
-        public void Lock()
+        private void Lock()
         {
             _locked = true;
         }
 
-        public void Unlock()
+        private void Unlock()
         {
             _locked = false;
         }

@@ -20,13 +20,11 @@ public class CoverIndicator : PlayerComponent
     public Mesh FullCoverMesh;
     
     public float StandardScale;
-    public float StandardHeight = 0f;
     public float MeshDistance;
     public float AirSupportHeight;
     public float AirSupportScale;
     
     private Dictionary<CoverTypes, Mesh> _meshMap;
-    private Quaternion UpwardsRotation = Quaternion.Euler(90f, 0f, 0f);
     private bool _shouldShowShields;
 
     private void Awake()
@@ -72,9 +70,6 @@ public class CoverIndicator : PlayerComponent
         EventManager.Subscribe(EventTypes.OnPlayerEndMove, AllowShields);
         EventManager.Subscribe(EventTypes.OnStartEnemyTurn, DisallowShields);
         EventManager.Subscribe(EventTypes.OnEndEnemyTurn, AllowShields);
-
-        // EventManager.Subscribe(EventTypes.OnPlayerBeginAbility, DisallowShields); TODO
-        // EventManager.Subscribe(EventTypes.OnPlayerEndAbility, AllowShields); TODO
     }
     
     private void OnDisable()
@@ -87,8 +82,6 @@ public class CoverIndicator : PlayerComponent
         EventManager.Unsubscribe(EventTypes.OnPlayerEndMove, AllowShields);
         EventManager.Unsubscribe(EventTypes.OnStartEnemyTurn, DisallowShields);
         EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, AllowShields);
-        // EventManager.Unsubscribe(EventTypes.OnPlayerBeginAbility, DisallowShields); TODO
-        // EventManager.Unsubscribe(EventTypes.OnPlayerEndAbility, AllowShields); TODO
     }
 
     private void RefreshMeshes(Cell cell)

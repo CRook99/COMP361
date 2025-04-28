@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Controller;
 using DG.Tweening;
 using Entities;
@@ -202,10 +201,6 @@ public class ShotManager : PlayerComponent
         if (shooter is Ally)
         {
             EventManager.TriggerEvent(EventTypes.OnPlayerShotFired, shooter);
-        }
-        else
-        {
-            // TurnManager.Instance.EndEnemyTurn(); // right?
         }
     }
 }

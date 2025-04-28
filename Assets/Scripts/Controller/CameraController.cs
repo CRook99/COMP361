@@ -1,9 +1,7 @@
 using System.Collections;
 using Cinemachine;
 using DG.Tweening;
-using Controller;
 using System;
-using Entities;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -126,7 +124,7 @@ namespace Controller
 
         private void SwitchMode(InputAction.CallbackContext context)
         {
-            if (_isRotating || brain.IsBlending || ModeSwitcher.CurrentMode != ControlMode.StandardMove) return;
+            if (_isRotating || brain.IsBlending || ModeSwitcher.CurrentMode != ControlMode.Move) return;
 
             _mode = _mode == CameraMode.Standard ? CameraMode.AirSupport : CameraMode.Standard;
             StartCoroutine(Switch());
@@ -250,7 +248,7 @@ namespace Controller
                 });
         }
 
-        public void AttachToTransform(object data)
+        private void AttachToTransform(object data)
         {
             if (!attachOnMove) return;
 
@@ -272,7 +270,7 @@ namespace Controller
             _attached = true; // We use an extra bool since null comparison is expensive
         }
 
-        public void DetachFromTransform()
+        private void DetachFromTransform()
         {
             if (!attachOnMove) return;
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Entities;
 using Managers;
@@ -62,7 +60,7 @@ namespace Controller
             _validTargets = FindValidTargets();
             if (_validTargets.Count == 0)
             {
-                // Indicate this
+                HintManager.Instance.Hint("No targets in range!", HintLevel.Warning);
                 return;
             }
 
@@ -75,14 +73,14 @@ namespace Controller
 
         private void ExitWeaponMode()
         {
-            ModeSwitcher.SwitchMode(ControlMode.StandardMove);
+            ModeSwitcher.SwitchMode(ControlMode.Move);
             _aiming = false;
             reticle.Hide();
         }
 
-        private void CycleTarget(InputAction.CallbackContext context) // TODO: SFX
+        private void CycleTarget(InputAction.CallbackContext context)
         {
-            if (_validTargets.Count == 0 || !_aiming) return; //!_modeSwitcher
+            if (_validTargets.Count == 0 || !_aiming) return;
 
             float inputValue = context.ReadValue<float>();
             int direction = (inputValue > 0) ? -1 : 1;  
@@ -144,8 +142,6 @@ namespace Controller
         {
             if (enemy == null) return false;
             
-
-            // TODO: Weapon range
             return !TacticsGrid.Instance.ObstacleBetweenCells(ActiveAllyController.ActiveAlly.CurrentCell, enemy.CurrentCell);
         }
     }
