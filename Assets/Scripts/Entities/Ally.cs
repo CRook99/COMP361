@@ -17,7 +17,6 @@ namespace Entities
         public string SoldierName => _name;
 
         public AbilityScriptableObject ChosenAbility;
-        public AbilityScriptableObject DELETEME;
 
         public HashSet<Cell> ReachableCells => _reachableCells;
         

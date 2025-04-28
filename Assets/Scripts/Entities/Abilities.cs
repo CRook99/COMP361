@@ -40,7 +40,7 @@ namespace Entities{
 
         public static void DebugAbility(Entity entity)
         {
-            Debug.Log(entity + "got hit with a big ouchie");
+            Debug.Log("DEBUG");
         }
 
         public static void GetAbilityInfoFromEnum(AbilityType type, out AbilityFunction func, out bool allies)
