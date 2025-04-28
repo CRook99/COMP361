@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using Controller;
 using Entities;
 using Managers;
 using UnityEngine;
-using World;
-using System.IO;
 using UI;
 using UnityEngine.SceneManagement;
-using Utility.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -100,28 +95,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync("Results");
     }
 
-    // Temporary method to demonstrate json serialization
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            foreach (Enemy enemy in Enemies)
-            {
-                enemy.TakeDamage(90);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            foreach (Ally ally in Allies)
-            {
-                Debug.Log(ally);
-            }
-        }
-    }
-
     private void OnSceneLoaded(Scene _, LoadSceneMode __)
     {
-        Debug.Log("sl");
         Allies?.Clear();
         Enemies?.Clear();
     }

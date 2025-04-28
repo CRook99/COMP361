@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using Controller;
 using Entities;
 using Managers;
-using Unity.VisualScripting;
-using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 using Utility.Serialization;
 
@@ -61,12 +58,8 @@ public class TurnManager : MonoBehaviour, IGameSerializable
     // Reset actions
     _actedAllies.Clear();
 
-    //EventManager.TriggerEvent(EventTypes.OnEndEnemyTurn);
-    // Make UI element indicating whose turn it is subscribe to this
-
     _isAllyTurn = true;
     _turnNumber++;
-    Debug.Log("Ally's Turn");
   }
 
   [ContextMenu("Enemy Turn")]
@@ -144,10 +137,5 @@ public class TurnManager : MonoBehaviour, IGameSerializable
     TurnDTO dto = JsonUtility.FromJson<TurnDTO>(json);
     _isAllyTurn = dto.isAllyTurn;
     _turnNumber = dto.turnNumber;
-  }
-
-  public void Autosave()
-  {
-
   }
 }

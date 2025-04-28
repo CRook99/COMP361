@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Entities;
-using Unity.PlasticSCM.Editor.WebApi;
-using Unity.VisualScripting;
 
 namespace Managers
 {
@@ -31,11 +28,6 @@ namespace Managers
     
         public IEnumerator HandleEnemyTurn()
         {
-            // make sure camera is in standard mode before running enemy turn
-            // TODO Can't trigger event here as the cam controller is solely responsible for calling this.
-            // TODO Introduce new event OnForceCameraMode and subscribe to this in CameraController?
-            // EventManager.TriggerEvent(EventTypes.OnCameraModeChanged, CameraMode.Standard);
-            
             _enemies ??= new List<Enemy>(GameManager.Enemies);
             
             foreach (Enemy enemy in _enemies)
