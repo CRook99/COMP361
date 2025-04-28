@@ -150,17 +150,5 @@ namespace World
         {
             Debug.Log(_cellMap[InspectCell]);
         }
-
-        private void OnDrawGizmos()
-        {
-            if (_cellMap == null) return;
-
-            foreach (Cell cell in _cellMap.Values)
-            {
-                var pos = new Vector3(cell.Position.x, 1f, cell.Position.y);
-                Handles.Label(pos, cell.Position.ToString());
-            }
-        }
-
     }
 }

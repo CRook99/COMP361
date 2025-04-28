@@ -67,7 +67,7 @@ namespace World
                 
                 foreach (Vector2Int cell in GetMapCells(layers[i].Image))
                 {
-                    GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(layers[i].Object, layer.transform);
+                    GameObject obj = Instantiate(layers[i].Object, layer.transform);
                     obj.transform.position = new Vector3(cell.x, layers[i].Elevation, cell.y);
                 }
             }
