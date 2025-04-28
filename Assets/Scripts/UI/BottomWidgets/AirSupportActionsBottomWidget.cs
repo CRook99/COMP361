@@ -13,7 +13,8 @@ namespace UI.BottomWidgets
         {
             base.OnEnable();
             
-            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, RefreshWidgets);
+            EventManager.Subscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
+            EventManager.Subscribe(EventTypes.OnCameraModeChanged, RefreshWidgets);
         }
 
         private void Start()
@@ -21,6 +22,7 @@ namespace UI.BottomWidgets
             if (AirSupportManager.Instance != null)
             {
                 AirSupportManager.Instance.Actions.OnUseAction += OnUseAction;
+                AirSupportManager.Instance.Actions.OnCooldownChanged += OnCooldownChanged;
             }
         }
 
@@ -28,7 +30,8 @@ namespace UI.BottomWidgets
         {
             base.OnDisable();
             
-            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, RefreshWidgets);
+            EventManager.Unsubscribe(EventTypes.OnEndEnemyTurn, OnEndEnemyTurn);
+            EventManager.Unsubscribe(EventTypes.OnCameraModeChanged, RefreshWidgets);
         }
 
         private void OnUseAction(ActionType type)
@@ -36,10 +39,15 @@ namespace UI.BottomWidgets
             int cooldown = AirSupportManager.Instance.Actions.GetCooldown(type);
             OnCooldownChanged(type, cooldown);
         }
-        
-        protected override void RefreshWidgets(object data)
+
+        private void OnEndEnemyTurn()
         {
             AirSupportManager.Instance.Actions.Tick();
+            RefreshWidgets(null);
+        }
+        
+        protected override void RefreshWidgets(object _)
+        {
             foreach (var kvp in _actionMap)
             {
                 ActionType type = kvp.Key;
