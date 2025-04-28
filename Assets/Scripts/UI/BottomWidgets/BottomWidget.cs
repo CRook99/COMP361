@@ -1,12 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Controller;
-using DG.Tweening;
-using Entities;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace UI.BottomWidgets
 {

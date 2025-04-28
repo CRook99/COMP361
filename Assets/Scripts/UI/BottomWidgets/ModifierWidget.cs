@@ -48,8 +48,5 @@ public class ModifierWidget : MonoBehaviour
 
         if (modifiers.BonusMovementRange > 0)
             modifierText.text += $"Bonus Movement: {modifiers.BonusMovementRange} tiles\n";
-
-        //if (modifiers.AbilityCooldownTurnReduction > 0)
-            //modifierText.text += $"Cooldown Reduction: {modifiers.AbilityCooldownTurnReduction} turns\n";
     }
 }

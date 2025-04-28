@@ -1,10 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.ExceptionServices;
-using System.Security.Cryptography;
-using Entities;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,18 +29,6 @@ namespace UI
             }
 
             SceneManager.LoadScene(COMBAT_SCENE);
-            
-            Debug.Log("Alpha Armor: " + EquipmentCarrier.Instance.GetSoldierEquipment("ALPHA", EquipmentType.Armor).title);
-            Debug.Log("Alpha Boots: " + EquipmentCarrier.Instance.GetSoldierEquipment("ALPHA", EquipmentType.Boots).title);
-            Debug.Log("Alpha Ability: " + EquipmentCarrier.Instance.GetSoldierEquipment("ALPHA", EquipmentType.Ability).title);
-
-            Debug.Log("Omega Armor: " + EquipmentCarrier.Instance.GetSoldierEquipment("OMEGA", EquipmentType.Armor).title);
-            Debug.Log("Omega Boots: " + EquipmentCarrier.Instance.GetSoldierEquipment("OMEGA", EquipmentType.Boots).title);
-            Debug.Log("Omega Ability: " + EquipmentCarrier.Instance.GetSoldierEquipment("OMEGA", EquipmentType.Ability).title);
-
-            Debug.Log("Gamma Armor: " + EquipmentCarrier.Instance.GetSoldierEquipment("GAMMA", EquipmentType.Armor).title);
-            Debug.Log("Gamma Boots: " + EquipmentCarrier.Instance.GetSoldierEquipment("GAMMA", EquipmentType.Boots).title);
-            Debug.Log("Gamma Ability: " + EquipmentCarrier.Instance.GetSoldierEquipment("GAMMA", EquipmentType.Ability).title);
         }
     }
 }

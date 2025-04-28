@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
 using TMPro;
@@ -51,7 +49,6 @@ namespace UI
 
         public void OnMainMenuButtonClicked()
         {
-            Debug.Log("Return to main menu");
             StatisticsManager.Instance.ResetStats();
             // Scene transition logic
             SceneManager.LoadSceneAsync("MainMenu");

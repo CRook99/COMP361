@@ -10,7 +10,6 @@ namespace World
     public class MapParser : MonoBehaviour
     {
         [SerializeField] private List<Layer> layers;
-        //private Dictionary<Vector2Int, GameObject> covers;
 
         private HashSet<Vector2Int> GetMapCells(Texture2D image)
         {
@@ -70,7 +69,6 @@ namespace World
                 {
                     GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(layers[i].Object, layer.transform);
                     obj.transform.position = new Vector3(cell.x, layers[i].Elevation, cell.y);
-                    //covers.Add(cell, obj);
                 }
             }
         }

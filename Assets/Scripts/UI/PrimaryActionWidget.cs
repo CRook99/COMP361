@@ -89,7 +89,7 @@ namespace UI
         // Only to be called by ability widget
         public void RefreshGraphics()
         {
-            if (AbilityData == null) return; // TODO Try to get rid of this
+            if (AbilityData == null) return;
             
             text.text = AbilityData.title;
             icon.sprite = AbilityData.image;

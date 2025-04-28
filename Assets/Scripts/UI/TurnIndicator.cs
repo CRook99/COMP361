@@ -14,7 +14,6 @@ namespace UI
         {
             turnText = GetComponent<TMP_Text>();
             ShowAllyTurn();
-            //turnText.gameObject.SetActive(false);
         }
 
         private void OnEnable()
@@ -34,7 +33,6 @@ namespace UI
             turnText.text = "Ally Turn";
             turnText.color = Color.blue;
             turnText.gameObject.SetActive(true);
-            //StartCoroutine(HideAfterDelay());
         }
 
         private void ShowEnemyTurn()
@@ -42,14 +40,12 @@ namespace UI
             turnText.text = "Enemy Turn";
             turnText.color = Color.red;
             turnText.gameObject.SetActive(true);
-            //StartCoroutine(HideAfterDelay());
         }
 
         private IEnumerator HideAfterDelay()
         {
             yield return new WaitForSeconds(2);
             turnText.gameObject.SetActive(false);
-            // Introduce a fade maybe
         }
     }
 }

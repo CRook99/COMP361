@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Entities;
-// using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -76,7 +75,6 @@ namespace World
         // uses Bresenham's algorithm
         public bool ObstacleBetweenCells(Cell start, Cell end)
         {
-            //HashSet<Cell> obstacles = GetObstacleCells();
             int x0 = start.Position.x;
             int y0 = start.Position.y;
             int dx = Math.Abs(end.Position.x - x0);

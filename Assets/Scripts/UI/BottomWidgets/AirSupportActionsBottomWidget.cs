@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using Controller;
 using Entities;
 using Managers;
-using UnityEngine;
 
 namespace UI.BottomWidgets
 {

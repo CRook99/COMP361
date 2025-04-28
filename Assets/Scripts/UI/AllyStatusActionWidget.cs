@@ -1,8 +1,5 @@
 using System;
-using DG.Tweening;
-using Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI
